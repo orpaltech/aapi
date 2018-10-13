@@ -1,0 +1,95 @@
+{
+    "configurations": [
+        {
+            "name": "bananapim2",
+            "includePath": [
+                "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/local/include",
+                "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/local/qt5pi/include",
+                "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include",
+                "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include/arm-linux-gnueabihf",
+                "${workspaceRoot}/sources"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/local/include",
+                    "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/local/qt5pi/include",
+                    "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include",
+                    "${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot/usr/include/arm-linux-gnueabihf",
+                    "${workspaceRoot}/sources"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "env": {
+                "BOARD": "bananapim2"
+            }
+        },
+        {
+            "name": "orangepipc",
+            "includePath": [
+                "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/local/include",
+                "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/local/qt5pi/include",
+                "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include",
+                "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include/arm-linux-gnueabihf",
+                "${workspaceRoot}/sources"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/local/include",
+                    "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/local/qt5pi/include",
+                    "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include",
+                    "${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot/usr/include/arm-linux-gnueabihf",
+                    "${workspaceRoot}/sources"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "env": {
+                "BOARD": "orangepipc"
+            }
+        },
+        {
+            "name": "rpi3-arm",
+            "includePath": [
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/include",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/qt5pi/include",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf",
+                "${workspaceRoot}/sources"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/include",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/qt5pi/include",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf",
+                    "${workspaceRoot}/sources"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "env": {
+                "BOARD": "rpi3-arm"
+            }
+        }
+    ],
+    "version": 4
+}

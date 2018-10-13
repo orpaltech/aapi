@@ -1,0 +1,148 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type":"shell",
+            "identifier": "outdir_bananapim2_debug",
+            "label": "Create Output Directory (BananaPi M2, Debug)",
+            "command": "mkdir",
+            "args": [
+                "-p", "${workspaceRoot}/build-antenna-analyzer-bananapim2-Debug"
+            ]
+        },
+        {
+            "type":"shell",
+            "identifier": "outdir_bananapim2_release",
+            "label": "Create Output Directory (BananaPi M2, Release)",
+            "command": "mkdir",
+            "args": [
+                "-p", "${workspaceRoot}/build-antenna-analyzer-bananapim2-Release"
+            ]
+        },
+        {
+            "type":"shell",
+            "identifier": "build_bananapim2_debug",
+            "label": "Build Analyzer (BananaPi M2, Debug)",
+            "command": "${workspaceRoot}/board_make.sh",
+            "args": [ "${workspaceRoot}", "Debug", "bananapim2", "/home/sergey/Projects/orpaltech/qt5-build/qt5" ],
+            "options": {
+                "cwd": "${workspaceRoot}/build-antenna-analyzer-bananapim2-Debug"
+            },
+            "dependsOn": "outdir_bananapim2_debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type":"shell",
+            "identifier": "build_bananapim2_release",
+            "label": "Build Analyzer (BananaPi M2, Release)",
+            "command": "${workspaceRoot}/board_make.sh",
+            "args": [ "${workspaceRoot}", "Release", "bananapim2", "/home/sergey/Projects/orpaltech/qt5-build/qt5" ],
+            "options": {
+                "cwd": "${workspaceRoot}/build-antenna-analyzer-bananapim2-Release"
+            },
+            "dependsOn": "outdir_bananapim2_release",
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "identifier": "launch_bananapim2_debug",
+            "label": "Launch Analyzer (BananaPi M2, Debug)",
+            "command": "${workspaceRoot}/board_launch.sh",
+            "args": [ "${workspaceRoot}", "Debug", "bananapim2", "192.168.3.71", "root", "2345" ],
+            "dependsOn": "build_bananapim2_debug"
+        },
+        {
+            "type":"shell",
+            "identifier": "outdir_rpi3-arm_debug",
+            "label": "Create Output Directory (Raspberry Pi3, Debug)",
+            "command": "mkdir",
+            "args": [
+                "-p", "${workspaceRoot}/build-antenna-analyzer-rpi3-arm-Debug"
+            ]
+        },
+        {
+            "type":"shell",
+            "identifier": "build_rpi3-arm_debug",
+            "label": "Build Analyzer (Raspberry Pi3, Debug)",
+            "command": "${workspaceRoot}/board_make.sh",
+            "args": [ "${workspaceRoot}", "Debug", "rpi3-arm", "/home/sergey/Projects/orpaltech/qt5-build/qt5" ],
+            "options": {
+                "cwd": "${workspaceRoot}/build-antenna-analyzer-rpi3-arm-Debug"
+            },
+            "dependsOn": "outdir_rpi3-arm_debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "identifier": "launch_rpi3-arm_debug",
+            "label": "Launch Analyzer (Raspberry Pi3, Debug)",
+            "command": "${workspaceRoot}/board_launch.sh",
+            "args": [ "${workspaceRoot}", "Debug", "rpi3-arm", "10.0.0.100", "root", "2345" ],
+            "dependsOn": "build_rpi3-arm_debug"
+        },
+        {
+            "type":"shell",
+            "identifier": "outdir_orangepipc_debug",
+            "label": "Create Output Directory (OrangePi PC, Debug)",
+            "command": "mkdir",
+            "args": [
+                "-p", "${workspaceRoot}/build-antenna-analyzer-orangepipc-Debug"
+            ]
+        },
+        {
+            "type":"shell",
+            "identifier": "outdir_orangepipc_release",
+            "label": "Create Output Directory (OrangePi PC, Release)",
+            "command": "mkdir",
+            "args": [
+                "-p", "${workspaceRoot}/build-antenna-analyzer-orangepipc-Release"
+            ]
+        },
+        {
+            "type":"shell",
+            "identifier": "build_orangepipc_debug",
+            "label": "Build Analyzer (OrangePi PC, Debug)",
+            "command": "${workspaceRoot}/board_make.sh",
+            "args": [ "${workspaceRoot}", "Debug", "orangepipc", "/home/sergey/Projects/orpaltech/qt5-build/qt5" ],
+            "options": {
+                "cwd": "${workspaceRoot}/build-antenna-analyzer-orangepipc-Debug"
+            },
+            "dependsOn": "outdir_orangepipc_debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type":"shell",
+            "identifier": "build_orangepipc_release",
+            "label": "Build Analyzer (OrangePi PC, Release)",
+            "command": "${workspaceRoot}/board_make.sh",
+            "args": [ "${workspaceRoot}", "Release", "orangepipc", "/home/sergey/Projects/orpaltech/qt5-build/qt5" ],
+            "options": {
+                "cwd": "${workspaceRoot}/build-antenna-analyzer-orangepipc-Release"
+            },
+            "dependsOn": "outdir_orangepipc_release",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "identifier": "launch_orangepipc_debug",
+            "label": "Launch Analyzer (OrangePi PC, Debug)",
+            "command": "${workspaceRoot}/board_launch.sh",
+            "args": [ "${workspaceRoot}", "Debug", "orangepipc", "192.168.3.60", "root", "2345" ],
+            "dependsOn": "build_orangepipc_debug"
+        }
+    ]
+}

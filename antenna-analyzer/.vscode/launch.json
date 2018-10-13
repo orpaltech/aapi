@@ -1,0 +1,75 @@
+{
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "gdb",
+                "request": "attach",
+                "name": "bananapim2",
+                "executable": "${workspaceRoot}/build-antenna-analyzer-bananapim2-Debug/antenna-analyzer",
+                "target": "192.168.3.71:2345",
+                "remote": true,
+                "cwd": "${workspaceRoot}",
+                "gdbpath": "${env:HOME}/Projects/orpaltech/toolchains/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gdb", 
+                "autorun": [
+                    "set sysroot ${env:HOME}/Projects/orpaltech/boards/bananapim2/sysroot"
+                ],
+                "preLaunchTask": "launch_bananapim2_debug",
+                "env":{
+                    "QT_QPA_PLATFORM": "linuxfb:fb=/dev/fb0",
+                    "QT_QUICK_BACKEND": "software",
+                    "QSG_RENDER_LOOP": "basic",
+                    "QT_IM_MODULE": "qtvirtualkeyboard",
+                    "QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS": "/dev/input/event3:rotate=90",
+                    "QT_QPA_FB_NO_LIBINPUT": "1"                    
+                }
+            },
+            {
+                "type": "gdb",
+                "request": "attach",
+                "name": "orangepipc",
+                "executable": "${workspaceRoot}/build-antenna-analyzer-orangepipc-Debug/antenna-analyzer",
+                "target": "192.168.3.60:2345",
+                "remote": true,
+                "cwd": "${workspaceRoot}",
+                "gdbpath": "${env:HOME}/Projects/orpaltech/toolchains/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gdb", 
+                "autorun": [
+                    "set sysroot ${env:HOME}/Projects/orpaltech/boards/orangepipc/sysroot"
+                ],
+                "preLaunchTask": "launch_orangepipc_debug",
+                "env":{
+                    "QT_QPA_PLATFORM": "eglfs",
+                    "QSG_RENDER_LOOP": "basic",
+                    "QT_QPA_EGLFS_FORCE888": "1",
+                    "FRONTBUFFER_LOCKING": "1",
+                    "QT_IM_MODULE": "qtvirtualkeyboard",
+                    "QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS": "/dev/input/event3:rotate=90",
+                    "QT_QPA_EGLFS_NO_LIBINPUT": "1",
+                    "QT_QPA_EGLFS_DEBUG": "1",
+                    "QT_LOGGING_RULES": "qt.qpa.*=true"
+                }
+            },
+            {
+                "type": "gdb",
+                "request": "attach",
+                "name": "rpi3-arm",
+                "executable": "${workspaceRoot}/build-antenna-analyzer-rpi3-arm-Debug/antenna-analyzer",
+                "target": "10.0.0.100:2345",
+                "remote": true,
+                "cwd": "${workspaceRoot}",
+                "gdbpath": "${env:HOME}/Projects/armlinux/toolchains/6.4-2017.11/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gdb", 
+                "autorun": [
+                    "set sysroot ${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot"
+                ],
+                "preLaunchTask": "launch_rpi3-arm_debug",
+                "env":{
+                    "QT_QPA_PLATFORM": "linuxfb:fb=/dev/fb0",
+                    "QT_QUICK_BACKEND": "software",
+                    "QSG_RENDER_LOOP": "basic",
+                    "QT_IM_MODULE": "qtvirtualkeyboard",
+                    "QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS": "/dev/input/event3:rotate=90",
+                    "QT_QPA_FB_NO_LIBINPUT": "1",
+                    "QT_LOGGING_RULES": "qt.qpa.*=true"
+                }
+            }
+        ]
+    }

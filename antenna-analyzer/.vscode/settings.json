@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "qdatetime": "cpp",
+        "qdatastream": "cpp",
+        "qapplication": "cpp",
+        "qfile": "cpp",
+        "qdir": "cpp",
+        "qobject": "cpp",
+        "complex": "cpp",
+        "mutex": "cpp",
+        "qqmlcontext": "cpp",
+        "qquickwindow": "cpp",
+        "qquickstyle": "cpp",
+        "qstring": "cpp",
+        "qqmlcomponent": "cpp",
+        "memory": "cpp"
+    }
+}
