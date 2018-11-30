@@ -85,25 +85,6 @@ X ~ 2 0 -100 80 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# AA-PI-Components_Conn_01x02
-#
-DEF AA-PI-Components_Conn_01x02 J 0 40 Y N 1 F N
-F0 "J" 0 100 50 H V C CNN
-F1 "AA-PI-Components_Conn_01x02" 0 -200 50 H V C CNN
-F2 "" 0 0 50 H I C CNN
-F3 "" 0 0 50 H I C CNN
-$FPLIST
- Connector*:*_1x??_*
-$ENDFPLIST
-DRAW
-S -50 -95 0 -105 1 1 6 N
-S -50 5 0 -5 1 1 6 N
-S -50 50 50 -150 1 1 10 f
-X Pin_1 1 -200 0 150 R 50 50 1 1 P
-X Pin_2 2 -200 -100 150 R 50 50 1 1 P
-ENDDRAW
-ENDDEF
-#
 # AA-PI-Components_Conn_01x03
 #
 DEF AA-PI-Components_Conn_01x03 J 0 40 Y N 1 F N
@@ -299,9 +280,9 @@ F2 "SOT94P279X130-5N" -450 -550 50 H I L CNN
 F3 "http://www.richtek.com/assets/product_file/RT9193/DS9193-17.pdf" -450 -650 50 H I L CNN
 F4 "300mA, Ultra-Low Noise, Ultra-Fast CMOS LDO Regulator" -450 -750 50 H I L CNN "Description"
 F5 "1.295" -450 -850 50 H I L CNN "Height"
-F6 "1028-1014-2-ND" -450 -950 50 H I L CNN "DigiKey Part Number"
-F7 "Richtek USA Inc." -450 -1050 50 H I L CNN "Manufacturer_Name"
-F8 "RT9193-33GB" -450 -1150 50 H I L CNN "Manufacturer_Part_Number"
+F6 "Richtek USA Inc." -450 -1050 50 H I L CNN "Manufacturer_Name"
+F7 "RT9193-33GB" -450 -1150 50 H I L CNN "Manufacturer_Part_Number"
+F8 "3.3" -380 -950 50 H I C CNN "Output_Voltage"
 DRAW
 P 5 0 1 6 -300 200 300 200 300 -200 -300 -200 -300 200 f
 X VIN 1 -500 100 200 R 50 50 0 0 B
@@ -349,6 +330,24 @@ X OUT_B 5 600 -150 200 L 50 50 0 0 O
 X OSC_B 6 600 -50 200 L 50 50 0 0 B
 X OSC_E 7 600 50 200 L 50 50 0 0 B
 X VCC 8 600 150 200 L 50 50 0 0 W
+ENDDRAW
+ENDDEF
+#
+# AA-PI-Components_SW_SPDT
+#
+DEF AA-PI-Components_SW_SPDT SW 0 0 Y N 1 F N
+F0 "SW" 0 170 50 H V C CNN
+F1 "AA-PI-Components_SW_SPDT" 0 -200 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+C -80 0 20 0 0 0 N
+C 80 -100 20 0 0 0 N
+C 80 100 20 0 1 0 N
+P 2 0 1 0 -60 10 65 90 N
+X A 1 200 100 100 L 50 50 1 1 P
+X B 2 -200 0 100 R 50 50 1 1 P
+X C 3 200 -100 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #

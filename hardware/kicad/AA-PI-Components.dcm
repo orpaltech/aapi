@@ -20,6 +20,11 @@ D power-flag symbol
 K Power Flag Symbol
 $ENDCMP
 #
+$CMP +V_ADC
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
 $CMP Barrel_Jack
 D DC Barrel Jack
 K DC power barrel jack connector
@@ -207,6 +212,11 @@ D Wide bandwidth dual bipolar operational amplifier
 F https://www.st.com/resource/en/datasheet/mc4558.pdf
 $ENDCMP
 #
+$CMP MCP3421
+D 18-Bit Analog-to-Digital Converter with I2C Interface
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22003b.pdf
+$ENDCMP
+#
 $CMP MCP73833
 D Charge Management Li-Ion/Li-Pol
 F https://componentsearchengine.com/Datasheets/1/MCP73833-FCI_UN.pdf
@@ -230,9 +240,20 @@ K r res resistor
 F ~
 $ENDCMP
 #
+$CMP RT9193-2HPB
+D 300mA, Ultra-Low Noise, Ultra-Fast CMOS LDO Regulator
+F http://www.richtek.com/assets/product_file/RT9193/DS9193-17.pdf
+$ENDCMP
+#
 $CMP RT9193-33GB
 D 300mA, Ultra-Low Noise, Ultra-Fast CMOS LDO Regulator
 F http://www.richtek.com/assets/product_file/RT9193/DS9193-17.pdf
+$ENDCMP
+#
+$CMP R_POT
+D Potentiometer
+K resistor variable
+F ~
 $ENDCMP
 #
 $CMP R_Small
