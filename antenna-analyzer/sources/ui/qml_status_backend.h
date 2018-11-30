@@ -15,30 +15,47 @@
  * 	along with ORPAL-AA-Pi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QML_ABOUT_VIEW_H
-#define QML_ABOUT_VIEW_H
+#ifndef AAPI_QML_STATUS_BACKEND_H
+#define AAPI_QML_STATUS_BACKEND_H
 
-#include "qml_view_backend.h"
+#include <QObject>
+#include <QTimer>
 
-using namespace aapi;
 
-///////////////////////////////////////////////////////////////////////////////
-// QAAPIQmlAboutView
-///////////////////////////////////////////////////////////////////////////////
-/// \brief The QAAPIQmlAboutView class
-///
-class QAAPIQmlAboutView : public QAAPIQmlView
+class QAAPIQmlStatusBackend : public QObject
 {
     Q_OBJECT
 
+    /* Properties */
+    Q_PROPERTY(BatteryStatus batteryStatus READ get_battery_status NOTIFY batteryStatusChanged)
+
 public:
-    explicit QAAPIQmlAboutView(AAPIConfig *config,
-                               QObject *parent = Q_NULLPTR);
+    QAAPIQmlStatusBackend();
+    ~QAAPIQmlStatusBackend();
+
+    enum BatteryStatus {
+        BATTERY_EMPTY = 1,
+        BATTERY_FULL = 2,
+        BATTERY_CHARGING = 3,
+        BATTERY_CHARGED = 4,
+    };
+
+    /* Enumerations */
+    Q_ENUM(BatteryStatus)
+
+    BatteryStatus get_battery_status() const { return m_batteryStatus;}
+
+    int init();
+    void destroy();
 signals:
+    void batteryStatusChanged();
 
 public slots:
-    void quit();
-    void reboot();
+    void notifyBatteryStatusChanged();
+
+private:
+    BatteryStatus   m_batteryStatus;
+    QTimer          *m_timer;
 };
 
-#endif // QML_ABOUT_VIEW_H
+#endif // AAPI_QML_STATUS_BACKEND_H

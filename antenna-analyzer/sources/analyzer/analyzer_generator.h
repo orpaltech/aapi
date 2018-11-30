@@ -19,7 +19,6 @@
 #define AAPI_GENERATOR_H
 
 #include "analyzer/analyzer_config.h"
-//#include "analyzer/si5351_synth.h"
 
 namespace aapi
 {
@@ -37,8 +36,7 @@ enum AAPIGeneratorError
 // class AAPIGenerator
 ///////////////////////////////////////////////////////////////////////////////
 
-class AAPIGenerator :
-        public AAPIObject
+class AAPIGenerator : public AAPIObject
 {
     DECLARE_AAPI_OBJECT(AAPIGenerator)
 
@@ -54,14 +52,14 @@ public:
     void unlock(void *owner);
     bool is_locked() const;
 
-    int set_frequency(unsigned int freq, void *owner = nullptr);
-    unsigned int get_last_frequency() const;
+    int set_frequency(uint32_t freq, void *owner = nullptr);
+    uint32_t get_last_frequency() const;
 
 private:
-    aapi_ptr<AAPIConfig> m_config;
-    uint32_t        m_lastFreq;
-    volatile void   *m_locker;
-    //aapi_ptr<si5351_synth>  synth;
+    aapi_ptr<AAPIConfig> config;
+    uint32_t        last_frequency;
+    volatile void   *current_owner;
+
 };
 
 } //namespace aapi

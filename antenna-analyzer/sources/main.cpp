@@ -21,9 +21,9 @@
 #include <QQmlContext>
 #include "analyzer_app.h"
 
-#define BACKEND_URI "com.orpaltech.aapi"
 
 const QString ERROR_CREATE_BACKEND("Unable to create backend object");
+
 
 int main( int argc, char *argv[] )
 {
@@ -43,21 +43,15 @@ int main( int argc, char *argv[] )
         }
 
         /* Register QML types */
-        ret = qmlRegisterUncreatableType<QAAPIQmlView>(BACKEND_URI, 1, 0, "ViewBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlDSPView>(BACKEND_URI, 1, 0, "DSPViewBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlConfigView>(BACKEND_URI, 1, 0, "ConfigViewBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlMeasureView>(BACKEND_URI, 1, 0, "MeasurementBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlPanVSWRView>(BACKEND_URI, 1, 0, "PanVSWRBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlOSLCalView>(BACKEND_URI, 1, 0, "OSLCalibrationBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlHWCalView>(BACKEND_URI, 1, 0, "HWCalibrationBackend", ERROR_CREATE_BACKEND);
-
-        ret = qmlRegisterUncreatableType<QAAPIQmlAboutView>(BACKEND_URI, 1, 0, "AboutViewBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlView>("com.orpaltech.aapi", 1, 0, "ViewBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlDSPView>("com.orpaltech.aapi", 1, 0, "DSPViewBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlConfigView>("com.orpaltech.aapi", 1, 0, "ConfigViewBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlMeasureView>("com.orpaltech.aapi", 1, 0, "MeasurementBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlPanVSWRView>("com.orpaltech.aapi", 1, 0, "PanVSWRBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlOSLCalView>("com.orpaltech.aapi", 1, 0, "OSLCalibrationBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlHWCalView>("com.orpaltech.aapi", 1, 0, "HWCalibrationBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlAboutView>("com.orpaltech.aapi", 1, 0, "AboutViewBackend", ERROR_CREATE_BACKEND);
+        ret = qmlRegisterUncreatableType<QAAPIQmlStatusBackend>("com.orpaltech.aapi", 1, 0, "StatusBackend", ERROR_CREATE_BACKEND);
 
         do
         {

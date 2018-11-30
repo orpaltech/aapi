@@ -199,14 +199,14 @@ int QAAPIQmlPanVSWRView::start_scan(bool fast)
     band_span *= 1000;
 
     /* Find how many points to scan */
-    points = qMin(fast ? 100 : 800, m_plotArea[m_chartType].width());
+    points = qMin((fast ? 100 : 800), m_plotArea[m_chartType].width());
 
     /* Prepare scan steps */
-    aapi_measure_list steps;
+    AAPIMeasureList steps;
     for (i = 0, freq_step = band_span/points; i <= points; i++)
     {
         freq = freq_min + i * freq_step;
-        aapi_ptr<aapi_measure> ptr( aapi_measure::create(m_config, m_calibrator, this,
+        aapi_ptr<AAPIMeasure> ptr( AAPIMeasure::create(m_config, m_calibrator, this,
                                             freq, true, true, n_scans, false) );
         steps.push_back(ptr);
     }
@@ -371,7 +371,7 @@ void QAAPIQmlPanVSWRView::update_axis_range()
 
 }
 
-int QAAPIQmlPanVSWRView::on_measure_finished(aapi_measure *measure)
+int QAAPIQmlPanVSWRView::on_measure_finished(AAPIMeasure *measure)
 {
     float freq, vswr;
     std::complex<float> rx, gamma;
@@ -394,7 +394,7 @@ int QAAPIQmlPanVSWRView::on_measure_finished(aapi_measure *measure)
         // update chart series
         rx = measure->rx;
         vswr = measure->vswr;
-        freq = measure->freq / 1000;
+        freq = measure->frequency / 1000;
 
         switch( m_chartType )
         {
@@ -410,8 +410,7 @@ int QAAPIQmlPanVSWRView::on_measure_finished(aapi_measure *measure)
         case CHART_SMITH:
             gamma = AAPICalibrator::gamma_from_z( rx, m_config->get_base_r0() );
 
-            QMetaObject::invokeMethod(m_SmithChart,
-                                      "append",
+            QMetaObject::invokeMethod(m_SmithChart, "append",
                                       Q_ARG(QVariant, QPointF(gamma.real(), gamma.imag())));
             break;
         }

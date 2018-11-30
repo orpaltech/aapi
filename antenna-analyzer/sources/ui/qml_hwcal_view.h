@@ -28,8 +28,7 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The QAAPIQmlHWCalView class
 ///
-class QAAPIQmlHWCalView
-        : public QAAPIQmlView
+class QAAPIQmlHWCalView : public QAAPIQmlView
 {
     Q_OBJECT
 
@@ -41,7 +40,7 @@ public:
 
 private:
     /* Measurement callback */
-    virtual int on_measure_finished(aapi_measure *measure);
+    virtual int on_measure_finished(AAPIMeasure *measure);
 
     virtual int load_view();
     virtual void destroy_view();

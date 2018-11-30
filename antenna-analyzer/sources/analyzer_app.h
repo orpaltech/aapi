@@ -29,6 +29,7 @@
 #include "ui/qml_panvswr_view.h"
 #include "ui/qml_oslcal_view.h"
 #include "ui/qml_hwcal_view.h"
+#include "ui/qml_status_backend.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,6 +56,7 @@ class QAAPIApplication : public QObject
     Q_PROPERTY(QAAPIQmlOSLCalView* oslcal READ get_oslcal_view CONSTANT)
     Q_PROPERTY(QAAPIQmlHWCalView* hwcal READ get_hwcal_view CONSTANT)
     Q_PROPERTY(QAAPIQmlAboutView* about READ get_about_view CONSTANT)
+    Q_PROPERTY(QAAPIQmlStatusBackend* status READ get_status_backend CONSTANT)
     Q_PROPERTY(QString lastSnapshot READ get_last_snapshot CONSTANT)
 
 public:
@@ -66,13 +68,14 @@ public:
 
 
     /* --------- Property accessors ------- */
-    QAAPIQmlDSPView* get_dsp_view() { return m_dspView; }
-    QAAPIQmlConfigView* get_config_view() { return m_configView; }
-    QAAPIQmlMeasureView* get_measure_view() { return m_measureView; }
-    QAAPIQmlPanVSWRView* get_panvswr_view() { return m_panVswrView; }
-    QAAPIQmlOSLCalView* get_oslcal_view() { return m_oslCalView; }
-    QAAPIQmlHWCalView* get_hwcal_view() { return m_hwCalView; }
-    QAAPIQmlAboutView* get_about_view() { return m_aboutView; }
+    QAAPIQmlDSPView *get_dsp_view() { return m_qmlDSPView; }
+    QAAPIQmlConfigView *get_config_view() { return m_qmlConfigView; }
+    QAAPIQmlMeasureView *get_measure_view() { return m_qmlMeasureView; }
+    QAAPIQmlPanVSWRView *get_panvswr_view() { return m_qmlPanVSWRView; }
+    QAAPIQmlOSLCalView *get_oslcal_view() { return m_qmlOSLCalView; }
+    QAAPIQmlHWCalView *get_hwcal_view() { return m_qmlHWCalView; }
+    QAAPIQmlAboutView *get_about_view() { return m_qmlAboutView; }
+    QAAPIQmlStatusBackend *get_status_backend() { return m_qmlStatusBackend; }
     QString get_last_snapshot() { return m_lastSnapshot; }
 
     static QString get_snapshot_dir();
@@ -86,13 +89,14 @@ private:
     QString                     m_lastSnapshot;
 
     /* ------------- Models -------------- */
-    QPointer<QAAPIQmlDSPView>       m_dspView;
-    QPointer<QAAPIQmlConfigView>    m_configView;
-    QPointer<QAAPIQmlMeasureView>   m_measureView;
-    QPointer<QAAPIQmlPanVSWRView>   m_panVswrView;
-    QPointer<QAAPIQmlOSLCalView>    m_oslCalView;
-    QPointer<QAAPIQmlHWCalView>     m_hwCalView;
-    QPointer<QAAPIQmlAboutView>     m_aboutView;
+    QPointer<QAAPIQmlDSPView>       m_qmlDSPView;
+    QPointer<QAAPIQmlConfigView>    m_qmlConfigView;
+    QPointer<QAAPIQmlMeasureView>   m_qmlMeasureView;
+    QPointer<QAAPIQmlPanVSWRView>   m_qmlPanVSWRView;
+    QPointer<QAAPIQmlOSLCalView>    m_qmlOSLCalView;
+    QPointer<QAAPIQmlHWCalView>     m_qmlHWCalView;
+    QPointer<QAAPIQmlAboutView>     m_qmlAboutView;
+    QPointer<QAAPIQmlStatusBackend> m_qmlStatusBackend;
 
 
 public slots:

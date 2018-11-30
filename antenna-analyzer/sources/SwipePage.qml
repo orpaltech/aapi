@@ -1,4 +1,4 @@
-/*  Copyright (C) 2013-2017 ORPAL Technologies, Inc. All rights reserved.
+/*  Copyright (C) 2013-2018 ORPAL Technologies, Inc. All rights reserved.
  * 	This file is part of ORPAL-AA-PI software.
  *
  * 	ORPAL-AA-PI is free software: you can redistribute it and/or modify

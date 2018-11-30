@@ -37,7 +37,7 @@ int QAAPIQmlMeasureView::load_view()
     int osl_sel;
 
     if (has_error_message()) {
-
+        // TODO: wut should be here ?
     }
 
     freq = m_config->get_measure_freq();

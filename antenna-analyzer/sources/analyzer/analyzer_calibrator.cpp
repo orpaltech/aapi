@@ -51,8 +51,8 @@ AAPICalibrator *AAPICalibrator::create(AAPIConfig* config, bool add_ref)
 
 AAPICalibrator::AAPICalibrator()
 {
-    m_OSLCorrStatus = OSL_FILE_INVALID;
     m_OSLFile = -1;
+    m_OSLCorrStatus = OSL_FILE_INVALID;
     m_HWErrCorrStatus = OSL_FILE_INVALID;
 }
 
@@ -291,14 +291,14 @@ int AAPICalibrator::save_osl_file()
 
     /* Write buffer length */
     len = sizeof( m_OSLCorrEntries );
-    ret = out.writeRawData( (const char*)&len, sizeof( quint32 ) );
+    ret = out.writeRawData( reinterpret_cast<const char*>(&len), sizeof(quint32) );
     if ( ret != sizeof( quint32 ) )
     {
         return AAPICAL_E_WRITE_FILE_FAILED;
     }
 
     /* Write OSL correction coefficients */
-    ret = out.writeRawData( (const char*) m_OSLCorrEntries, len );
+    ret = out.writeRawData( reinterpret_cast<const char*>(m_OSLCorrEntries), len );
     if ( ret != len )
     {
         return AAPICAL_E_WRITE_FILE_FAILED;
@@ -330,12 +330,12 @@ int AAPICalibrator::load_hwerr_file()
          ERR_CORR_FILE_VERSION  == version )
     {
         /* Read 4-byte length */
-        ret = in.readRawData( (char*)&len, sizeof( quint32 ) );
+        ret = in.readRawData( reinterpret_cast<char*>(&len), sizeof(quint32) );
         if ( ret == sizeof( quint32 ) &&
              len == sizeof( m_HWErrCorrEntries ) )
         {
             /* read OSL entries */
-            ret = in.readRawData( (char *)m_HWErrCorrEntries, len );
+            ret = in.readRawData( reinterpret_cast<char *>(m_HWErrCorrEntries), len );
             if ( ret == len )
             {
                 /* Error corrections array loaded */
@@ -377,14 +377,14 @@ int AAPICalibrator::save_hwerr_file()
 
     /* output buffer length */
     len = sizeof( m_HWErrCorrEntries );
-    ret = out.writeRawData( (const char *) &len, sizeof( quint32 ) );
-    if( ret != sizeof( quint32 ) )
+    ret = out.writeRawData( reinterpret_cast<const char *>(&len), sizeof(quint32) );
+    if( ret != sizeof(quint32) )
     {
         return AAPICAL_E_WRITE_FILE_FAILED;
     }
 
     /* flush error correction coefficients */
-    ret = out.writeRawData( (const char *) m_HWErrCorrEntries, len );
+    ret = out.writeRawData( reinterpret_cast<const char *>(m_HWErrCorrEntries), len );
     if( ret != len )
     {
         return AAPICAL_E_WRITE_FILE_FAILED;
@@ -521,34 +521,37 @@ int AAPICalibrator::correct_gamma(uint32_t freq, std::complex<float>& g)
     {
         /* We have 3 OSL points near freq, use parabolic interpolation */
         float f1, f2, f3;
-        f1 = (float)( i - 1 ) * CALIB_SCAN_STEP + AA_BAND_FMIN;
-        f2 = (float)( i + 0 ) * CALIB_SCAN_STEP + AA_BAND_FMIN;
-        f3 = (float)( i + 1 ) * CALIB_SCAN_STEP + AA_BAND_FMIN;
+        f1 = static_cast<float>( i - 1 ) * CALIB_SCAN_STEP + AA_BAND_FMIN;
+        f2 = static_cast<float>( i + 0 ) * CALIB_SCAN_STEP + AA_BAND_FMIN;
+        f3 = static_cast<float>( i + 1 ) * CALIB_SCAN_STEP + AA_BAND_FMIN;
 
         ent.e_00 = AAPIMathUtils::parabolic_interpolate(
                                         m_OSLCorrEntries[i-1].e_00,
                                         m_OSLCorrEntries[i].e_00,
                                         m_OSLCorrEntries[i+1].e_00,
                                         f1, f2, f3, 
-                                        (float) freq).__rep();
+                                        static_cast<float>(freq)).__rep();
 
         ent.e_11 = AAPIMathUtils::parabolic_interpolate(
                                         m_OSLCorrEntries[i-1].e_11,
                                         m_OSLCorrEntries[i].e_11,
                                         m_OSLCorrEntries[i+1].e_11,
                                         f1, f2, f3, 
-                                        (float) freq).__rep();
+                                        static_cast<float>(freq)).__rep();
 
         ent.d_e = AAPIMathUtils::parabolic_interpolate(
                                         m_OSLCorrEntries[i-1].d_e,
                                         m_OSLCorrEntries[i].d_e,
                                         m_OSLCorrEntries[i+1].d_e,
                                         f1, f2, f3, 
-                                        (float) freq).__rep();
+                                        static_cast<float>(freq)).__rep();
     }
 
-    res = ( g.__rep() * ent.e_11 ) - ( ent.d_e );
-    res = ( g.__rep() - ent.e_00 ) / ( AAPIMathUtils::_cnonz( res ).__rep() );
+    res = ( g * std::complex<float>( ent.e_11 )) - std::complex<float>( ent.d_e );
+    res = ( g * std::complex<float>( ent.e_00 )) / ( AAPIMathUtils::_cnonz( res ));
+
+    //res = ( gamma.__rep() * ent.e_11 ) - ( ent.d_e );
+    //res = ( gamma.__rep() - ent.e_00 ) / ( AAPIMathUtils::_cnonz( res ).__rep() );
 
     g = res;
 
@@ -557,9 +560,9 @@ int AAPICalibrator::correct_gamma(uint32_t freq, std::complex<float>& g)
 
 int AAPICalibrator::correct_z(uint32_t freq, std::complex<float>& z)
 {
-    std::complex<float> g;
     float r0;
     int ret;
+    std::complex<float> g;
 
     r0 = m_config->get_base_r0();
     g = gamma_from_z( z, r0 );
@@ -595,7 +598,7 @@ int AAPICalibrator::correct_z(uint32_t freq, std::complex<float>& z)
 
 uint32_t AAPICalibrator::freq_by_index(size_t index)
 {
-    if ( index >= CALIB_NUM_ENTRIES )
+    if( index >= CALIB_NUM_ENTRIES )
     {
         return 0;
     }
@@ -610,7 +613,7 @@ int AAPICalibrator::index_by_freq(uint32_t freq)
         return -1;
     }
 
-    return std::round( (float) freq / CALIB_SCAN_STEP ) - ( AA_BAND_FMIN / CALIB_SCAN_STEP );
+    return std::round( static_cast<float>(freq) / CALIB_SCAN_STEP ) - ( AA_BAND_FMIN / CALIB_SCAN_STEP );
 }
 
 QString AAPICalibrator::get_osl_dir(bool generate)
@@ -640,31 +643,30 @@ AAPICalibrator::gamma_from_z(const std::complex<float>& z, float r0)
 
     if( std::isnan( g.real() ) || std::isnan( g.imag() ) )
     {
-        return std::complex<float>( 0.99999999f, 0.f );
+        g = std::complex<float>( 0.99999999f, 0.f );
     }
-
     return g;
 }
 
 std::complex<float>
-AAPICalibrator::z_from_gamma(const std::complex<float>& g, float r0)
+AAPICalibrator::z_from_gamma(const std::complex<float>& gamma, float r0)
 {
     float gr2, gi2;
-    float dg, r, x;
+    float dg, re, im;
 
-    gr2 = std::pow( g.real(), 2 );
-    gi2 = std::pow( g.imag(), 2 );
-    dg = AAPIMathUtils::_nonz( std::pow( 1.f - g.real(), 2 ) + gi2 );
+    gr2 = std::pow( gamma.real(), 2 );
+    gi2 = std::pow( gamma.imag(), 2 );
+    dg = AAPIMathUtils::_nonz( std::pow( 1.f - gamma.real(), 2 ) + gi2 );
 
-    r = r0 * ( 1.f - gr2 - gi2 ) / dg;
-    if( r < 0.f ) /* This may happen due to limited computational accuracy */
+    re = r0 * ( 1.f - gr2 - gi2 ) / dg;
+    if( re < 0.f ) /* This may happen due to limited computational accuracy */
     {
-        r = 0.f;
+        re = 0.f;
     }
     
-    x = r0 * 2.f * g.imag() / dg;
+    im = r0 * 2.f * gamma.imag() / dg;
 
-    return std::complex<float>( r, x );
+    return std::complex<float>( re, im );
 }
 
 } //namespace aapi

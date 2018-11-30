@@ -19,6 +19,8 @@
 #define AAPI_OBJECT_H
 
 #include <inttypes.h>
+#include <cassert>
+#include <atomic>
 
 namespace aapi
 {
@@ -66,6 +68,8 @@ public:
 
     long release()
     {
+        assert(m_ref > 0);
+
         if (--m_ref == 0)
         {
             delete this;
@@ -80,7 +84,7 @@ protected:
         m_ref = 0;
     }
 
-    volatile long m_ref;
+    std::atomic_long m_ref;
 private:
     AAPIObject(const AAPIObject &) {}
     AAPIObject& operator=(const AAPIObject &) { return *this; }

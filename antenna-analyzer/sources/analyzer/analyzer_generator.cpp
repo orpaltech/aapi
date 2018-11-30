@@ -31,13 +31,13 @@ AAPIGenerator *AAPIGenerator::create(AAPIConfig *config, bool add_ref)
 {
     AAPIGenerator *gen = create(add_ref);
     if (gen)
-        gen->m_config = config;
+        gen->config = config;
     return gen;
 }
 
 AAPIGenerator::AAPIGenerator()
-    : m_lastFreq(0)
-    , m_locker(nullptr)
+    : last_frequency(0)
+    , current_owner(nullptr)
 {
 }
 
@@ -47,12 +47,14 @@ int AAPIGenerator::open()
 
     file_ptr = fopen(SYSFS_PATH, "r");
     if (!file_ptr)
+    {
         return AAPIGEN_E_DEVICE_NOT_FOUND;
+    }
 
     fclose(file_ptr);
 
-    m_lastFreq = m_config->get_measure_freq();
-    m_locker = nullptr;
+    last_frequency = config->get_measure_freq();
+    current_owner = nullptr;
 
 	return 0;
 }
@@ -68,36 +70,36 @@ int AAPIGenerator::lock(void *owner)
         return AAPI_E_INVALID_ARG;
     }
 
-    if( m_locker && m_locker != owner )
+    if( current_owner && current_owner != owner )
     {
         return AAPI_E_RESOURCE_LOCKED;
     }
 
-    m_locker = owner;
+    current_owner = owner;
     return 0;
 }
 
 void AAPIGenerator::unlock(void *owner)
 {
-    if( m_locker == owner )
+    if( current_owner == owner )
     {
-        m_locker = nullptr;
+        current_owner = nullptr;
     }
 }
 
 bool AAPIGenerator::is_locked() const
 {
-    return m_locker != nullptr;
+    return current_owner != nullptr;
 }
 
-unsigned int AAPIGenerator::get_last_frequency() const
+uint32_t AAPIGenerator::get_last_frequency() const
 {
-    return m_lastFreq;
+    return last_frequency;
 }
 
-int AAPIGenerator::set_frequency(unsigned int freq, void *owner)
+int AAPIGenerator::set_frequency(uint32_t freq, void *owner)
 {
-    if( m_locker && m_locker != owner )
+    if( current_owner && current_owner != owner )
     {
         return AAPI_E_RESOURCE_LOCKED;
     }
@@ -108,12 +110,14 @@ int AAPIGenerator::set_frequency(unsigned int freq, void *owner)
 
         file_ptr = fopen(SYSFS_PATH, "w");
         if (!file_ptr)
+        {
             return AAPIGEN_E_DEVICE_NOT_FOUND;
+        }
 
         fprintf(file_ptr, "%u", freq);
         fclose(file_ptr);
 
-        m_lastFreq = freq;
+        last_frequency = freq;
     }
 
 	return 0;

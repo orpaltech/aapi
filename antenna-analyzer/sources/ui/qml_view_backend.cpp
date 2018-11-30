@@ -39,8 +39,8 @@ QAAPIQmlView::QAAPIQmlView(AAPIConfig *config, AAPISignalProcessor *processor,
     m_generator = generator;
 
     /* Connect signal and slot */
-    QObject::connect(this, SIGNAL(measureFinished(aapi_measure*)), this,
-                     SLOT(measureFinishedHandler(aapi_measure*)),
+    QObject::connect(this, SIGNAL(measureFinished(AAPIMeasure*)), this,
+                     SLOT(measureFinishedHandler(AAPIMeasure*)),
                      Qt::QueuedConnection);
 
 }
@@ -69,7 +69,7 @@ bool QAAPIQmlView::has_error_message() const
     return m_errorMsg.length() > 0;
 }
 
-int QAAPIQmlView::start_measure(aapi_measure_list& steps)
+int QAAPIQmlView::start_measure(AAPIMeasureList& steps)
 {
     int ret;
     uint32_t freq;
@@ -92,7 +92,7 @@ int QAAPIQmlView::start_measure(aapi_measure_list& steps)
     }
 
     /* Here is the starting frequency */
-    freq = steps.at(0)->freq;
+    freq = steps.at(0)->frequency;
 
     enable_signal_processing(false);
 
@@ -172,14 +172,14 @@ void QAAPIQmlView::dsp_magnitudes(std::complex<float> *mags, uint32_t num_mags)
     }
 }
 
-void QAAPIQmlView::measure_finished(aapi_measure *measure)
+void QAAPIQmlView::measure_finished(AAPIMeasure *measure)
 {
     m_currentMeasure = nullptr;
     /* Queue result to the main thread */
     emit measureFinished(measure);
 }
 
-void QAAPIQmlView::measureFinishedHandler(aapi_measure *measure)
+void QAAPIQmlView::measureFinishedHandler(AAPIMeasure *measure)
 {
     enable_signal_processing( false );
 
@@ -203,7 +203,7 @@ void QAAPIQmlView::measureFinishedHandler(aapi_measure *measure)
         measure = *m_measureIter;
 
         /* Setup generator */
-        ret = m_generator->set_frequency( measure->freq, this );
+        ret = m_generator->set_frequency( measure->frequency, this );
         if (AAPI_FAILED( ret ))
         {
             /* handle error */

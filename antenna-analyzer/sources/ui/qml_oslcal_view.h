@@ -28,8 +28,7 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The QAAPIQmlOSLCalView class
 ///
-class QAAPIQmlOSLCalView
-        : public QAAPIQmlView
+class QAAPIQmlOSLCalView : public QAAPIQmlView
 {
 public:
     enum ScanType {
@@ -61,7 +60,7 @@ public:
 
 private:
     /* Measurement callback */
-    virtual int on_measure_finished(aapi_measure *measure);
+    virtual int on_measure_finished(AAPIMeasure *measure);
 
     virtual int load_view();
     virtual void destroy_view();

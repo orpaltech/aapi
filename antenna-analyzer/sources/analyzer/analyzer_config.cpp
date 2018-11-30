@@ -161,29 +161,13 @@ const static AAPIParam g_param_table[] =
                     .add_option(300U)
                     .set_description("Base impedance (R0) for Smith Chart and VSWR, Ohm"),
 
-    /*AAPIParam(AA_PARAM_I2C_BUS_NUMBER, "i2c_bus_no", AA_PT_UINT)
-                    .add_option(0U, "i2c0")
-                    .add_option(1U, "i2c1 / Raspberry Pi3")
-                    .add_option(2U, "i2c2 / Banana PiM2")
-                    .add_option(3U, "i2c3")
-                    .set_is_valid(show_advanced)
-                    .set_description("I2C bus number (/dev/i2c-X). Requires reboot."),
-
-    AAPIParam(AA_PARAM_SI5351_I2C_BUS_ADDR, "si5351_i2c_bus_addr", AA_PT_BYTE)
-                    .add_option(0x60U, "60h (C0h)")
-                    .add_option(0x62U, "62h (C4h)")
-                    .add_option(0x67U, "67h (CEh)")
-                    .add_option(0x6FU, "6Fh (DEh)")
-                    .add_option(0U, "Auto-detect")
-                    .set_description("Si5351 I2C bus address (default 60h). Requires reboot."),*/
-
-    AAPIParam(AA_PARAM_SI5351_XTAL_FREQ, "si5351_xtal_freq", AA_PT_UINT)
+    AAPIParam(AA_PARAM_SYNTH_XTAL_FREQ, "synth_xtal_freq", AA_PT_UINT)
                     .add_option((uint32_t) AA_XTALF_25MHZ, "25")
                     .add_option((uint32_t) AA_XTALF_27MHZ, "27")
-                    .set_description("Si5351 external crystal frequency, MHz"),
+                    .set_description("Synthesizer IC crystal frequency, MHz"),
 
-    AAPIParam(AA_PARAM_SI5351_XTAL_CORR, "si5351_xtal_corr", AA_PT_INT)
-                    .set_description("Si5351 crystal frequency correction, Hz")
+    AAPIParam(AA_PARAM_SYNTH_XTAL_CORR, "synth_xtal_corr", AA_PT_INT)
+                    .set_description("Synthesizer IC crystal frequency correction, Hz")
                     .set_repeat_delay(20),
 
     AAPIParam(AA_PARAM_OSL_R_OPEN, "osl_r_open", AA_PT_UINT)
@@ -192,7 +176,7 @@ const static AAPIParam g_param_table[] =
                     .add_option(500U, "500 Ohm")
                     .add_option(750U, "750 Ohm")
                     .add_option(1000U, "1000 Ohm")
-                    .add_option(999999U, "Infinite")
+                    .add_option(999999U, "INFINITE")
                     .set_description("Open impedance for OSL calibration, Ohm"),
 
     AAPIParam(AA_PARAM_OSL_R_SHORT, "osl_r_short", AA_PT_UINT)
@@ -254,7 +238,7 @@ const static AAPIParam g_param_table[] =
                     .set_description("Audio line input attenuation, dB. Requires reboot.")
                     .set_reboot_required(true),
 
-    AAPIParam(AA_PARAM_BRIDGE_R_MEAS, "bridge_r_meas", AA_PT_FLOAT)
+    AAPIParam(AA_PARAM_BRIDGE_R_MEASURE, "bridge_r_measure", AA_PT_FLOAT)
                     .add_option(1.f)
                     .add_option(5.1f)
                     .add_option(10.f)
@@ -262,7 +246,7 @@ const static AAPIParam g_param_table[] =
                     .set_is_valid(show_advanced)
                     .set_description("Bridge R-measure value, Ohm"),
 
-    AAPIParam(AA_PARAM_BRIDGE_R_MEAS_ADD, "bridge_r_meas_add", AA_PT_FLOAT)
+    AAPIParam(AA_PARAM_BRIDGE_R_MEASURE_ADD, "bridge_r_measure_add", AA_PT_FLOAT)
                     .add_option(33.f)
                     .add_option(51.f)
                     .add_option(75.f)
@@ -323,8 +307,8 @@ const static AAPIParam g_param_table[] =
                     .set_description("Display S11 graph in panoramic view."),
 
     AAPIParam(AA_PARAM_S1P_FILE_TYPE, "s1p_file_type", AA_PT_UINT)
-                    .add_option((uint) AA_S1P_TYPE_S_MA, "S MA R50")
-                    .add_option((uint) AA_S1P_TYPE_S_RI, "S RI R50")
+                    .add_option((uint32_t) AA_S1P_TYPE_S_MA, "S MA R50")
+                    .add_option((uint32_t) AA_S1P_TYPE_S_RI, "S RI R50")
                     .set_description("Touchstone S1P file type saved with screenshot. Default is S MA R 50."),
 
     AAPIParam(AA_PARAM_SNAPSHOT_FORMAT, "snapshot_format", AA_PT_TEXT)
@@ -563,10 +547,8 @@ void AAPIConfig::set_defaults()
     set_dsp_sample_size(AUDIO_SSIZE_16);
     set_dsp_nsamples(512);
     set_dsp_fftbin(107);
-    //set_i2c_bus_no(0);
-    set_si5351_xtal_freq(AA_XTALF_27MHZ);
-    //set_si5351_i2c_bus_addr(0x60);
-    set_si5351_xtal_corr(0);
+    set_synth_xtal_freq(AA_XTALF_27MHZ);
+    set_synth_xtal_corr(0);
     set_osl_selected(-1); /*TODO: set back to -1*/
     set_base_r0(50);
     set_osl_r_load(50);
@@ -581,9 +563,9 @@ void AAPIConfig::set_defaults()
     set_pan_span(8000/*000*/);
     set_measure_freq(14000000);
     set_pan_is_center_freq(0);
-    set_bridge_r_meas(5.1);
-    set_bridge_r_meas_add(200);
-    set_bridge_r_load(51);
+    set_bridge_r_measure(5.1f);
+    set_bridge_r_measure_add(200.f);
+    set_bridge_r_load(52.f);
     set_audio_input_gain(0);
     set_uart_device(""); // Raspberry Pi3 option "/dev/ttyAMA0"
     set_uart_baudrate(UART_BR_38400);

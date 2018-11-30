@@ -79,8 +79,7 @@ typedef enum __tag_osl_file_status {
 // class AAPICalibrator
 ///////////////////////////////////////////////////////////////////////////////
 
-class AAPICalibrator :
-        public AAPIObject
+class AAPICalibrator : public AAPIObject
 {
     DECLARE_AAPI_OBJECT(AAPICalibrator)
 

@@ -15,7 +15,7 @@
  * 	along with ORPAL-AA-Pi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
+import QtQuick 2.11
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import com.orpaltech.aapi 1.0
@@ -24,14 +24,38 @@ ApplicationWindow {
     visible: true
     title: "ORPAL AA (PI Edition)"
 
+    Rectangle {
+        id: statusStrip
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+        height: 28
+
+        BatteryIndicator {
+            id: batteryIcon
+            anchors {
+                top: parent.top
+                right: parent.right
+                topMargin: 0
+                rightMargin: 6
+            }
+            width: 32
+            height: 25
+        }
+    }
+
     GroupBox {
         id: groupBox
         rightPadding: 6
         leftPadding: 6
         topPadding: 28
         bottomPadding: 6
-        anchors.topMargin: 2
-        anchors.fill: parent
+        anchors {
+            fill: parent
+            topMargin: 2
+        }
 
         SwipeView {
             id: swipeView

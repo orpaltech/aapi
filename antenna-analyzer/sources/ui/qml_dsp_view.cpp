@@ -223,17 +223,21 @@ void QAAPIQmlDSPView::setup_oscilloscope(QLineSeries *v_series, QLineSeries *i_s
     QChart *vChart = m_VSeriesOscillosc->chart();
     QChart *iChart = m_ISeriesOscillosc->chart();
 
-    vChart->axisX()->setMin(0);
-    vChart->axisX()->setMax(m_config->get_dsp_nsamples());
+    QAbstractAxis *vAxisX = vChart->axes(Qt::Horizontal).first();
+    QAbstractAxis *vAxisY = vChart->axes(Qt::Vertical).first();
 
-    vChart->axisY()->setMin(-1000);
-    vChart->axisY()->setMax(1000);
+    vAxisX->setMin(0);
+    vAxisX->setMax(m_config->get_dsp_nsamples());
+    vAxisY->setMin(-1000);
+    vAxisY->setMax(1000);
 
-    iChart->axisX()->setMin(0);
-    iChart->axisX()->setMax(m_config->get_dsp_nsamples());
+    QAbstractAxis *iAxisX = iChart->axes(Qt::Horizontal).first();
+    QAbstractAxis *iAxisY = iChart->axes(Qt::Vertical).first();
 
-    iChart->axisY()->setMin(-1000);
-    iChart->axisY()->setMax(1000);
+    iAxisX->setMin(0);
+    iAxisX->setMax(m_config->get_dsp_nsamples());
+    iAxisY->setMin(-1000);
+    iAxisY->setMax(1000);
 
     /* Setup chart backgrounds etc */
     setup_chart(vChart);

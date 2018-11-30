@@ -41,20 +41,11 @@ using namespace aapi;
 // class QAAPIQmlView
 ///////////////////////////////////////////////////////////////////////////////
 
-class QAAPIQmlView
-        : public QObject,
+class QAAPIQmlView : public QObject,
           public AAPISignalProcessorEvents,
           public AAPIMeasurementEvents
 {
-public:
-    enum ViewStatus {
-        VS_IDLE = 0,
-        VS_BUSY = 1
-    };
     Q_OBJECT
-
-    /* Enumerations */
-    Q_ENUM(ViewStatus)
 
     /* Properties */
     Q_PROPERTY(QString error_message READ get_error_message CONSTANT)
@@ -67,6 +58,15 @@ public:
                 AAPIGenerator *gen, QObject *parent);
     ~QAAPIQmlView();
 
+    enum ViewStatus {
+        VS_IDLE = 0,
+        VS_BUSY = 1
+    };
+
+    /* Enumerations */
+    Q_ENUM(ViewStatus)
+
+public:
     /* Property accessors */
     bool is_active() const { return m_active; }
     QString get_error_message() const { return m_errorMsg; }
@@ -74,7 +74,7 @@ public:
     uint32_t get_freq_max() const { return AA_BAND_FMAX; }
     uint32_t get_base_r0() const;
 
-    typedef QList<aapi_ptr<aapi_measure>> aapi_measure_list;
+    typedef QList<aapi_ptr<AAPIMeasure>> AAPIMeasureList;
 
 protected:
     void set_error_message(const char* message);
@@ -85,7 +85,7 @@ protected:
     void skip_frames() const;
 
     /* Initiates a new measurement sequence */
-    int start_measure(aapi_measure_list& measures);
+    int start_measure(AAPIMeasureList& measures);
 
     /* AAPISignalProcessorEvents */
     virtual void dsp_magnitudes(std::complex<float> *mags, uint32_t num_mags);
@@ -97,28 +97,28 @@ protected:
     virtual void destroy_view() {}
 
     /* Override to handle measure finished (called in main thread)*/
-    virtual int on_measure_finished(aapi_measure *measure) { return 0; }
+    virtual int on_measure_finished(AAPIMeasure *measure) { return 0; }
     virtual void on_measure_error(int error) {}
 
 private:
     /* AnalyzerMeasureCallback */
-    virtual void measure_finished(aapi_measure *measure);
+    virtual void measure_finished(AAPIMeasure *measure);
 
 protected:
     aapi_ptr<AAPIConfig>                m_config;
     aapi_ptr<AAPIGenerator>             m_generator;
     aapi_ptr<AAPISignalProcessor>       m_processor;
 
-    aapi_measure_list                   m_allMeasures;
-    aapi_measure_list::const_iterator   m_measureIter;
-    aapi_measure                        *m_currentMeasure;
+    AAPIMeasureList                     m_allMeasures;
+    AAPIMeasureList::const_iterator     m_measureIter;
+    AAPIMeasure                        *m_currentMeasure;
 
     QString                             m_errorMsg;
     /* true means the view is now shown to user */
     bool                                m_active;
 
 signals:
-    void measureFinished(aapi_measure *measure);
+    void measureFinished(AAPIMeasure *measure);
     void snapshotTaken(QString file, QImage image);
     void quitApplication();
     void rebootApplication();
@@ -128,7 +128,7 @@ public slots:
     int activated();
     void deactivated();
     void destroyed();
-    void measureFinishedHandler(aapi_measure *measure);
+    void measureFinishedHandler(AAPIMeasure *measure);
 };
 
 #endif // AAPI_QML_VIEW_H

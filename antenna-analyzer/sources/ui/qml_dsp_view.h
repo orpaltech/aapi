@@ -31,8 +31,7 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The QAAPIQmlDSPView class
 ///
-class QAAPIQmlDSPView
-        : public QAAPIQmlView
+class QAAPIQmlDSPView : public QAAPIQmlView
 {
     Q_OBJECT
 

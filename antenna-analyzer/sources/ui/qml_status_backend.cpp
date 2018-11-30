@@ -15,30 +15,41 @@
  * 	along with ORPAL-AA-Pi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QML_ABOUT_VIEW_H
-#define QML_ABOUT_VIEW_H
+#include "qml_status_backend.h"
 
-#include "qml_view_backend.h"
 
-using namespace aapi;
-
-///////////////////////////////////////////////////////////////////////////////
-// QAAPIQmlAboutView
-///////////////////////////////////////////////////////////////////////////////
-/// \brief The QAAPIQmlAboutView class
-///
-class QAAPIQmlAboutView : public QAAPIQmlView
+QAAPIQmlStatusBackend::QAAPIQmlStatusBackend()
 {
-    Q_OBJECT
+    m_batteryStatus = BATTERY_EMPTY;
+    m_timer = Q_NULLPTR;
+}
 
-public:
-    explicit QAAPIQmlAboutView(AAPIConfig *config,
-                               QObject *parent = Q_NULLPTR);
-signals:
+QAAPIQmlStatusBackend::~QAAPIQmlStatusBackend()
+{
+    destroy();
+}
 
-public slots:
-    void quit();
-    void reboot();
-};
+int QAAPIQmlStatusBackend::init()
+{
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(notifyBatteryStatusChanged()));
+    m_timer->setSingleShot(false);
+    m_timer->start(5000);
 
-#endif // QML_ABOUT_VIEW_H
+    return 0;
+}
+
+void QAAPIQmlStatusBackend::destroy()
+{
+    delete m_timer;
+}
+
+void QAAPIQmlStatusBackend::notifyBatteryStatusChanged()
+{
+    if (m_batteryStatus == BATTERY_EMPTY)
+        m_batteryStatus = BATTERY_FULL;
+    else
+        m_batteryStatus = BATTERY_EMPTY;
+
+    emit batteryStatusChanged();
+}

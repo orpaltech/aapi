@@ -45,7 +45,7 @@ void QAAPIQmlHWCalView::destroy_view()
 {
 }
 
-int QAAPIQmlHWCalView::on_measure_finished(aapi_measure *measure)
+int QAAPIQmlHWCalView::on_measure_finished(AAPIMeasure *measure)
 {
     float mag_ratio, phas_diff;
     int ret;
@@ -86,7 +86,7 @@ int QAAPIQmlHWCalView::on_measure_finished(aapi_measure *measure)
 
 int QAAPIQmlHWCalView::start_hwcal()
 {
-    aapi_measure_list steps;
+    AAPIMeasureList steps;
     unsigned int freq, num_scans;
     int ret;
 
@@ -98,7 +98,7 @@ int QAAPIQmlHWCalView::start_hwcal()
     {
         freq = AAPICalibrator::freq_by_index(i);
 
-        aapi_ptr<aapi_measure> ptr( aapi_measure::create(m_config, m_calibrator, this,
+        aapi_ptr<AAPIMeasure> ptr( AAPIMeasure::create(m_config, m_calibrator, this,
                                     freq, false, false, num_scans, false) );
         steps.push_back(ptr);
     }

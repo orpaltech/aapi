@@ -76,8 +76,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The AAPISignalProcessor class
 ///
-class AAPISignalProcessor :
-        public AAPIObject,
+class AAPISignalProcessor : public AAPIObject,
         public callback_holder<AAPISignalProcessorEvents>,
         public AAPIAudioReaderEvents
 {

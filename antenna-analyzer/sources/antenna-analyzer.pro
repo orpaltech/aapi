@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT      += core quick quickcontrols2 charts
+QT      += core quick quickcontrols2 charts xml svg
+
+QTPLUGIN += qsvg qsvgicon
 
 CONFIG  += c++11
 # Virtual keyboard desktop integration will be disabled for the embedded system
@@ -54,7 +56,8 @@ HEADERS += \
     analyzer/analyzer_config.h \
     analyzer/analyzer_measure.h \
     error_codes.h \
-    analyzer/analyzer_calibrator.h
+    analyzer/analyzer_calibrator.h \
+    ui/qml_status_backend.h
 
 SOURCES += main.cpp \
     serial/uart_device.cpp \
@@ -76,7 +79,8 @@ SOURCES += main.cpp \
     ui/qml_oslcal_view.cpp \
     ui/qml_panvswr_view.cpp \
     ui/qml_view_backend.cpp \
-    analyzer/analyzer_calibrator.cpp
+    analyzer/analyzer_calibrator.cpp \
+    ui/qml_status_backend.cpp
 
 
 RESOURCES += qml.qrc

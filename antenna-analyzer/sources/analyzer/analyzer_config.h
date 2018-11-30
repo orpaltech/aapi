@@ -149,25 +149,15 @@ enum AAPIParamId {
 	 */
 	AA_PARAM_MEASURE_FREQ,
 
-    /**
-     * I2C bus number (depends on hardware configuration)
-     */
-//    AA_PARAM_I2C_BUS_NUMBER,
+	/**
+     * Synthesizer IC Xtal frequency, Hz
+	 */
+    AA_PARAM_SYNTH_XTAL_FREQ,
 
 	/**
-	 * Si5351a Xtal frequency, Hz
+     * Synthesizer IC Xtal correction (signed, int16_t)
 	 */
-	AA_PARAM_SI5351_XTAL_FREQ,
-
-	/**
-	 * Si5351a I2C bus base address
-	 */
-    //AA_PARAM_SI5351_I2C_BUS_ADDR,
-
-	/**
-	 * Si5351a Xtal correction (signed, int16_t)
-	 */
-	AA_PARAM_SI5351_XTAL_CORR,
+    AA_PARAM_SYNTH_XTAL_CORR,
 
 	/**
      * Base R0 for G measurements
@@ -227,12 +217,12 @@ enum AAPIParamId {
 	/**
 	 * Value of measurement resistor in bridge, float32
 	 */
-    AA_PARAM_BRIDGE_R_MEAS,
+    AA_PARAM_BRIDGE_R_MEASURE,
 
 	/**
 	 * Value of series resistor in bridge, float32
 	 */
-    AA_PARAM_BRIDGE_R_MEAS_ADD,
+    AA_PARAM_BRIDGE_R_MEASURE_ADD,
 
 	/**
 	 * Value of load resistor in bridge, float32
@@ -333,8 +323,7 @@ struct AAPIRadioBand
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The AAPIConfig class
 ///
-class AAPIConfig :
-        public AAPIObject
+class AAPIConfig : public AAPIObject
 {
     DECLARE_AAPI_OBJECT(AAPIConfig)
 
@@ -374,10 +363,8 @@ public:
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_PAN_FREQ1, pan_freq1)
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_PAN_SPAN, pan_span)
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_MEASURE_FREQ, measure_freq)
-    //AA_PARAM_UINT32_ACCESSOR(AA_PARAM_I2C_BUS_NUMBER, i2c_bus_no)
-	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_SI5351_XTAL_FREQ, si5351_xtal_freq)
-    //AA_PARAM_UINT8_ACCESSOR(AA_PARAM_SI5351_I2C_BUS_ADDR, si5351_i2c_bus_addr)
-	AA_PARAM_INT32_ACCESSOR(AA_PARAM_SI5351_XTAL_CORR, si5351_xtal_corr)
+    AA_PARAM_UINT32_ACCESSOR(AA_PARAM_SYNTH_XTAL_FREQ, synth_xtal_freq)
+    AA_PARAM_INT32_ACCESSOR(AA_PARAM_SYNTH_XTAL_CORR, synth_xtal_corr)
     AA_PARAM_INT32_ACCESSOR(AA_PARAM_OSL_SELECTED, osl_selected)
     AA_PARAM_UINT32_ACCESSOR(AA_PARAM_BASE_R0, base_r0)
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_OSL_R_LOAD, osl_r_load)
@@ -391,8 +378,8 @@ public:
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_LO_FREQ_DIV_BY_2, lo_freq_div_by_2)
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_GENERATOR_FREQ, generator_freq)
     AA_PARAM_UINT32_ACCESSOR(AA_PARAM_PAN_IS_CENTER_FREQ, pan_is_center_freq)
-    AA_PARAM_FLOAT_ACCESSOR(AA_PARAM_BRIDGE_R_MEAS, bridge_r_meas)
-    AA_PARAM_FLOAT_ACCESSOR(AA_PARAM_BRIDGE_R_MEAS_ADD, bridge_r_meas_add)
+    AA_PARAM_FLOAT_ACCESSOR(AA_PARAM_BRIDGE_R_MEASURE, bridge_r_measure)
+    AA_PARAM_FLOAT_ACCESSOR(AA_PARAM_BRIDGE_R_MEASURE_ADD, bridge_r_measure_add)
 	AA_PARAM_FLOAT_ACCESSOR(AA_PARAM_BRIDGE_R_LOAD, bridge_r_load)
 	AA_PARAM_STRING_ACCESSOR(AA_PARAM_UART_DEVICE, uart_device)
 	AA_PARAM_UINT32_ACCESSOR(AA_PARAM_UART_BAUDRATE, uart_baudrate)

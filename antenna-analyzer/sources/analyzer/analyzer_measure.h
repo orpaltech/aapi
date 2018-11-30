@@ -25,7 +25,7 @@
 namespace aapi
 {
 
-class aapi_measure;
+class AAPIMeasure;
 
 ///////////////////////////////////////////////////////////////////////////////
 // class AAPIMeasurementEvents
@@ -39,28 +39,28 @@ protected:
 public:
     virtual ~AAPIMeasurementEvents() {}
 
-    virtual void measure_finished(aapi_measure *measure) = 0;
+    virtual void measure_finished(AAPIMeasure *measure) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// class aapi_measure
+// class AAPIMeasure
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief The aapi_measure class
+/// \brief The AAPIMeasure class
 ///
-class aapi_measure :
+class AAPIMeasure :
         public AAPIObject
 {
-    DECLARE_AAPI_OBJECT(aapi_measure)
+    DECLARE_AAPI_OBJECT(AAPIMeasure)
 
-    static aapi_measure *create(AAPIConfig *config, AAPICalibrator *calibrator,
-                                AAPIMeasurementEvents *callback,
-                                uint32_t freq,
-                                bool correct_hwerr,
-                                bool correct_osl,
-                                uint32_t num_scans,
-                                bool add_ref = true);
+    static AAPIMeasure *create(AAPIConfig *config, AAPICalibrator *calibrator,
+                               AAPIMeasurementEvents *callback,
+                               uint32_t frequency,
+                               bool correct_hwerr,
+                               bool correct_osl,
+                               uint32_t num_scans,
+                               bool add_ref = true);
 private:
-    aapi_measure();
+    AAPIMeasure();
 
     std::complex<float> calc_rx();
 
@@ -71,18 +71,18 @@ private:
      * the mean of remaining entries that fall into 1 sigma interval.
      * In normal distribution i.e. our case ~68% entries fall into single
      * standard deviation range. */
-    static float filter_array(float *arr, int n, int retries);
+    static float filter_array(float *arr, uint32_t len, int retries);
 
 public:
-    ~aapi_measure();
+    ~AAPIMeasure();
 
     int process_mags(const std::complex<float>& mag_v, const std::complex<float>& mag_i);
     bool calc_finalize();
     bool is_signal_low() const;
 
 private:
-    aapi_ptr<AAPICalibrator> m_calibrator;
-    AAPIMeasurementEvents   *m_callback;
+    aapi_ptr<AAPICalibrator> calibrator;
+    AAPIMeasurementEvents   *callback;
 
 public:
     float               mag_mv_v;       /* Measured magnitude in mV for V-channel */
@@ -95,18 +95,18 @@ public:
     std::complex<float> mag_i;          /* Measured complex magnitude for I-channel */
     std::complex<float> rx;             /* Measured complex resistance */
     float               vswr;           /* Measured VSWR */
-    int                 m_retries;
-    int                 m_iter;
-    uint32_t            m_numMeasures;
-    uint32_t            freq;
-    bool                m_oslCorrection;
-    bool                m_hwErrCorrection;
+    int                 num_retries;
+    int                 measure_iter;
+    uint32_t            num_measures;
+    uint32_t            frequency;
+    bool                osl_corr;
+    bool                hwerr_corr;
     float               *mag_v_buf;
     float               *mag_i_buf;
     float               *phas_diff_buf;
     float               r0;             /* System impedance (real value, i.e. 50 Ohm)*/
-    float               r_meas;         /* Bridge measurement resistor */
-    float               r_meas_add;     /* Bridge add resistor */
+    float               r_measure;      /* Bridge measurement resistor */
+    float               r_measure_add;  /* Bridge add resistor */
     float               r_load;         /* Bridge load resistor */
     float               r_total;
 };

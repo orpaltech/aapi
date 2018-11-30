@@ -60,19 +60,21 @@ int QAAPIApplication::load()
     aapi_ptr<AAPISignalProcessor>   processor;  processor.attach(AAPISignalProcessor::create( m_config ));
     aapi_ptr<AAPICalibrator> calibrator;    calibrator.attach(AAPICalibrator::create( m_config ));
 
-    QPointer<QAAPIQmlConfigView> qmlConfig ( new QAAPIQmlConfigView( m_config ) );
+    QPointer<QAAPIQmlConfigView> qmlConfigView ( new QAAPIQmlConfigView( m_config ) );
 
-    QPointer<QAAPIQmlDSPView> qmlDSP ( new QAAPIQmlDSPView( m_config, processor, generator) );
+    QPointer<QAAPIQmlDSPView> qmlDSPView ( new QAAPIQmlDSPView( m_config, processor, generator) );
 
-    QPointer<QAAPIQmlMeasureView> qmlMeasure ( new QAAPIQmlMeasureView( m_config, processor, generator) );
+    QPointer<QAAPIQmlMeasureView> qmlMeasureView ( new QAAPIQmlMeasureView( m_config, processor, generator) );
 
-    QPointer<QAAPIQmlPanVSWRView> qmlPanVSWR ( new QAAPIQmlPanVSWRView( m_config, processor, generator, calibrator) );
+    QPointer<QAAPIQmlPanVSWRView> qmlPanVSWRView ( new QAAPIQmlPanVSWRView( m_config, processor, generator, calibrator) );
 
-    QPointer<QAAPIQmlOSLCalView> qmlOSLCal ( new QAAPIQmlOSLCalView( m_config, processor, generator, calibrator) );
+    QPointer<QAAPIQmlOSLCalView> qmlOSLCalView ( new QAAPIQmlOSLCalView( m_config, processor, generator, calibrator) );
 
-    QPointer<QAAPIQmlHWCalView> qmlHWCal ( new QAAPIQmlHWCalView( m_config, processor, generator, calibrator) );
+    QPointer<QAAPIQmlHWCalView> qmlHWCalView ( new QAAPIQmlHWCalView( m_config, processor, generator, calibrator) );
 
-    QPointer<QAAPIQmlAboutView> qmlAbout ( new QAAPIQmlAboutView( m_config ) );
+    QPointer<QAAPIQmlAboutView> qmlAboutView ( new QAAPIQmlAboutView( m_config ) );
+
+    QPointer<QAAPIQmlStatusBackend> qmlStatusBackend ( new QAAPIQmlStatusBackend() );
 
     int ret = calibrator->init();
     if( AAPI_FAILED(ret) )
@@ -98,36 +100,43 @@ int QAAPIApplication::load()
         return ret;
     }
 
+    ret = qmlStatusBackend->init();
+    if( AAPI_FAILED(ret) )
+    {
+        return ret;
+    }
+
     m_generator   = generator;
     m_antscope    = antscope;
     m_processor   = processor;
     m_calibrator  = calibrator;
 
-    m_dspView     = qmlDSP;
-    m_configView  = qmlConfig;
-    m_measureView = qmlMeasure;
-    m_panVswrView = qmlPanVSWR;
-    m_oslCalView  = qmlOSLCal;
-    m_hwCalView   = qmlHWCal;
-    m_aboutView   = qmlAbout;
+    m_qmlDSPView     = qmlDSPView;
+    m_qmlConfigView  = qmlConfigView;
+    m_qmlMeasureView = qmlMeasureView;
+    m_qmlPanVSWRView = qmlPanVSWRView;
+    m_qmlOSLCalView  = qmlOSLCalView;
+    m_qmlHWCalView   = qmlHWCalView;
+    m_qmlAboutView   = qmlAboutView;
+    m_qmlStatusBackend = qmlStatusBackend;
 
     // Connect snapshot signal and slot
-    QObject::connect( m_panVswrView, SIGNAL( snapshotTaken(QString, QImage) ),
+    QObject::connect( m_qmlPanVSWRView, SIGNAL( snapshotTaken(QString, QImage) ),
                       this, SLOT( snapshot_taken( QString, QImage ) ));
 
     // Connect quit, reboot signals and slots
-    QObject::connect( m_aboutView, SIGNAL( rebootApplication() ),
+    QObject::connect( m_qmlAboutView, SIGNAL( rebootApplication() ),
                       this, SLOT( reboot_application() ) );
 
-    QObject::connect( m_aboutView, SIGNAL( quitApplication() ),
+    QObject::connect( m_qmlAboutView, SIGNAL( quitApplication() ),
                       this, SLOT( quit_application() ));
 
     /*===========================================================*/
 /*REMOVE THIS */
-    QTimer *timer = new QTimer(this);
+   QTimer *timer = new QTimer(this);
    connect(timer, SIGNAL(timeout()), this, SLOT(quit_application()));
    timer->setSingleShot(true);
-   timer->start(30000);
+   timer->start(2*30000);
 
     return 0;
 }
@@ -153,13 +162,13 @@ void QAAPIApplication::unload()
     m_calibrator = nullptr;
 
     /* Release views */
-    m_dspView = nullptr;
-    m_configView = nullptr;
-    m_measureView = nullptr;
-    m_panVswrView = nullptr;
-    m_oslCalView = nullptr;
-    m_hwCalView = nullptr;
-    m_aboutView = nullptr;
+    m_qmlDSPView = nullptr;
+    m_qmlConfigView = nullptr;
+    m_qmlMeasureView = nullptr;
+    m_qmlPanVSWRView = nullptr;
+    m_qmlOSLCalView = nullptr;
+    m_qmlHWCalView = nullptr;
+    m_qmlAboutView = nullptr;
 }
 
 QString QAAPIApplication::get_snapshot_dir()

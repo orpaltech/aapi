@@ -119,7 +119,7 @@ void QAAPIQmlOSLCalView::destroy_view()
 {
 }
 
-int QAAPIQmlOSLCalView::on_measure_finished(aapi_measure *measure)
+int QAAPIQmlOSLCalView::on_measure_finished(AAPIMeasure *measure)
 {
     std::complex<float> rx;
     int ret;
@@ -172,7 +172,7 @@ int QAAPIQmlOSLCalView::on_measure_finished(aapi_measure *measure)
 int QAAPIQmlOSLCalView::start_scan(enum ScanType type)
 {
     uint32_t freq, n_scans;
-    aapi_measure_list steps;
+    AAPIMeasureList steps;
     int ret;
 
     /* Read number of scans*/
@@ -188,7 +188,7 @@ int QAAPIQmlOSLCalView::start_scan(enum ScanType type)
     for( uint i = 0; i < CALIB_NUM_ENTRIES; i++ )
     {
         freq = AAPICalibrator::freq_by_index(i);
-        aapi_ptr<aapi_measure> ptr( aapi_measure::create(m_config, m_calibrator, this,
+        aapi_ptr<AAPIMeasure> ptr( AAPIMeasure::create(m_config, m_calibrator, this,
                                         freq, true, false, n_scans, false) );
         steps.push_back(ptr);
     }
