@@ -1,0 +1,1067 @@
+EESchema Schematic File Version 4
+LIBS:AA-PI-V3_0-Display-Board-RaspberryPi3-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 2 3
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L AA-PI-Components:WM8731 U3
+U 1 1 5CFE15B3
+P 7290 2170
+F 0 "U3" H 6930 3250 50  0000 C CNN
+F 1 "WM8731" H 7250 1080 50  0000 C CNN
+F 2 "AA-PI-Footprints:SOP65P780X200-28N" H 7290 320 50  0001 L CNN
+F 3 "https://statics.cirrus.com/pubs/proDatasheet/WM8731_v4.9.pdf" H 7290 220 50  0001 L CNN
+F 4 "WM8731 or WM8731L (WM8731/L) is low power stereo CODECs with an integrated headphone driver." H 7290 70  50  0001 L CNN "Description"
+F 5 "Cirrus Logic" H 7290 -30 50  0001 L CNN "Manufacturer_Name"
+F 6 "WM8731/L" H 7290 -130 50  0001 L CNN "Manufacturer_Part_Number"
+	1    7290 2170
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:L_Small L2
+U 1 1 5CFE15BA
+P 6560 920
+F 0 "L2" V 6490 890 50  0000 L CNN
+F 1 "0.5" V 6640 880 50  0000 L CNN
+F 2 "AA-PI-Footprints:L_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 6560 920 50  0001 C CNN
+F 3 "~" H 6560 920 50  0001 C CNN
+	1    6560 920 
+	0    1    1    0   
+$EndComp
+$Comp
+L AA-PI-Components:CP_Small C11
+U 1 1 5CFE15C1
+P 5580 1170
+F 0 "C11" H 5668 1216 50  0000 L CNN
+F 1 "10u" H 5668 1125 50  0000 L CNN
+F 2 "AA-PI-Footprints:CP_EIA-3216-18_Kemet-A" H 5580 1170 50  0001 C CNN
+F 3 "~" H 5580 1170 50  0001 C CNN
+	1    5580 1170
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C14
+U 1 1 5CFE15C8
+P 5960 1170
+F 0 "C14" H 6052 1216 50  0000 L CNN
+F 1 "100n" H 6052 1125 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5960 1170 50  0001 C CNN
+F 3 "~" H 5960 1170 50  0001 C CNN
+	1    5960 1170
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:CP_Small C36
+U 1 1 5CFE15CF
+P 5580 1670
+F 0 "C36" H 5810 1630 50  0000 R CNN
+F 1 "10u" H 5810 1720 50  0000 R CNN
+F 2 "AA-PI-Footprints:CP_EIA-3216-18_Kemet-A" H 5580 1670 50  0001 C CNN
+F 3 "~" H 5580 1670 50  0001 C CNN
+	1    5580 1670
+	1    0    0    1   
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C15
+U 1 1 5CFE15D6
+P 5960 1670
+F 0 "C15" H 6052 1716 50  0000 L CNN
+F 1 "100n" H 6052 1625 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5960 1670 50  0001 C CNN
+F 3 "~" H 5960 1670 50  0001 C CNN
+	1    5960 1670
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5960 1070 5960 920 
+Wire Wire Line
+	5580 1070 5580 920 
+Wire Wire Line
+	5580 920  5960 920 
+Wire Wire Line
+	5960 1420 5960 1270
+Wire Wire Line
+	5580 1270 5580 1420
+Wire Wire Line
+	5580 1420 5960 1420
+Connection ~ 5960 1420
+$Comp
+L AA-PI-Components:GND #PWR0142
+U 1 1 5CFE15E4
+P 5420 1420
+F 0 "#PWR0142" H 5420 1170 50  0001 C CNN
+F 1 "GND" H 5420 1247 50  0000 C CNN
+F 2 "" H 5420 1420 50  0001 C CNN
+F 3 "" H 5420 1420 50  0001 C CNN
+	1    5420 1420
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5960 1570 5960 1420
+Wire Wire Line
+	6660 920  6720 920 
+Wire Wire Line
+	6590 1920 5960 1920
+Wire Wire Line
+	5960 1920 5960 1770
+Wire Wire Line
+	5960 1920 5580 1920
+Wire Wire Line
+	5580 1920 5580 1770
+Connection ~ 5960 1920
+Wire Wire Line
+	5580 1570 5580 1420
+Connection ~ 5580 1420
+Wire Wire Line
+	6590 1420 5960 1420
+Wire Wire Line
+	5960 920  6360 920 
+Wire Wire Line
+	6360 920  6360 1320
+Wire Wire Line
+	6360 1320 6590 1320
+Connection ~ 5960 920 
+Wire Wire Line
+	5420 1420 5580 1420
+Wire Wire Line
+	7990 2920 8150 2920
+Text GLabel 8150 2920 2    50   Output ~ 0
+I2S_DIN
+Wire Wire Line
+	7990 3020 8150 3020
+Text GLabel 8150 3020 2    50   Output ~ 0
+I2S_LRCK
+Wire Wire Line
+	7990 2620 8150 2620
+Text GLabel 8150 2620 2    50   Output ~ 0
+I2S_BCLK
+Wire Wire Line
+	7990 2220 8150 2220
+Wire Wire Line
+	7990 2120 8150 2120
+Text GLabel 8150 2220 2    50   Input ~ 0
+VNA_I2C_SDA
+Text GLabel 8150 2120 2    50   Input ~ 0
+VNA_I2C_SCL
+$Comp
+L AA-PI-Components:CP_Small C19
+U 1 1 5CFE1603
+P 8690 1170
+F 0 "C19" H 8460 1220 50  0000 L CNN
+F 1 "22u" H 8470 1140 50  0000 L CNN
+F 2 "AA-PI-Footprints:CP_EIA-3216-18_Kemet-A" H 8690 1170 50  0001 C CNN
+F 3 "~" H 8690 1170 50  0001 C CNN
+	1    8690 1170
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C21
+U 1 1 5CFE160A
+P 9070 1170
+F 0 "C21" H 8850 1220 50  0000 L CNN
+F 1 "100n" H 8800 1130 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 9070 1170 50  0001 C CNN
+F 3 "~" H 9070 1170 50  0001 C CNN
+	1    9070 1170
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C26
+U 1 1 5CFE1611
+P 9450 1170
+F 0 "C26" H 9220 1220 50  0000 L CNN
+F 1 "100n" H 9180 1130 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 9450 1170 50  0001 C CNN
+F 3 "~" H 9450 1170 50  0001 C CNN
+	1    9450 1170
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7990 1320 8290 1320
+Wire Wire Line
+	8290 920  8690 920 
+Wire Wire Line
+	8690 920  8690 1070
+Wire Wire Line
+	8290 920  8290 1320
+Wire Wire Line
+	8690 920  9070 920 
+Wire Wire Line
+	9450 920  9450 1070
+Connection ~ 8690 920 
+Wire Wire Line
+	9070 1070 9070 920 
+Connection ~ 9070 920 
+Wire Wire Line
+	9070 920  9450 920 
+Wire Wire Line
+	7990 1420 8290 1420
+Wire Wire Line
+	9450 1420 9450 1270
+Wire Wire Line
+	7990 1520 8690 1520
+Wire Wire Line
+	8690 1270 8690 1420
+Wire Wire Line
+	8690 1420 9070 1420
+Wire Wire Line
+	9070 1270 9070 1420
+Connection ~ 9070 1420
+Wire Wire Line
+	9070 1420 9450 1420
+$Comp
+L AA-PI-Components:GND #PWR0143
+U 1 1 5CFE162A
+P 9510 1420
+F 0 "#PWR0143" H 9510 1170 50  0001 C CNN
+F 1 "GND" H 9510 1247 50  0000 C CNN
+F 2 "" H 9510 1420 50  0001 C CNN
+F 3 "" H 9510 1420 50  0001 C CNN
+	1    9510 1420
+	0    -1   -1   0   
+$EndComp
+$Comp
+L AA-PI-Components:GND #PWR0144
+U 1 1 5CFE1630
+P 8280 2420
+F 0 "#PWR0144" H 8280 2170 50  0001 C CNN
+F 1 "GND" H 8280 2247 50  0000 C CNN
+F 2 "" H 8280 2420 50  0001 C CNN
+F 3 "" H 8280 2420 50  0001 C CNN
+	1    8280 2420
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7990 2420 8150 2420
+Wire Wire Line
+	7990 2320 8150 2320
+Wire Wire Line
+	8150 2320 8150 2420
+Connection ~ 8150 2420
+Wire Wire Line
+	8150 2420 8280 2420
+$Comp
+L AA-PI-Components:Crystal Y1
+U 1 1 5CFE163B
+P 9070 2060
+F 0 "Y1" V 9116 1929 50  0000 R CNN
+F 1 "12.288M" V 9025 1929 50  0000 R CNN
+F 2 "AA-PI-Footprints:Crystal_SMD_5032-2Pin_5.0x3.2mm" H 9070 2060 50  0001 C CNN
+F 3 "~" H 9070 2060 50  0001 C CNN
+	1    9070 2060
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7990 1720 9070 1720
+Wire Wire Line
+	9070 1720 9070 1910
+Wire Wire Line
+	9070 2210 9070 2390
+Wire Wire Line
+	9070 2390 8780 2390
+Wire Wire Line
+	8780 2390 8780 1820
+Wire Wire Line
+	8780 1820 7990 1820
+$Comp
+L AA-PI-Components:C_Small C22
+U 1 1 5CFE1648
+P 9330 1720
+F 0 "C22" V 9440 1720 50  0000 C CNN
+F 1 "22p" V 9220 1720 50  0000 C CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 9330 1720 50  0001 C CNN
+F 3 "~" H 9330 1720 50  0001 C CNN
+	1    9330 1720
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9510 1420 9450 1420
+Connection ~ 9450 1420
+$Comp
+L AA-PI-Components:C_Small C23
+U 1 1 5CFE1651
+P 9330 2390
+F 0 "C23" V 9430 2390 50  0000 C CNN
+F 1 "22p" V 9220 2390 50  0000 C CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 9330 2390 50  0001 C CNN
+F 3 "~" H 9330 2390 50  0001 C CNN
+	1    9330 2390
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9230 1720 9070 1720
+Connection ~ 9070 1720
+Wire Wire Line
+	9230 2390 9070 2390
+Connection ~ 9070 2390
+Wire Wire Line
+	9430 1720 9610 1720
+Wire Wire Line
+	9610 2390 9430 2390
+$Comp
+L AA-PI-Components:GND #PWR0145
+U 1 1 5CFE165E
+P 9680 2050
+F 0 "#PWR0145" H 9680 1800 50  0001 C CNN
+F 1 "GND" H 9680 1877 50  0000 C CNN
+F 2 "" H 9680 2050 50  0001 C CNN
+F 3 "" H 9680 2050 50  0001 C CNN
+	1    9680 2050
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9680 2050 9610 2050
+Wire Wire Line
+	9610 1720 9610 2050
+Connection ~ 9610 2050
+Wire Wire Line
+	9610 2050 9610 2390
+$Comp
+L AA-PI-Components:R_Small R12
+U 1 1 5CFE1668
+P 5280 2620
+F 0 "R12" V 5350 2690 50  0000 C CNN
+F 1 "910" V 5350 2460 50  0000 C CNN
+F 2 "AA-PI-Footprints:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5280 2620 50  0001 C CNN
+F 3 "~" H 5280 2620 50  0001 C CNN
+	1    5280 2620
+	0    -1   -1   0   
+$EndComp
+$Comp
+L AA-PI-Components:R_Small R13
+U 1 1 5CFE166F
+P 5280 2720
+F 0 "R13" V 5360 2790 50  0000 C CNN
+F 1 "910" V 5360 2560 50  0000 C CNN
+F 2 "AA-PI-Footprints:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5280 2720 50  0001 C CNN
+F 3 "~" H 5280 2720 50  0001 C CNN
+	1    5280 2720
+	0    -1   1    0   
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C16
+U 1 1 5CFE1676
+P 5950 2420
+F 0 "C16" H 6060 2380 50  0000 L CNN
+F 1 "10n" H 6060 2460 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5950 2420 50  0001 C CNN
+F 3 "~" H 5950 2420 50  0001 C CNN
+	1    5950 2420
+	1    0    0    1   
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C17
+U 1 1 5CFE167D
+P 5950 2940
+F 0 "C17" H 6070 2980 50  0000 L CNN
+F 1 "10n" H 6070 2900 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5950 2940 50  0001 C CNN
+F 3 "~" H 5950 2940 50  0001 C CNN
+	1    5950 2940
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5380 2620 5590 2620
+Wire Wire Line
+	5950 2620 5950 2520
+Wire Wire Line
+	5950 2720 5950 2840
+$Comp
+L AA-PI-Components:R_Small R15
+U 1 1 5CFE1687
+P 5590 2950
+F 0 "R15" H 5460 3000 50  0000 C CNN
+F 1 "void" H 5460 2880 50  0001 C CNN
+F 2 "AA-PI-Footprints:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5590 2950 50  0001 C CNN
+F 3 "~" H 5590 2950 50  0001 C CNN
+	1    5590 2950
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5590 2850 5590 2720
+$Comp
+L AA-PI-Components:R_Small R14
+U 1 1 5CFE168F
+P 5590 2410
+F 0 "R14" H 5460 2360 50  0000 C CNN
+F 1 "void" H 5470 2470 50  0001 C CNN
+F 2 "AA-PI-Footprints:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5590 2410 50  0001 C CNN
+F 3 "~" H 5590 2410 50  0001 C CNN
+	1    5590 2410
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	5590 2620 5590 2510
+Connection ~ 5590 2620
+Wire Wire Line
+	5590 2620 5950 2620
+Connection ~ 5950 2620
+$Comp
+L AA-PI-Components:GND #PWR0146
+U 1 1 5CFE169A
+P 5590 3140
+F 0 "#PWR0146" H 5590 2890 50  0001 C CNN
+F 1 "GND" H 5590 2967 50  0000 C CNN
+F 2 "" H 5590 3140 50  0001 C CNN
+F 3 "" H 5590 3140 50  0001 C CNN
+	1    5590 3140
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5180 2620 5030 2620
+Wire Wire Line
+	5180 2720 5030 2720
+Text GLabel 5030 2620 0    50   Input ~ 0
+VNA_OUT_VV
+Text GLabel 5030 2720 0    50   Input ~ 0
+VNA_OUT_VI
+Wire Wire Line
+	8290 1320 8290 1420
+Connection ~ 8290 1320
+Connection ~ 8690 1420
+Connection ~ 5950 2720
+Connection ~ 5590 2720
+Wire Wire Line
+	5590 2720 5950 2720
+Wire Wire Line
+	5380 2720 5590 2720
+Wire Wire Line
+	5590 3050 5590 3110
+Wire Wire Line
+	5590 3110 5950 3110
+Wire Wire Line
+	5950 3110 5950 3040
+Wire Wire Line
+	5590 3140 5590 3110
+Connection ~ 5590 3110
+Wire Wire Line
+	5950 2320 5950 2250
+Wire Wire Line
+	5950 2250 5590 2250
+Wire Wire Line
+	5590 2250 5590 2310
+$Comp
+L AA-PI-Components:GND #PWR0147
+U 1 1 5CFE16B3
+P 5590 2210
+F 0 "#PWR0147" H 5590 1960 50  0001 C CNN
+F 1 "GND" H 5590 2037 50  0000 C CNN
+F 2 "" H 5590 2210 50  0001 C CNN
+F 3 "" H 5590 2210 50  0001 C CNN
+	1    5590 2210
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5590 2210 5590 2250
+Connection ~ 5590 2250
+Wire Wire Line
+	5950 2720 6590 2720
+Wire Wire Line
+	5950 2620 6590 2620
+Connection ~ 6360 920 
+Connection ~ 8290 920 
+Wire Wire Line
+	8690 1520 8690 1420
+Wire Wire Line
+	8190 920  8290 920 
+Wire Wire Line
+	6460 920  6360 920 
+Wire Wire Line
+	7930 920  7990 920 
+$Comp
+L AA-PI-Components:L_Small L3
+U 1 1 5CFE16C3
+P 8090 920
+F 0 "L3" V 8160 890 50  0000 L CNN
+F 1 "0.5" V 8030 860 50  0000 L CNN
+F 2 "AA-PI-Footprints:L_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 8090 920 50  0001 C CNN
+F 3 "~" H 8090 920 50  0001 C CNN
+	1    8090 920 
+	0    -1   -1   0   
+$EndComp
+$Comp
+L AA-PI-Components:+V_ADC #PWR0148
+U 1 1 5CFE16CA
+P 6720 920
+F 0 "#PWR0148" H 6720 770 50  0001 C CNN
+F 1 "+V_ADC" V 6720 1047 50  0000 L CNN
+F 2 "" H 6720 920 50  0001 C CNN
+F 3 "" H 6720 920 50  0001 C CNN
+	1    6720 920 
+	0    1    1    0   
+$EndComp
+$Comp
+L AA-PI-Components:+V_ADC #PWR0149
+U 1 1 5CFE16D0
+P 7930 920
+F 0 "#PWR0149" H 7930 770 50  0001 C CNN
+F 1 "+V_ADC" V 7930 1048 50  0000 L CNN
+F 2 "" H 7930 920 50  0001 C CNN
+F 3 "" H 7930 920 50  0001 C CNN
+	1    7930 920 
+	0    -1   -1   0   
+$EndComp
+Text Notes 8850 2900 0    50   ~ 10
+VNA Codec
+Wire Wire Line
+	2540 1310 2790 1310
+Wire Wire Line
+	2540 2110 2790 2110
+Connection ~ 2790 2110
+Wire Wire Line
+	2540 1410 3020 1410
+Wire Wire Line
+	2540 1510 3020 1510
+Wire Wire Line
+	2540 1910 3090 1910
+Wire Wire Line
+	2540 2010 3090 2010
+Wire Wire Line
+	2540 1210 3020 1210
+Text GLabel 3090 1910 2    50   Output ~ 0
+VNA_OUT_VV
+Text GLabel 3090 2010 2    50   Output ~ 0
+VNA_OUT_VI
+$Comp
+L AA-PI-Components:Conn_01x10_Shielded J?
+U 1 1 5D0E30A6
+P 2340 1610
+AR Path="/5D0E30A6" Ref="J?"  Part="1" 
+AR Path="/5CEC0063/5D0E30A6" Ref="J1"  Part="1" 
+AR Path="/5C71FC91/5D0E30A6" Ref="J6"  Part="1" 
+F 0 "J6" H 2360 2150 50  0000 C CNN
+F 1 "VNA Board Interface" H 1680 2320 50  0000 C CNN
+F 2 "AA-PI-Footprints:1.25-AB-SMT-10pin-Vertical" H 2340 1610 50  0001 C CNN
+F 3 "~" H 2340 1610 50  0001 C CNN
+	1    2340 1610
+	-1   0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D0E30AD
+P 2790 2390
+AR Path="/5D0E30AD" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D0E30AD" Ref="#PWR0121"  Part="1" 
+AR Path="/5C71FC91/5D0E30AD" Ref="#PWR0150"  Part="1" 
+F 0 "#PWR0150" H 2790 2140 50  0001 C CNN
+F 1 "GND" H 2790 2217 50  0000 C CNN
+F 2 "" H 2790 2390 50  0001 C CNN
+F 3 "" H 2790 2390 50  0001 C CNN
+	1    2790 2390
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2340 2310 2790 2310
+Wire Wire Line
+	2790 2110 2790 2310
+Connection ~ 2790 2310
+Wire Wire Line
+	2790 2310 2790 2390
+Text GLabel 3020 1410 2    50   Input ~ 0
+VNA_I2C_SCL
+Text GLabel 3020 1510 2    50   Input ~ 0
+VNA_I2C_SDA
+Wire Wire Line
+	2790 1310 2790 2110
+$Comp
+L AA-PI-Components:+V_RADIO #PWR?
+U 1 1 5D0E30BA
+P 3020 1210
+AR Path="/5C8475BA/5D0E30BA" Ref="#PWR?"  Part="1" 
+AR Path="/5D0E30BA" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D0E30BA" Ref="#PWR0122"  Part="1" 
+AR Path="/5C71FC91/5D0E30BA" Ref="#PWR0151"  Part="1" 
+F 0 "#PWR0151" H 3020 1060 50  0001 C CNN
+F 1 "+V_RADIO" V 3020 1337 50  0000 L CNN
+F 2 "" H 3020 1210 50  0001 C CNN
+F 3 "" H 3020 1210 50  0001 C CNN
+	1    3020 1210
+	0    1    1    0   
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C?
+U 1 1 5D187CF5
+P 2280 4130
+AR Path="/5D187CF5" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D187CF5" Ref="C6"  Part="1" 
+AR Path="/5C71FC91/5D187CF5" Ref="C28"  Part="1" 
+F 0 "C28" H 2070 4060 50  0000 L CNN
+F 1 "2.2u" H 2060 4210 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2280 4130 50  0001 C CNN
+F 3 "~" H 2280 4130 50  0001 C CNN
+	1    2280 4130
+	1    0    0    1   
+$EndComp
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D187CFC
+P 2280 4410
+AR Path="/5D187CFC" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D187CFC" Ref="#PWR0123"  Part="1" 
+AR Path="/5C71FC91/5D187CFC" Ref="#PWR0152"  Part="1" 
+F 0 "#PWR0152" H 2280 4160 50  0001 C CNN
+F 1 "GND" H 2280 4237 50  0000 C CNN
+F 2 "" H 2280 4410 50  0001 C CNN
+F 3 "" H 2280 4410 50  0001 C CNN
+	1    2280 4410
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D187D02
+P 3680 4410
+AR Path="/5D187D02" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D187D02" Ref="#PWR0124"  Part="1" 
+AR Path="/5C71FC91/5D187D02" Ref="#PWR0153"  Part="1" 
+F 0 "#PWR0153" H 3680 4160 50  0001 C CNN
+F 1 "GND" H 3680 4237 50  0000 C CNN
+F 2 "" H 3680 4410 50  0001 C CNN
+F 3 "" H 3680 4410 50  0001 C CNN
+	1    3680 4410
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C?
+U 1 1 5D187D08
+P 3680 4100
+AR Path="/5D187D08" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D187D08" Ref="C8"  Part="1" 
+AR Path="/5C71FC91/5D187D08" Ref="C29"  Part="1" 
+F 0 "C29" H 3730 4170 50  0000 L CNN
+F 1 "22n" H 3740 4030 50  0000 L CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3680 4100 50  0001 C CNN
+F 3 "~" H 3680 4100 50  0001 C CNN
+	1    3680 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3510 3970 3680 3970
+Wire Wire Line
+	3680 3970 3680 4000
+Wire Wire Line
+	3510 4070 3540 4070
+Wire Wire Line
+	3540 4070 3540 4130
+Wire Wire Line
+	3510 3870 3960 3870
+Wire Wire Line
+	3960 3870 3960 4000
+Wire Wire Line
+	3960 3870 4200 3870
+Connection ~ 3960 3870
+Wire Wire Line
+	2280 4030 2280 3870
+Connection ~ 2280 3870
+$Comp
+L AA-PI-Components:RT9193-33GB U?
+U 1 1 5D187D1C
+P 3010 3970
+AR Path="/5D187D1C" Ref="U?"  Part="1" 
+AR Path="/5CEC0063/5D187D1C" Ref="U2"  Part="1" 
+AR Path="/5C71FC91/5D187D1C" Ref="U7"  Part="1" 
+F 0 "U7" H 2800 4250 50  0000 C CNN
+F 1 "RT9193-33GB" H 3010 3700 50  0000 C CNN
+F 2 "SOT94P279X130-5N" H 2560 3420 50  0001 L CNN
+F 3 "http://www.richtek.com/assets/product_file/RT9193/DS9193-17.pdf" H 2560 3320 50  0001 L CNN
+F 4 "300mA, Ultra-Low Noise, Ultra-Fast CMOS LDO Regulator" H 2560 3220 50  0001 L CNN "Description"
+F 5 "Richtek USA Inc." H 2560 3120 50  0001 L CNN "Manufacturer_Name"
+F 6 "RT9193" H 2560 3020 50  0001 L CNN "Manufacturer_Part_Number"
+	1    3010 3970
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2280 4230 2280 4410
+Wire Wire Line
+	2510 4070 2460 4070
+Wire Wire Line
+	2120 3870 2280 3870
+Wire Wire Line
+	2460 4070 2460 3870
+Wire Wire Line
+	2280 3870 2460 3870
+Connection ~ 2460 3870
+Wire Wire Line
+	2460 3870 2510 3870
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D187D2A
+P 3540 4130
+AR Path="/5D187D2A" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D187D2A" Ref="#PWR0128"  Part="1" 
+AR Path="/5C71FC91/5D187D2A" Ref="#PWR0154"  Part="1" 
+F 0 "#PWR0154" H 3540 3880 50  0001 C CNN
+F 1 "GND" H 3540 3957 50  0000 C CNN
+F 2 "" H 3540 4130 50  0001 C CNN
+F 3 "" H 3540 4130 50  0001 C CNN
+	1    3540 4130
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:CP_Small C?
+U 1 1 5D187D30
+P 3960 4100
+AR Path="/5D187D30" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D187D30" Ref="C9"  Part="1" 
+AR Path="/5C71FC91/5D187D30" Ref="C30"  Part="1" 
+F 0 "C30" H 4010 4180 50  0000 L CNN
+F 1 "47u" H 4020 4030 50  0000 L CNN
+F 2 "AA-PI-Footprints:CP_EIA-3528-21_Kemet-B" H 3960 4100 50  0001 C CNN
+F 3 "~" H 3960 4100 50  0001 C CNN
+	1    3960 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C?
+U 1 1 5D187D37
+P 4200 4100
+AR Path="/5D187D37" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D187D37" Ref="C11"  Part="1" 
+AR Path="/5C71FC91/5D187D37" Ref="C35"  Part="1" 
+F 0 "C35" H 4320 4180 50  0000 C CNN
+F 1 "100n" H 4340 4030 50  0000 C CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 4200 4100 50  0001 C CNN
+F 3 "~" H 4200 4100 50  0001 C CNN
+	1    4200 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 4000 4200 3870
+Connection ~ 4200 3870
+Wire Wire Line
+	4200 3870 4270 3870
+Wire Wire Line
+	3960 4380 4200 4380
+Wire Wire Line
+	4200 4380 4200 4200
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D187D43
+P 3960 4410
+AR Path="/5D187D43" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D187D43" Ref="#PWR0133"  Part="1" 
+AR Path="/5C71FC91/5D187D43" Ref="#PWR0155"  Part="1" 
+F 0 "#PWR0155" H 3960 4160 50  0001 C CNN
+F 1 "GND" H 3960 4237 50  0000 C CNN
+F 2 "" H 3960 4410 50  0001 C CNN
+F 3 "" H 3960 4410 50  0001 C CNN
+	1    3960 4410
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3680 4200 3680 4410
+Wire Wire Line
+	3960 4380 3960 4200
+Wire Wire Line
+	3960 4410 3960 4380
+Connection ~ 3960 4380
+$Comp
+L AA-PI-Components:+V_ADC #PWR?
+U 1 1 5D187D4D
+P 4270 3870
+AR Path="/5D187D4D" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D187D4D" Ref="#PWR0134"  Part="1" 
+AR Path="/5C71FC91/5D187D4D" Ref="#PWR0156"  Part="1" 
+F 0 "#PWR0156" H 4270 3720 50  0001 C CNN
+F 1 "+V_ADC" V 4270 3997 50  0000 L CNN
+F 2 "" H 4270 3870 50  0001 C CNN
+F 3 "" H 4270 3870 50  0001 C CNN
+	1    4270 3870
+	0    1    1    0   
+$EndComp
+$Comp
+L AA-PI-Components:+V_RADIO #PWR?
+U 1 1 5D187D53
+P 2120 3870
+AR Path="/5D187D53" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D187D53" Ref="#PWR0135"  Part="1" 
+AR Path="/5C71FC91/5D187D53" Ref="#PWR0157"  Part="1" 
+F 0 "#PWR0157" H 2120 3720 50  0001 C CNN
+F 1 "+V_RADIO" V 2120 3998 50  0000 L CNN
+F 2 "" H 2120 3870 50  0001 C CNN
+F 3 "" H 2120 3870 50  0001 C CNN
+	1    2120 3870
+	0    -1   -1   0   
+$EndComp
+Text Notes 2690 4510 0    50   ~ 10
+VNA Codec LDO
+$Comp
+L AA-PI-Components:+5V #PWR?
+U 1 1 5D328B68
+P 6270 3900
+AR Path="/5C8475BA/5D328B68" Ref="#PWR?"  Part="1" 
+AR Path="/5D328B68" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D328B68" Ref="#PWR0136"  Part="1" 
+AR Path="/5C71FC91/5D328B68" Ref="#PWR0158"  Part="1" 
+F 0 "#PWR0158" H 6270 3750 50  0001 C CNN
+F 1 "+5V" V 6270 4028 50  0000 L CNN
+F 2 "" H 6270 3900 50  0001 C CNN
+F 3 "" H 6270 3900 50  0001 C CNN
+	1    6270 3900
+	0    -1   -1   0   
+$EndComp
+Text GLabel 6250 4100 0    50   Input ~ 0
+RADIO_EN
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D328B6F
+P 7940 4210
+AR Path="/5C8475BA/5D328B6F" Ref="#PWR?"  Part="1" 
+AR Path="/5D328B6F" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D328B6F" Ref="#PWR0137"  Part="1" 
+AR Path="/5C71FC91/5D328B6F" Ref="#PWR0159"  Part="1" 
+F 0 "#PWR0159" H 7940 3960 50  0001 C CNN
+F 1 "GND" H 7940 4037 50  0001 C CNN
+F 2 "" H 7940 4210 50  0001 C CNN
+F 3 "" H 7940 4210 50  0001 C CNN
+	1    7940 4210
+	-1   0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:TPS2051BDBVR U?
+U 1 1 5D328B78
+P 7410 4000
+AR Path="/5C8475BA/5D328B78" Ref="U?"  Part="1" 
+AR Path="/5D328B78" Ref="U?"  Part="1" 
+AR Path="/5CEC0063/5D328B78" Ref="U6"  Part="1" 
+AR Path="/5C71FC91/5D328B78" Ref="U9"  Part="1" 
+F 0 "U9" H 7210 4290 50  0000 C CNN
+F 1 "TPS2051BDBVR" H 7420 3720 50  0000 C CNN
+F 2 "AA-PI-Footprints:SOT95P280X145-5N" H 7010 3350 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tps2051b.pdf" H 7010 3250 50  0001 L CNN
+F 4 "TEXAS INSTRUMENTS - TPS2051BDBVR - CURRENT LIMITED POWER SWITCH, 5.5V SOT23-5, FULL REEL" H 7010 3150 50  0001 L CNN "Description"
+F 5 "Texas Instruments" H 7010 3050 50  0001 L CNN "Manufacturer_Name"
+F 6 "TPS2051BDBVR" H 7010 2950 50  0001 L CNN "Manufacturer_Part_Number"
+	1    7410 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7910 4100 7940 4100
+Wire Wire Line
+	7940 4100 7940 4210
+$Comp
+L AA-PI-Components:C_Small C?
+U 1 1 5D328B81
+P 8160 4160
+AR Path="/5C8475BA/5D328B81" Ref="C?"  Part="1" 
+AR Path="/5D328B81" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D328B81" Ref="C21"  Part="1" 
+AR Path="/5C71FC91/5D328B81" Ref="C39"  Part="1" 
+F 0 "C39" H 8280 4240 50  0000 C CNN
+F 1 "100n" H 8300 4090 50  0000 C CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 8160 4160 50  0001 C CNN
+F 3 "~" H 8160 4160 50  0001 C CNN
+	1    8160 4160
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D328B88
+P 8160 4490
+AR Path="/5C8475BA/5D328B88" Ref="#PWR?"  Part="1" 
+AR Path="/5D328B88" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D328B88" Ref="#PWR0138"  Part="1" 
+AR Path="/5C71FC91/5D328B88" Ref="#PWR0160"  Part="1" 
+F 0 "#PWR0160" H 8160 4240 50  0001 C CNN
+F 1 "GND" H 8170 4340 50  0000 C CNN
+F 2 "" H 8160 4490 50  0001 C CNN
+F 3 "" H 8160 4490 50  0001 C CNN
+	1    8160 4490
+	-1   0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:C_Small C?
+U 1 1 5D328B8E
+P 6840 4270
+AR Path="/5C8475BA/5D328B8E" Ref="C?"  Part="1" 
+AR Path="/5D328B8E" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D328B8E" Ref="C19"  Part="1" 
+AR Path="/5C71FC91/5D328B8E" Ref="C38"  Part="1" 
+F 0 "C38" H 6680 4310 50  0000 C CNN
+F 1 "100n" H 6680 4210 50  0000 C CNN
+F 2 "AA-PI-Footprints:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 6840 4270 50  0001 C CNN
+F 3 "~" H 6840 4270 50  0001 C CNN
+	1    6840 4270
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5D328B95
+P 6840 4490
+AR Path="/5C8475BA/5D328B95" Ref="#PWR?"  Part="1" 
+AR Path="/5D328B95" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D328B95" Ref="#PWR0139"  Part="1" 
+AR Path="/5C71FC91/5D328B95" Ref="#PWR0161"  Part="1" 
+F 0 "#PWR0161" H 6840 4240 50  0001 C CNN
+F 1 "GND" H 6810 4340 50  0000 C CNN
+F 2 "" H 6840 4490 50  0001 C CNN
+F 3 "" H 6840 4490 50  0001 C CNN
+	1    6840 4490
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	8160 4490 8160 4460
+Wire Wire Line
+	6270 3900 6840 3900
+Wire Wire Line
+	6840 4170 6840 3900
+Connection ~ 6840 3900
+Wire Wire Line
+	6840 3900 6910 3900
+Wire Wire Line
+	8160 4060 8160 3900
+Wire Wire Line
+	7910 3900 8160 3900
+Connection ~ 8160 3900
+Wire Wire Line
+	8160 3900 8440 3900
+$Comp
+L AA-PI-Components:+V_RADIO #PWR?
+U 1 1 5D328BAD
+P 8580 3900
+AR Path="/5C8475BA/5D328BAD" Ref="#PWR?"  Part="1" 
+AR Path="/5D328BAD" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5D328BAD" Ref="#PWR0140"  Part="1" 
+AR Path="/5C71FC91/5D328BAD" Ref="#PWR0162"  Part="1" 
+F 0 "#PWR0162" H 8580 3750 50  0001 C CNN
+F 1 "+V_RADIO" V 8580 4027 50  0000 L CNN
+F 2 "" H 8580 3900 50  0001 C CNN
+F 3 "" H 8580 3900 50  0001 C CNN
+	1    8580 3900
+	0    1    1    0   
+$EndComp
+$Comp
+L AA-PI-Components:CP_Small C?
+U 1 1 5D328BB3
+P 8440 4160
+AR Path="/5C8475BA/5D328BB3" Ref="C?"  Part="1" 
+AR Path="/5D328BB3" Ref="C?"  Part="1" 
+AR Path="/5CEC0063/5D328BB3" Ref="C22"  Part="1" 
+AR Path="/5C71FC91/5D328BB3" Ref="C40"  Part="1" 
+F 0 "C40" H 8490 4240 50  0000 L CNN
+F 1 "47u" H 8500 4090 50  0000 L CNN
+F 2 "AA-PI-Footprints:CP_EIA-3528-21_Kemet-B" H 8440 4160 50  0001 C CNN
+F 3 "~" H 8440 4160 50  0001 C CNN
+	1    8440 4160
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8440 4060 8440 3900
+Connection ~ 8440 3900
+Wire Wire Line
+	8440 3900 8580 3900
+Wire Wire Line
+	8160 4460 8440 4460
+Wire Wire Line
+	8440 4460 8440 4260
+Connection ~ 8160 4460
+Wire Wire Line
+	8160 4460 8160 4260
+Text Notes 5270 4830 0    50   ~ 10
+I2C Bus Switch
+$Comp
+L AA-PI-Components:TCA9802 U2
+U 1 1 5DF16A7F
+P 5590 5380
+F 0 "U2" H 5340 5710 50  0000 C CNN
+F 1 "TCA9802" H 5590 5060 50  0000 C CNN
+F 2 "AA-PI-Footprints:SOP65P490X110-8N" H 5490 4080 50  0001 L CNN
+F 3 "http://www.ti.com/lit/gpn/tca9802" H 5490 3980 50  0001 L CNN
+F 4 "Level-Translating I2C Bus Buffer/Repeater" H 5490 3880 50  0001 L CNN "Description"
+F 5 "Texas Instruments" H 5490 3680 50  0001 L CNN "Manufacturer_Name"
+F 6 "TCA9802DGKR" H 5490 3580 50  0001 L CNN "Manufacturer_Part_Number"
+	1    5590 5380
+	1    0    0    -1  
+$EndComp
+$Comp
+L AA-PI-Components:+3V3 #PWR0163
+U 1 1 5DF2F850
+P 4920 5100
+F 0 "#PWR0163" H 4920 4950 50  0001 C CNN
+F 1 "+3V3" H 4920 5274 50  0000 C CNN
+F 2 "" H 4920 5100 50  0001 C CNN
+F 3 "" H 4920 5100 50  0001 C CNN
+	1    4920 5100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5040 5230 4920 5230
+Wire Wire Line
+	4920 5230 4920 5100
+Wire Wire Line
+	6140 5230 6240 5230
+Wire Wire Line
+	6240 5230 6240 5100
+$Comp
+L AA-PI-Components:GND #PWR?
+U 1 1 5DF4D7E5
+P 4920 5600
+AR Path="/5C8475BA/5DF4D7E5" Ref="#PWR?"  Part="1" 
+AR Path="/5DF4D7E5" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5DF4D7E5" Ref="#PWR0176"  Part="1" 
+AR Path="/5C71FC91/5DF4D7E5" Ref="#PWR0164"  Part="1" 
+F 0 "#PWR0164" H 4920 5350 50  0001 C CNN
+F 1 "GND" H 4890 5450 50  0000 C CNN
+F 2 "" H 4920 5600 50  0001 C CNN
+F 3 "" H 4920 5600 50  0001 C CNN
+	1    4920 5600
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	4920 5600 4920 5530
+Wire Wire Line
+	4920 5530 5040 5530
+Wire Wire Line
+	5040 5330 4760 5330
+Wire Wire Line
+	5040 5430 4760 5430
+Text GLabel 4760 5330 0    50   Input ~ 0
+I2C1_SCL
+Text GLabel 4760 5430 0    50   Input ~ 0
+I2C1_SDA
+Text GLabel 6610 5330 2    50   Input ~ 0
+VNA_I2C_SCL
+Text GLabel 6610 5430 2    50   Input ~ 0
+VNA_I2C_SDA
+Wire Wire Line
+	6840 4370 6840 4490
+$Comp
+L AA-PI-Components:+V_ADC #PWR?
+U 1 1 5C673569
+P 6240 5100
+AR Path="/5C673569" Ref="#PWR?"  Part="1" 
+AR Path="/5CEC0063/5C673569" Ref="#PWR0175"  Part="1" 
+AR Path="/5C71FC91/5C673569" Ref="#PWR0165"  Part="1" 
+F 0 "#PWR0165" H 6240 4950 50  0001 C CNN
+F 1 "+V_ADC" H 6020 5270 50  0000 L CNN
+F 2 "" H 6240 5100 50  0001 C CNN
+F 3 "" H 6240 5100 50  0001 C CNN
+	1    6240 5100
+	1    0    0    -1  
+$EndComp
+Text Notes 7230 4710 0    50   ~ 10
+VNA Power Switch
+Wire Wire Line
+	6250 4100 6400 4100
+Wire Wire Line
+	6400 5530 6400 4100
+Wire Wire Line
+	6140 5530 6400 5530
+Connection ~ 6400 4100
+Wire Wire Line
+	6400 4100 6910 4100
+Wire Wire Line
+	6140 5430 6610 5430
+Wire Wire Line
+	6140 5330 6610 5330
+$EndSCHEMATC

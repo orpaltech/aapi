@@ -1,4 +1,0 @@
-(sym_lib_table
-  (lib (name AA-PI-Radio-Board-eagle-import)(type Legacy)(uri ${KIPRJMOD}/AA-PI-Radio-Board-eagle-import.lib)(options "")(descr ""))
-  (lib (name SW-Diodes-Inc)(type Legacy)(uri /home/sergey/Projects2/kicad/KiCAD-Libraries/SW-Diodes-Inc.lib)(options "")(descr ""))
-)

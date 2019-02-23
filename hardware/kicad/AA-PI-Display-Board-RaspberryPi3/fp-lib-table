@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name AA-PI-Display-Board-RaspberryPi3)(type KiCad)(uri "$(KIPRJMOD)/AA-PI-Display-Board-RaspberryPi3.pretty")(options "")(descr ""))
-)

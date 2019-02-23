@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name AA-PI-Display-Board-RaspberryPi3-eagle-import)(type Legacy)(uri ${KIPRJMOD}/AA-PI-Display-Board-RaspberryPi3-eagle-import.lib)(options "")(descr "")(disabled))
+  (lib (name AA-PI-Display-Board-RaspberryPi3-rescue)(type Legacy)(uri ${KIPRJMOD}/AA-PI-Display-Board-RaspberryPi3-rescue.lib)(options "")(descr "")(disabled))
+)
