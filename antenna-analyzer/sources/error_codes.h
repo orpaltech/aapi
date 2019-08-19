@@ -15,22 +15,22 @@
  * 	along with ORPAL-AA-PI. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AA_ERROR_CODE_H
-#define AA_ERROR_CODE_H
+#ifndef AAPI_ERROR_CODE_H
+#define AAPI_ERROR_CODE_H
 
 namespace aapi
 {
 
 enum AAPIError {
-    AAPI_E_SUCCESS = 0,
+    AAPI_SUCCESS = 0,
     AAPI_E_FAILURE = -1,
     AAPI_E_OUT_OF_MEMORY = -2,
     AAPI_E_INVALID_ARG = -3,
     AAPI_E_BAD_POINTER = -4,
     AAPI_E_INVALID_STATE = -5,
-    AAPI_E_CREATE_THREAD = -6,
+    AAPI_E_CREATE_THREAD_FAILED = -6,
     AAPI_E_RESOURCE_LOCKED = -7,
-    AAPI_E_CREATE_DIRECTORY = -8,
+    AAPI_E_CREATE_DIR_FAILED = -8,
 };
 
 } //namespace aapi
@@ -44,7 +44,7 @@ enum AAPIError {
 #define AAPI_GEN_ERROR_START            -350
 #define AAPI_CALIB_ERROR_START          -400
 
-#define AAPI_SUCCESS(rc)        ((rc) >= AAPI_E_SUCCESS)
-#define AAPI_FAILED(rc)         ((rc) < AAPI_E_SUCCESS)
+#define AAPI_SUCCESS(rc)        ((rc) >= AAPI_SUCCESS)
+#define AAPI_FAILED(rc)         ((rc) < AAPI_SUCCESS)
 
-#endif // AA_ERROR_CODE_H
+#endif // AAPI_ERROR_CODE_H

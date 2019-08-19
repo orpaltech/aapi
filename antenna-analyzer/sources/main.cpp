@@ -35,12 +35,12 @@ int main( int argc, char *argv[] )
         QApplication app( argc, argv );
         QAAPIApplication *analyzer = new QAAPIApplication( &app );
 
-        ret = analyzer->load();
+/*        ret = analyzer->load();
         if( AAPI_FAILED( ret ) )
         {
             ret = EXIT_FAILURE;
             break;
-        }
+        }*/
 
         /* Register QML types */
         ret = qmlRegisterUncreatableType<QAAPIQmlView>("com.orpaltech.aapi", 1, 0, "ViewBackend", ERROR_CREATE_BACKEND);

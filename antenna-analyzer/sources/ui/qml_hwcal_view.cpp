@@ -21,19 +21,21 @@
 // class QAAPIQmlHWCalView
 ///////////////////////////////////////////////////////////////////////////////
 
-QAAPIQmlHWCalView::QAAPIQmlHWCalView(AAPIConfig *config, AAPISignalProcessor *processor,
-                                     AAPIGenerator *generator, AAPICalibrator *calibrator,
+QAAPIQmlHWCalView::QAAPIQmlHWCalView(AAPIConfig *config, AAPISignalProcessor *dsp,
+                                     AAPIGenerator *gen, AAPICalibrator *calibrator,
                                      QObject *parent)
-    : QAAPIQmlView(config, processor, generator, parent)
+    : QAAPIQmlView(config, dsp, gen, parent)
 {
     m_calibrator = calibrator;
+    AAPI_ADDREF(m_calibrator);
 
-    /* Subscribe for DSP events */
-    processor->add_callback( this );
+    // Subscribe for DSP events 
+    dsp->add_callback( this );
 }
 
 QAAPIQmlHWCalView::~QAAPIQmlHWCalView()
 {
+    AAPI_DISPOSE(m_calibrator);
 }
 
 int QAAPIQmlHWCalView::load_view()
@@ -50,35 +52,37 @@ int QAAPIQmlHWCalView::on_measure_finished(AAPIMeasure *measure)
     float mag_ratio, phas_diff;
     int ret;
 
-    /* We are in the main thread now */
-    if ( measure == nullptr )
-    {
-        /* Finalize measurement */
-        m_calibrator->scan_hwerr_ended();
+    // NOTE: We are in the main thread now 
 
-        /* Save calibration data to file */
-        ret = m_calibrator->save_hwerr_file();
+    if( measure == nullptr )
+    {
+        // Finalize measurement
+        m_calibrator->scan_hwerror_ended();
+
+        // Save calibration data to file 
+        ret = m_calibrator->save_hwerror_correction_file();
     }
     else
     {
-        if ( m_scanCancelled ) /*User cancelled*/
+        if( m_scan_cancelled ) /*User cancelled*/
         {
             return 1;
         }
 
-        if ( measure->is_signal_low() )
+        if( measure->is_signal_low() )
         {
-            /* Hardware problem */
+            // Hardware problem 
             emit scanNoSignal();
             return 1;
         }
 
         mag_ratio = measure->mag_ratio;
-        phas_diff = measure->phas_diff;
+        phas_diff = measure->Phas_diff;
 
-        ret = m_calibrator->set_hwerr_entry( m_scanIndex++, mag_ratio, phas_diff);
-        /* Notify UI progress */
-        emit scanProgress( m_scanIndex, m_allMeasures.length(), mag_ratio, phas_diff);
+        ret = m_calibrator->set_hwerror_entry( m_scan_index++, mag_ratio, phas_diff);
+        
+        // Notify UI progress 
+        emit scanProgress( m_scan_index, m_measures.length(), mag_ratio, phas_diff);
     }
 
     return 0;
@@ -86,9 +90,9 @@ int QAAPIQmlHWCalView::on_measure_finished(AAPIMeasure *measure)
 
 int QAAPIQmlHWCalView::start_hwcal()
 {
-    AAPIMeasureList steps;
-    unsigned int freq, num_scans;
-    int ret;
+    AAPIMeasureList     measure_steps;
+    unsigned int        freq, num_scans;
+    int                 ret;
 
     /* Read number of scans*/
     num_scans = m_config->get_osl_n_scans();
@@ -98,19 +102,18 @@ int QAAPIQmlHWCalView::start_hwcal()
     {
         freq = AAPICalibrator::freq_by_index(i);
 
-        aapi_ptr<AAPIMeasure> ptr( AAPIMeasure::create(m_config, m_calibrator, this,
-                                    freq, false, false, num_scans, false) );
-        steps.push_back(ptr);
+        AAPtr<AAPIMeasure> measure( AAPIMeasure::create(m_config, m_calibrator, this, freq, false, false, num_scans, false) );
+        measure_steps.push_back( measure );
     }
 
-    m_calibrator->scan_hwerr_begin();
+    m_calibrator->scan_hwerror_begin();
 
-    /* reset scan index */
-    m_scanIndex = 0;
-    m_scanCancelled = false;
+    // reset scan index & cancel flag
+    m_scan_index = 0;
+    m_scan_cancelled = false;
 
-    ret = start_measure(steps);
-    if (AAPI_FAILED(ret))
+    ret = start_measure( measure_steps );
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
@@ -120,5 +123,5 @@ int QAAPIQmlHWCalView::start_hwcal()
 
 void QAAPIQmlHWCalView::cancel_hwcal()
 {
-    m_scanCancelled = true;
+    m_scan_cancelled = true;
 }

@@ -68,36 +68,35 @@ public:
 
 
     /* --------- Property accessors ------- */
-    QAAPIQmlDSPView *get_dsp_view() { return m_qmlDSPView; }
-    QAAPIQmlConfigView *get_config_view() { return m_qmlConfigView; }
-    QAAPIQmlMeasureView *get_measure_view() { return m_qmlMeasureView; }
-    QAAPIQmlPanVSWRView *get_panvswr_view() { return m_qmlPanVSWRView; }
-    QAAPIQmlOSLCalView *get_oslcal_view() { return m_qmlOSLCalView; }
-    QAAPIQmlHWCalView *get_hwcal_view() { return m_qmlHWCalView; }
-    QAAPIQmlAboutView *get_about_view() { return m_qmlAboutView; }
-    QAAPIQmlStatusBackend *get_status_backend() { return m_qmlStatusBackend; }
-    QString get_last_snapshot() { return m_lastSnapshot; }
+    QAAPIQmlConfigView *get_config_view() const { return m_qml_config_view; }
+    QAAPIQmlDSPView *get_dsp_view() const { return m_qml_dsp_view; }
+    QAAPIQmlMeasureView *get_measure_view() const { return m_qml_measure_view; }
+    QAAPIQmlPanVSWRView *get_panvswr_view() const { return m_qml_panvswr_view; }
+    QAAPIQmlOSLCalView *get_oslcal_view() const { return m_qml_oslcal_view; }
+    QAAPIQmlHWCalView *get_hwcal_view() const { return m_qml_hwcal_view; }
+    QAAPIQmlAboutView *get_about_view() const { return m_qml_about_view; }
+    QAAPIQmlStatusBackend *get_status_backend() const { return m_qml_status_backend; }
+    QString get_last_snapshot() const { return m_last_snapshot; }
 
     static QString get_snapshot_dir();
 
 private:
-    aapi_ptr<AAPIConfig>        m_config;
-    aapi_ptr<AAPIGenerator>     m_generator;
-    aapi_ptr<antscope_device>   m_antscope;
-    aapi_ptr<AAPISignalProcessor>   m_processor;
-    aapi_ptr<AAPICalibrator>    m_calibrator;
-    QString                     m_lastSnapshot;
+    AAPIConfig      *m_config;
+    AAPIGenerator   *m_generator;
+    AntScopeDevice  *m_antscope;
+    AAPISignalProcessor *m_dsp;
+    AAPICalibrator  *m_calibrator;
+    QString         m_last_snapshot;
 
     /* ------------- Models -------------- */
-    QPointer<QAAPIQmlDSPView>       m_qmlDSPView;
-    QPointer<QAAPIQmlConfigView>    m_qmlConfigView;
-    QPointer<QAAPIQmlMeasureView>   m_qmlMeasureView;
-    QPointer<QAAPIQmlPanVSWRView>   m_qmlPanVSWRView;
-    QPointer<QAAPIQmlOSLCalView>    m_qmlOSLCalView;
-    QPointer<QAAPIQmlHWCalView>     m_qmlHWCalView;
-    QPointer<QAAPIQmlAboutView>     m_qmlAboutView;
-    QPointer<QAAPIQmlStatusBackend> m_qmlStatusBackend;
-
+    QPointer<QAAPIQmlDSPView>       m_qml_dsp_view;
+    QPointer<QAAPIQmlConfigView>    m_qml_config_view;
+    QPointer<QAAPIQmlMeasureView>   m_qml_measure_view;
+    QPointer<QAAPIQmlPanVSWRView>   m_qml_panvswr_view;
+    QPointer<QAAPIQmlOSLCalView>    m_qml_oslcal_view;
+    QPointer<QAAPIQmlHWCalView>     m_qml_hwcal_view;
+    QPointer<QAAPIQmlAboutView>     m_qml_about_view;
+    QPointer<QAAPIQmlStatusBackend> m_qml_status_backend;
 
 public slots:
     void snapshot_taken(QString file_name, QImage snapshot);

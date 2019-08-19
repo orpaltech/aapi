@@ -21,10 +21,18 @@
 namespace aapi
 {
 
+///////////////////////////////////////////////////////////////////////////////
+// AAPIAudioReader implementation
+///////////////////////////////////////////////////////////////////////////////
+
 AAPIAudioReader *AAPIAudioReader::create(bool add_ref)
 {
-    /* create an ALSA reader impl */
+    // create an ALSA reader impl 
     return AAPIALSAReader::create(add_ref);
+}
+
+AAPIAudioReader::AAPIAudioReader()
+{
 }
 
 AAPIAudioReader::~AAPIAudioReader()

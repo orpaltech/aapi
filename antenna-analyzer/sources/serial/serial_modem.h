@@ -23,59 +23,59 @@
 namespace aapi
 {
 
-enum serial_modem_error
+enum AAPISerialModemError
 {
-    MODEM_E_CALLBACK_FAILED = SERIAL_MODEM_ERROR_START,
+    SMODEM_E_CALLBACK_FAILED = SERIAL_MODEM_ERROR_START,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// serial_modem_callback
+// class AAPISerialModemCallback
 ///////////////////////////////////////////////////////////////////////////////
 
-class serial_modem_callback
+class AAPISerialModemCallback
 {
 public:
-    virtual ~serial_modem_callback() {}
+    virtual ~AAPISerialModemCallback() {}
 
     virtual void serial_modem_command(const char *command) = 0;
     virtual void serial_modem_error(int code) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// serial_modem
+// class AAPISerialModem
 ///////////////////////////////////////////////////////////////////////////////
 
-class serial_modem
-        : public AAPIObject
-        , public uart_device_callback
+class AAPISerialModem : public AAPIObject, public AAPIUartCallback
 {
-    DECLARE_AAPI_OBJECT(serial_modem)
+    DECLARE_AAPI_OBJECT(AAPISerialModem)
 
 protected:
-    serial_modem();
-public:
-    ~serial_modem();
+    AAPISerialModem();
+    ~AAPISerialModem();
 
+public:
     const char *get_rx_delimit_chars() const;
     const char *get_tx_delimit_chars() const;
     void set_rx_delimit_chars(const char *delimit_chars);
     void set_tx_delimit_chars(const char *delimit_chars);
 
-    virtual int start(const char *device_name, struct uart_params *params, serial_modem_callback *callback);
+    virtual int start(const char *device_name, struct AAPIUartParams *params, AAPISerialModemCallback *callback);
 	virtual void stop();
     virtual int send(const char *command);
 
-protected:
+private:
+// AAPIUartCallback
     virtual void uart_rx_data(const uint8_t *buffer, uint32_t len);
 	virtual void uart_error(int error_code);
 
-protected:
+private:
     char        *rx_delimit;
     char        *tx_delimit;
     char        *cmd_buff;
     uint32_t    cmd_size;
-    aapi_ptr<uart_device>   uart;
-    serial_modem_callback   *callback;
+
+    AAPIUart    *m_uart;
+    AAPISerialModemCallback *m_callback;
 };
 
 } // namespace aapi

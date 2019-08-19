@@ -29,7 +29,7 @@ namespace aapi
 ///
 enum AAPIGeneratorError
 {
-    AAPIGEN_E_DEVICE_NOT_FOUND  = AAPI_GEN_ERROR_START
+    AAPI_GEN_E_DEVICE_NOT_FOUND  = AAPI_GEN_ERROR_START
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,6 +43,7 @@ class AAPIGenerator : public AAPIObject
     static AAPIGenerator *create(AAPIConfig *config, bool add_ref = true);
 protected:
     AAPIGenerator();
+    ~AAPIGenerator();
 
 public:
     int open();
@@ -56,8 +57,8 @@ public:
     uint32_t get_last_frequency() const;
 
 private:
-    aapi_ptr<AAPIConfig> config;
-    uint32_t        last_frequency;
+    AAPIConfig      *m_config;
+    uint32_t        last_freq;
     volatile void   *current_owner;
 
 };

@@ -21,34 +21,38 @@
 // class QAAPIQmlOSLCalView
 ///////////////////////////////////////////////////////////////////////////////
 
-QAAPIQmlOSLCalView::QAAPIQmlOSLCalView(AAPIConfig *config, AAPISignalProcessor *processor,
+QAAPIQmlOSLCalView::QAAPIQmlOSLCalView(AAPIConfig *config, AAPISignalProcessor *dsp,
                                        AAPIGenerator *gen, AAPICalibrator *calibrator,
                                        QObject *parent)
-    : QAAPIQmlView(config, processor, gen, parent)
+    : QAAPIQmlView(config, dsp, gen, parent)
 {
     m_calibrator = calibrator;
+    AAPI_ADDREF(m_calibrator);
 
-    /* Subscribe for DSP events */
-    processor->add_callback(this);
+    m_osl_file = -1;
+
+    // Subscribe for DSP events 
+    dsp->add_callback(this);
 }
 
 QAAPIQmlOSLCalView::~QAAPIQmlOSLCalView()
 {
+    AAPI_DISPOSE(m_calibrator);
 }
 
 void QAAPIQmlOSLCalView::set_osl_file(int osl_file)
 {
-    if (m_OSLFile != osl_file)
+    if( m_osl_file != osl_file )
     {
-        m_OSLFile = osl_file;
+        m_osl_file = osl_file;
     }
 }
 
 uint32_t QAAPIQmlOSLCalView::get_file_num_options() const
 {
-    uint32_t num_vals = m_config->get_num_opt(AA_PARAM_OSL_SELECTED);
-    const QVariant *values = m_config->get_opt_values(AA_PARAM_OSL_SELECTED);
-    uint32_t count = 0;
+    uint32_t        num_vals    = m_config->get_num_opt(AA_PARAM_OSL_SELECTED);
+    const QVariant *values      = m_config->get_opt_values(AA_PARAM_OSL_SELECTED);
+    uint32_t        count       = 0;
 
     for (uint i = 0; i < num_vals; i++)
     {
@@ -63,9 +67,9 @@ uint32_t QAAPIQmlOSLCalView::get_file_num_options() const
 
 QList<int> QAAPIQmlOSLCalView::get_file_opt_values() const
 {
-    QList<int> res;
-    uint32_t num_vals = m_config->get_num_opt(AA_PARAM_OSL_SELECTED);
-    const QVariant *values = m_config->get_opt_values(AA_PARAM_OSL_SELECTED);
+    QList<int>      res;
+    uint32_t        num_vals    = m_config->get_num_opt(AA_PARAM_OSL_SELECTED);
+    const QVariant *values      = m_config->get_opt_values(AA_PARAM_OSL_SELECTED);
 
     for( uint i = 0; i < num_vals; i++ )
     {
@@ -81,11 +85,11 @@ QList<int> QAAPIQmlOSLCalView::get_file_opt_values() const
 QStringList QAAPIQmlOSLCalView::get_file_opt_labels() const
 {
     QStringList res;
-    uint32_t num_vals = m_config->get_num_opt(AA_PARAM_OSL_SELECTED);
-    const QString* labels = m_config->get_opt_labels(AA_PARAM_OSL_SELECTED);
-    const QVariant* values = m_config->get_opt_values(AA_PARAM_OSL_SELECTED);
+    uint32_t        num_vals    = m_config->get_num_opt(AA_PARAM_OSL_SELECTED);
+    const QString   *labels     = m_config->get_opt_labels(AA_PARAM_OSL_SELECTED);
+    const QVariant  *values     = m_config->get_opt_values(AA_PARAM_OSL_SELECTED);
 
-    for (uint i = 0; i < num_vals; i++)
+    for( uint i = 0; i < num_vals; i++ )
     {
         int val = values[i].toInt();
         if ( val >= 0 )
@@ -98,18 +102,18 @@ QStringList QAAPIQmlOSLCalView::get_file_opt_labels() const
 
 bool QAAPIQmlOSLCalView::get_file_exists() const
 {
-    return m_calibrator->osl_file_exists( m_OSLFile );
+    return m_calibrator->osl_file_exists( m_osl_file );
 }
 
 int QAAPIQmlOSLCalView::load_view()
 {
-    m_OSLFile = m_config->get_osl_selected();
+    m_osl_file = m_config->get_osl_selected();
 
-    if (! AAPICalibrator::is_valid_file( m_OSLFile ))
+    if (! AAPICalibrator::is_valid_file( m_osl_file ))
     {
-        /* Select 1st available OSL file */
+        // Select 1st available OSL file 
         QList<int> vals = get_file_opt_values();
-        m_OSLFile = vals.at(0);
+        m_osl_file = vals.at(0);
     }
 
     return 0;
@@ -121,95 +125,96 @@ void QAAPIQmlOSLCalView::destroy_view()
 
 int QAAPIQmlOSLCalView::on_measure_finished(AAPIMeasure *measure)
 {
-    std::complex<float> rx;
-    int ret;
+    std::complex<float>     rx;
+    int                     ret;
 
-    /* We are being called from the MAIN/UI THREAD */
-    if ( measure == nullptr )
+    // We are being called from the MAIN/UI THREAD 
+
+    if( measure == nullptr )
     {
-        /* Finalize */
-        m_calibrator->scan_osl_ended( m_scanType );
+        // Finalize 
+        m_calibrator->scan_osl_ended( m_scan_type );
 
         /* Calculate OSL calibration coefficients */
         ret = m_calibrator->calc_osl_entries();
-        if (ret == AAPICAL_E_SCAN_INCOMPLETE)
+        if( ret == AAPI_CAL_E_SCAN_INCOMPLETE )
         {
-            /* Not fully scanned */
+            // Not fully scanned 
         }
-        else if (AAPI_SUCCESS( ret ))
+        else if( AAPI_SUCCESS( ret ) )
         {
-            /* Save results into file */
-            ret = m_calibrator->save_osl_file();
+            // Save results into file 
+            ret = m_calibrator->save_osl_correction_file();
 
-            /* Notify frontend */
+            // Notify frontend 
             emit oslFileExistsChanged();
         }
     }
     else
     {
-        if ( m_scanCancelled ) /*User cancelled*/
+        if( m_scan_cancelled ) /*User cancelled*/
         {
             return 1;
         }
 
-        if ( measure->is_signal_low() )
+        if( measure->is_signal_low() )
         {
-            /* Hardware problem */
-            emit scanNoSignal( m_scanType );
+            // Hardware problem 
+            emit scanNoSignal( m_scan_type );
             return 1;
         }
 
-        rx = measure->rx;
-        ret = m_calibrator->set_osl_z( m_scanType, m_scanIndex++, rx );
+        rx = measure->Rx;
+        ret = m_calibrator->set_osl_z( m_scan_type, m_scan_index++, rx );
 
-        /* Notify UI */
-        emit scanProgress( m_scanType, m_scanIndex, m_allMeasures.length(), rx.real(), rx.imag());
+        // Notify UI 
+        emit scanProgress( m_scan_type, m_scan_index, m_measures.length(), rx.real(), rx.imag());
     }
 
     return 0;
 }
 
-int QAAPIQmlOSLCalView::start_scan(enum ScanType type)
+int QAAPIQmlOSLCalView::start_scan(ScanType type)
 {
-    uint32_t freq, n_scans;
-    AAPIMeasureList steps;
-    int ret;
+    uint32_t        freq, num_scans;
+    AAPIMeasureList measure_steps;
+    int             ret;
 
-    /* Read number of scans*/
-    n_scans = m_config->get_osl_n_scans();
+    // Read number of scans
+    num_scans = m_config->get_osl_n_scans();
 
-    ret = m_calibrator->set_osl_file( m_OSLFile );
+    ret = m_calibrator->set_osl_file( m_osl_file );
     if( AAPI_FAILED( ret ))
     {
         return ret;
     }
 
-    /* Prepare measurement steps */
+    // Prepare measurement steps 
     for( uint i = 0; i < CALIB_NUM_ENTRIES; i++ )
     {
         freq = AAPICalibrator::freq_by_index(i);
-        aapi_ptr<AAPIMeasure> ptr( AAPIMeasure::create(m_config, m_calibrator, this,
-                                        freq, true, false, n_scans, false) );
-        steps.push_back(ptr);
+
+        AAPtr<AAPIMeasure> measure( AAPIMeasure::create(m_config, m_calibrator, this, freq, true, false, num_scans, false) );
+        measure_steps.push_back( measure );
     }
 
     /* reset scan index */
-    m_scanIndex = 0;
+    m_scan_index = 0;
 
     /* reset cancel flag */
-    m_scanCancelled = false;
+    m_scan_cancelled = false;
 
     /* set scan type */
-    m_scanType = type;
+    m_scan_type = type;
 
-    ret = m_calibrator->scan_osl_begin( m_scanType );
-    if (AAPI_FAILED( ret ))
+    ret = m_calibrator->scan_osl_begin( m_scan_type );
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
-    ret = start_measure( steps );
-    if (AAPI_FAILED( ret ))
+    ret = start_measure( measure_steps );
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
@@ -219,5 +224,5 @@ int QAAPIQmlOSLCalView::start_scan(enum ScanType type)
 
 void QAAPIQmlOSLCalView::cancel_scan()
 {
-    m_scanCancelled = true;
+    m_scan_cancelled = true;
 }

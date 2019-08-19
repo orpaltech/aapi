@@ -43,9 +43,8 @@ enum AAPIAudioSampleRate {
 };
 
 enum AAPIAudioError {
-    AAPIAUDIO_E_OPEN_DEVICE         = AUDIO_ERROR_START,
-    AAPIAUDIO_E_ALREADY_OPEN        = AUDIO_ERROR_START - 1,
-    AAPIAUDIO_E_INVALID_PARAM       = AUDIO_ERROR_START - 2,
+    AAPI_AUDIO_E_OPEN_DEVICE         = AUDIO_ERROR_START,
+    AAPI_AUDIO_E_INVALID_PARAM       = AUDIO_ERROR_START - 1,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,8 +58,6 @@ public:
     virtual ~AAPIAudioReaderEvents() {}
 
     virtual void audio_reader_data(char **buffers, uint32_t num_buffers, uint32_t buf_size) = 0;
-protected:
-    AAPIAudioReaderEvents() {}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,14 +65,16 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The AAPIAudioReader class
 ///
-class AAPIAudioReader :
-        public AAPIObject
+class AAPIAudioReader : public AAPIObject
 {
 public:
     static AAPIAudioReader *create(bool add_ref = true);
-public:
+
+protected:
+    AAPIAudioReader();
     ~AAPIAudioReader();
 
+public:
     virtual unsigned int get_num_devices() = 0;
     virtual const char *get_device_id(int index) = 0;
     virtual const char *get_device_name(int index) = 0;
@@ -86,9 +85,9 @@ public:
                                      enum AAPIAudioSampleSize sample_size) = 0;
 
     virtual int open(const char *device_id,
-                     enum AAPIAudioChannels channels,
-                     enum AAPIAudioSampleRate sample_rate,
-                     enum AAPIAudioSampleSize sample_size,
+                     AAPIAudioChannels channels,
+                     AAPIAudioSampleRate sample_rate,
+                     AAPIAudioSampleSize sample_size,
                      uint32_t nsamples) = 0;
     virtual void close() { }
 

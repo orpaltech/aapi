@@ -23,33 +23,36 @@
 namespace aapi
 {
 ///////////////////////////////////////////////////////////////////////////////
-// antscope_device
+// class AntScopeDevice
 ///////////////////////////////////////////////////////////////////////////////
 
-class antscope_device
-        : public AAPIObject
-        , public serial_modem_callback
+class AntScopeDevice : public AAPIObject, public AAPISerialModemCallback
 {
-    DECLARE_AAPI_OBJECT(antscope_device)
+    DECLARE_AAPI_OBJECT(AntScopeDevice)
 
-    static antscope_device *create(AAPIConfig *config,  AAPIGenerator *gen, bool add_ref = true);
+    static AntScopeDevice *create(AAPIConfig *config,
+                                  AAPIGenerator *gen,
+                                  bool add_ref = true);
+protected:
+    AntScopeDevice();
+    ~AntScopeDevice();
+
 public:
-    ~antscope_device();
-
     int start();
 	void stop();
 
 private:
+// AAPISerialModemCallback
     virtual void serial_modem_command(const char *command);
     virtual void serial_modem_error(int error);
 
 private:
-    uint32_t    center_freq;
-    uint32_t    sweep_freq;
+    uint32_t    m_center_freq;
+    uint32_t    m_sweep_freq;
 
-    aapi_ptr<serial_modem>  modem;
-    aapi_ptr<AAPIConfig>    config;
-    aapi_ptr<AAPIGenerator> gen;
+    AAPIConfig      *m_config;
+    AAPIGenerator   *m_gen;
+    AAPISerialModem *m_modem;
 };
 
-} // namespace AAPi
+} // namespace aapi

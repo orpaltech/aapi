@@ -39,14 +39,15 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The QAAPIQmlPanVSWRView class
 ///
-class QAAPIQmlPanVSWRView :
-        public QAAPIQmlView
+class QAAPIQmlPanVSWRView : public QAAPIQmlView
 {
     Q_OBJECT
 
 public:
-    explicit QAAPIQmlPanVSWRView(AAPIConfig *config, AAPISignalProcessor *dsp,
-                                 AAPIGenerator *gen, AAPICalibrator *cal,
+    explicit QAAPIQmlPanVSWRView(AAPIConfig *config,
+                                 AAPISignalProcessor *dsp,
+                                 AAPIGenerator *gen,
+                                 AAPICalibrator *cal,
                                  QObject *parent = Q_NULLPTR);
     ~QAAPIQmlPanVSWRView();
 
@@ -74,27 +75,27 @@ private:
     int get_params();
     uint32_t get_freq_start() const;
     int start_scan(bool fast);
-    void update_plot_area(enum ChartType chart_type, QRectF rect);
+    void update_plot_area(ChartType chart_type, QRectF rect);
     void set_plot_bgnd(QChart *chart);
     void update_axis_range();
-
-    /* Measurement callback */
-    virtual int on_measure_finished(AAPIMeasure *measure);
 
     virtual int load_view();
     virtual void destroy_view();
 
+// Measurement callback 
+    virtual int on_measure_finished(AAPIMeasure *measure);
+
 private:
-    QMap<ChartType, QSize> m_plotArea;
+    QMap<ChartType, QSize>  m_plot_area;
 
-    QPointer<QObject>   m_SmithChart;
-    enum ChartType      m_chartType;
+    QPointer<QObject>       m_smith_chart;
+    ChartType               m_chart_type;
 
-    QPointer<QLineSeries>   m_RXSeries[2];
-    QPointer<QLineSeries>   m_VSWRSeries;
+    QPointer<QLineSeries>   m_rx_series[2];
+    QPointer<QLineSeries>   m_vswr_series;
 
-    aapi_ptr<AAPICalibrator> m_calibrator;
-    uint32_t    m_freq1, m_span, m_width;
+    AAPICalibrator          *m_calibrator;
+    uint32_t                m_freq1, m_span, m_width;
 
 signals:
     void pointGamma(QPointF pt);

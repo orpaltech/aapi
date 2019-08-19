@@ -27,14 +27,15 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The QAAPIQmlMeasureView class
 ///
-class QAAPIQmlMeasureView
-        : public QAAPIQmlView
+class QAAPIQmlMeasureView : public QAAPIQmlView
 {
     Q_OBJECT
 
 public:
-    explicit QAAPIQmlMeasureView(AAPIConfig *config, AAPISignalProcessor *processor,
-                                 AAPIGenerator *gen, QObject *parent = Q_NULLPTR);
+    explicit QAAPIQmlMeasureView(AAPIConfig *config,
+                                AAPISignalProcessor *processor,
+                                AAPIGenerator *gen,
+                                QObject *parent = Q_NULLPTR);
     ~QAAPIQmlMeasureView();
 
 private:

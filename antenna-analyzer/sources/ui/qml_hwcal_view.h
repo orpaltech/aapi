@@ -33,22 +33,22 @@ class QAAPIQmlHWCalView : public QAAPIQmlView
     Q_OBJECT
 
 public:
-    explicit QAAPIQmlHWCalView(AAPIConfig *config, AAPISignalProcessor *processor,
+    explicit QAAPIQmlHWCalView(AAPIConfig *config, AAPISignalProcessor *dsp,
                                AAPIGenerator *gen, AAPICalibrator *cal,
                                QObject *parent = Q_NULLPTR);
     ~QAAPIQmlHWCalView();
 
 private:
-    /* Measurement callback */
-    virtual int on_measure_finished(AAPIMeasure *measure);
-
     virtual int load_view();
     virtual void destroy_view();
 
+// Measurement callback 
+    virtual int on_measure_finished(AAPIMeasure *measure);
+
 private:
-    aapi_ptr<AAPICalibrator> m_calibrator;
-    uint32_t        m_scanIndex;
-    volatile bool   m_scanCancelled;
+    AAPICalibrator  *m_calibrator;
+    uint32_t        m_scan_index;
+    volatile bool   m_scan_cancelled;
 
 signals:
     void scanProgress(int step, int total, float mag_ratio, float phase_diff);

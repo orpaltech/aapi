@@ -28,52 +28,53 @@ namespace aapi
 AAPIMeasure *AAPIMeasure::create(AAPIConfig *config, AAPICalibrator *calibrator,
                                  AAPIMeasurementEvents *callback,
                                  uint32_t frequency,
-                                 bool correct_hwerr,
+                                 bool correct_hwerror,
                                  bool correct_osl,
                                  uint32_t num_measures,
                                  bool add_ref)
 {
-    AAPIMeasure *m = create(add_ref);
-    if ( m )
-    {
-        m->calibrator   = calibrator;
-        m->callback     = callback;
+    AAPIMeasure *obj = create(add_ref);
+    if( obj ) {
+        obj->m_calibrator   = calibrator;
+        obj->m_callback     = callback;
 
-        m->frequency    = frequency;
-        m->num_measures = num_measures;
-        m->measure_iter = static_cast<int>( m->num_measures );
-        m->hwerr_corr   = correct_hwerr;
-        m->osl_corr     = correct_osl;
-        m->num_retries  = 3;
+        AAPI_ADDREF(calibrator);
 
-        /* allocate internal buffers */
-        m->mag_v_buf    = reinterpret_cast<float*> (malloc(num_measures));
-        m->mag_i_buf    = reinterpret_cast<float*> (malloc(num_measures));
-        m->phas_diff_buf = reinterpret_cast<float*> (malloc(num_measures));
+        obj->Frequency    = frequency;
+        obj->num_measures = num_measures;
+        obj->measure_iter = static_cast<int>( num_measures );
+        obj->correct_hwerror = correct_hwerror;
+        obj->correct_osl    = correct_osl;
+        obj->num_retries    = 3;
 
-        /* read configuration */
-        m->r0           = config->get_base_r0();
-        m->rx           = std::complex<float>( m->r0, 0.f );
-        m->r_measure    = config->get_bridge_r_measure();
-        m->r_measure_add = config->get_bridge_r_measure_add();
-        m->r_load       = config->get_bridge_r_load();
-        m->r_total      = ( m->r_measure + m->r_measure_add + m->r_load );
+        // allocate internal buffers 
+        obj->mag_v_buf    = reinterpret_cast<float*> (malloc(num_measures));
+        obj->mag_i_buf    = reinterpret_cast<float*> (malloc(num_measures));
+        obj->phas_diff_buf = reinterpret_cast<float*> (malloc(num_measures));
 
-        /* set default parameters */
-        m->mag_mv_v     = 1.f;
-        m->mag_mv_i     = 1.f;
-        m->mag_ratio    = 1.f;
-        m->mag_ratio_db = 0.f;
-        m->phas_diff    = 0.f;
-        m->phas_diff_d  = 0.f;
+        // read configuration 
+        obj->R0             = config->get_base_r0();
+        obj->Rx             = std::complex<float>( obj->R0, 0.f );
+        obj->R_measure      = config->get_bridge_r_measure();
+        obj->R_measure_add  = config->get_bridge_r_measure_add();
+        obj->R_load         = config->get_bridge_r_load();
+        obj->R_total        = ( obj->R_measure + obj->R_measure_add + obj->R_load );
+
+        // set default parameters 
+        obj->mag_mv_v       = 1.f;
+        obj->mag_mv_i       = 1.f;
+        obj->mag_ratio      = 1.f;
+        obj->mag_ratio_db   = 0.f;
+        obj->Phas_diff      = 0.f;
+        obj->Phas_diff_d    = 0.f;
     }
 
-    return m;
+    return obj;
 }
 
 AAPIMeasure::AAPIMeasure()
-    : calibrator(nullptr)
-    , callback( nullptr )
+    : m_calibrator(nullptr)
+    , m_callback( nullptr )
     , mag_v_buf( nullptr )
     , mag_i_buf( nullptr )
     , phas_diff_buf( nullptr )
@@ -85,17 +86,19 @@ AAPIMeasure::~AAPIMeasure()
     free ( this->mag_v_buf );
     free ( this->mag_i_buf );
     free ( this->phas_diff_buf );
+
+    AAPI_DISPOSE(m_calibrator);
 }
 
 std::complex<float> AAPIMeasure::calc_rx()
 {
     float r, x;
 
-    r = ( std::cos( this->phas_diff ) * this->r_total * this->mag_ratio )
-            - ( this->r_measure + this->r_measure_add );
+    r = ( std::cos( Phas_diff ) * R_total * this->mag_ratio )
+            - ( R_measure + R_measure_add );
 
     /* Real part may be negative here, OSL calibration gets rid of the sign */
-    x = std::sin( this->phas_diff ) * this->r_total * this->mag_ratio;
+    x = std::sin( Phas_diff ) * R_total * this->mag_ratio;
 
     std::complex<float> rx( r, x );
     /* Result validation */
@@ -164,7 +167,7 @@ float AAPIMeasure::filter_array(float *arr, uint32_t len, int retries)
     float ret = 0.f;
     int count = 0, i;
 
-    if (len <= 0)
+    if( len <= 0 )
         return 0.f;
 
     /* calculate mean value */
@@ -185,25 +188,25 @@ float AAPIMeasure::filter_array(float *arr, uint32_t len, int retries)
         float t = arr[i] - mean;
         deviation += (t * t);
     }
-    deviation = std::sqrt(deviation / len);
+    deviation = std::sqrt( deviation / len );
 
     /* calculate mean of entries within part of standard deviation range */
     bot = mean - deviation * 0.75f;
     top = mean + deviation * 0.75f;
 
-    for ( i = 0; i < len; i++ )
+    for( i = 0; i < len; i++ )
     {
-        if (arr[i] >= bot && arr[i] <= top)
+        if( arr[i] >= bot && arr[i] <= top )
         {
             ret += arr[i];
             count++;
         }
     }
 
-    if ( retries && count < len/2 )
+    if( retries && count < len/2 )
         return 0.f;
 
-    if ( count == 0 ) /* nothing falls into range, simply reaturn mean */
+    if( count == 0 ) /* nothing falls into range, simply reaturn mean */
         return mean;
 
     ret /= count;
@@ -212,23 +215,23 @@ float AAPIMeasure::filter_array(float *arr, uint32_t len, int retries)
 
 int AAPIMeasure::process_mags(const std::complex<float>& v_mag, const std::complex<float>& i_mag)
 {
-    if ( this->measure_iter > 0 )
+    if( measure_iter > 0 )
     {
-        if (! AA_IS_FREQ_INBAND( this->frequency ))
+        if( AA_IS_FREQ_INBAND( this->Frequency ) == false )
         {
-            /* use default results for out-of-band measure */
+            // use default results for out-of-band measure 
             mag_mv_v = 500.f;
             mag_mv_i = 500.f;
             measure_iter = 0;
 
-            /* measure complete, issue callback */
-            if( this->callback )
-                this->callback->measure_finished(this);
+            // measure complete, issue callback
+            if( m_callback )
+                m_callback->measure_finished(this);
 
             return 1;
         }
 
-        int i = this->measure_iter - 1;
+        int i = measure_iter - 1;
         // store V-channel real part
         this->mag_v_buf[i] = v_mag.real();
 
@@ -239,7 +242,7 @@ int AAPIMeasure::process_mags(const std::complex<float>& v_mag, const std::compl
         this->phas_diff_buf[i] = calc_phase_diff(i_mag.imag(), v_mag.imag());
 
         /* decrement measurement iterator */
-        if ( --this->measure_iter == 0 )
+        if ( --measure_iter == 0 )
         {
             if (! calc_finalize())
             {
@@ -248,8 +251,8 @@ int AAPIMeasure::process_mags(const std::complex<float>& v_mag, const std::compl
             else
             {
                 /* measurements complete, issue callback */
-                if( this->callback )
-                    this->callback->measure_finished(this);
+                if( m_callback )
+                    m_callback->measure_finished(this);
 
                 return 1;
             }
@@ -261,7 +264,7 @@ int AAPIMeasure::process_mags(const std::complex<float>& v_mag, const std::compl
 
 bool AAPIMeasure::is_signal_low() const
 {
-    if ( this->mag_mv_i < 10.f || this->mag_mv_v < 10.f )
+    if ( mag_mv_i < 10.f || mag_mv_v < 10.f )
     {
         /* hardware problem */
         return true;
@@ -281,46 +284,46 @@ bool AAPIMeasure::calc_finalize()
                             this->num_measures,
                             this->num_retries );
 
-    this->phas_diff = filter_array( this->phas_diff_buf,
+    this->Phas_diff = filter_array( this->phas_diff_buf,
                                     this->num_measures,
                                     this->num_retries );
 
-    if ( mag_v == 0.f || mag_i == 0.f || this->phas_diff == 0.f )
+    if ( mag_v == 0.f || mag_i == 0.f || this->Phas_diff == 0.f )
     {
-        /* Need to measure again - too much noise detected */
-        this->num_retries --;
-        this->measure_iter = (int) this->num_measures;
+        // Need to measure again - too much noise detected 
+        num_retries --;
+        measure_iter = (int) num_measures;
         return false;
     }
 
     this->mag_ratio = mag_v / AAPIMathUtils::_nonz(mag_i);
 
-    if ( this->hwerr_corr && this->calibrator )
+    if ( correct_hwerror && m_calibrator )
     {
-        /* do hardware error correction */
-        this->calibrator->correct_hwerr( this->frequency,
+        // do hardware error correction 
+        m_calibrator->correct_hwerror( this->Frequency,
                                         &this->mag_ratio,
-                                        &this->phas_diff );
+                                        &this->Phas_diff );
     }
 
     this->mag_ratio_db = 20.f * std::log10( this->mag_ratio );
-    this->phas_diff_d = ( this->phas_diff * 180.f ) / M_PI;
+    this->Phas_diff_d = ( this->Phas_diff * 180.f ) / M_PI;
 
     // calculate derived results
     this->mag_mv_v = mag_v * AA_MAG_CORR_FACTOR;
     this->mag_mv_i = mag_i * AA_MAG_CORR_FACTOR;
 
-    /* complex impedance */
-    this->rx = calc_rx();
+    // calculate complex impedance 
+    this->Rx = calc_rx();
 
-    if ( this->osl_corr && this->calibrator )
+    if ( correct_osl && m_calibrator )
     {
-        /* do OSL error correction */
-        this->calibrator->correct_z( this->frequency, this->rx );
+        // do OSL error correction 
+        m_calibrator->correct_z( this->Frequency, this->Rx );
     }
 
-    /* calculate VSWR */
-    this->vswr = calc_vswr( this->rx, this->r0 );
+    // calculate VSWR 
+    this->vswr = calc_vswr( this->Rx, this->R0 );
 
     return true;
 }

@@ -3,7 +3,6 @@ PROJDIR=$1
 CONFIG=$2
 BOARD=$3
 QT5_DIR=$4
-QMAKE=${QT5_DIR}/build/${BOARD}/qt5host/bin/qmake
 PROJFILE=${PROJDIR}/sources/antenna-analyzer.pro
 DEVSPEC="none"
 
@@ -14,8 +13,11 @@ case $BOARD in
 "orangepipc")
     DEVSPEC="linux-sun8i-g++"
     ;;
-"rpi3-arm")
-    DEVSPEC="linux-rasp-pi3-g++"
+"rpi3-aplus-arm")
+    DEVSPEC="linux-rasp-pi3-vc4-g++"
+    ;;
+"rpi3-aplus-arm64")
+    DEVSPEC="linux-rpi3-arm64-vc4-g++"
     ;;
 esac
 
@@ -23,6 +25,8 @@ if [ "$DEVSPEC" = "none" ]; then
     echo "Unknown device specification."
     exit 1
 fi
+
+QMAKE=${QT5_DIR}/build/${DEVSPEC}/qt5host/bin/qmake
 
 if [ "$CONFIG" = "Debug" ]; then
     ${QMAKE} -makefile -spec ${QT5_DIR}/qtbase/mkspecs/devices/${DEVSPEC} CONFIG+=debug CONFIG+=qml_debug ${PROJFILE}

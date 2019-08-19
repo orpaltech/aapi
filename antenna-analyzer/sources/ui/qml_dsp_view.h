@@ -39,7 +39,7 @@ class QAAPIQmlDSPView : public QAAPIQmlView
     Q_PROPERTY(uint frequency READ get_frequency CONSTANT)
 
 public:
-    explicit QAAPIQmlDSPView(AAPIConfig *config, AAPISignalProcessor *processor,
+    explicit QAAPIQmlDSPView(AAPIConfig *config, AAPISignalProcessor *dsp,
                              AAPIGenerator *gen, QObject *parent = Q_NULLPTR);
     ~QAAPIQmlDSPView();
 
@@ -64,17 +64,17 @@ private:
     QMutex              m_mutex;
 
     uint32_t            m_frequency;
-    volatile int        m_tabIndex;
+    volatile int        m_tab_index;
 
-    QVector<float>      m_VSpectrumPoints;
-    QVector<float>      m_ISpectrumPoints;
-    QVector<float>      m_VOscilloscPoints;
-    QVector<float>      m_IOscilloscPoints;
+    QVector<float>      m_v_spectrum_points;
+    QVector<float>      m_i_spectrum_points;
+    QVector<float>      m_v_oscillosc_points;
+    QVector<float>      m_i_oscillosc_points;
 
-    QLineSeries         *m_VSeriesOscillosc;
-    QLineSeries         *m_ISeriesOscillosc;
-    QLineSeries         *m_VSeriesSpectrum;
-    QLineSeries         *m_ISeriesSpectrum;
+    QLineSeries         *m_v_oscillosc_series;
+    QLineSeries         *m_i_oscillosc_series;
+    QLineSeries         *m_v_spectrum_series;
+    QLineSeries         *m_i_spectrum_series;
 
 signals:
 

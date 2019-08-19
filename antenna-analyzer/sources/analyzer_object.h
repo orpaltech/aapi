@@ -29,15 +29,15 @@ namespace aapi
 // Definitions
 ///////////////////////////////////////////////////////////////////////////////
 
-#define AAPI_ADDREF(d)  \
-    if (d) {            \
-        (d)->add_ref(); \
+#define AAPI_ADDREF(p)  \
+    if (p) {            \
+        (p)->add_ref(); \
     }
 
-#define AAPI_DISPOSE(d) \
-    if (d) {            \
-        (d)->release(); \
-        (d) = nullptr;  \
+#define AAPI_DISPOSE(p) \
+    if (p) {            \
+        (p)->release(); \
+        (p) = nullptr;  \
     }
 
 #define DECLARE_AAPI_OBJECT(clazz) \
@@ -59,8 +59,6 @@ public:                                         \
 class AAPIObject
 {
 public:
-    virtual ~AAPIObject() {}
-
     long add_ref()
     {
         return ++m_ref;
@@ -78,52 +76,57 @@ public:
         return m_ref;
     }
 
-protected:
     AAPIObject()
     {
         m_ref = 0;
     }
 
+protected:
+    virtual ~AAPIObject() 
+    {
+    }
+
     std::atomic_long m_ref;
+
 private:
     AAPIObject(const AAPIObject &) {}
     AAPIObject& operator=(const AAPIObject &) { return *this; }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// class aapi_ptr
+// class AAPtr
 ///////////////////////////////////////////////////////////////////////////////
 
-template<class T> class aapi_ptr
+template<class T> class AAPtr
 {
 public:
-    aapi_ptr(T *ptr = nullptr)
+    AAPtr(T *ptr = nullptr)
     {
         m_ptr = ptr;
         if (m_ptr)
             m_ptr->add_ref();
     }
 
-    aapi_ptr(const aapi_ptr<T>& other)
+    AAPtr(const AAPtr<T>& other)
     {
         m_ptr = other.m_ptr;
         if (m_ptr)
             m_ptr->add_ref();
     }
 
-    ~aapi_ptr()
+    ~AAPtr()
     {
         if (m_ptr)
             m_ptr->release();
     }
 
-    aapi_ptr<T>& operator=(T* ptr)
+    AAPtr<T>& operator=(T* ptr)
     {
         set(ptr);
         return *this;
     }
 
-    aapi_ptr<T>& operator=(const aapi_ptr<T>& other)
+    AAPtr<T>& operator=(const AAPtr<T>& other)
     {
         if (this != &other)
         {

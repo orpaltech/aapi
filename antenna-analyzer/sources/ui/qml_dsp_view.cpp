@@ -25,19 +25,19 @@
 // class QAAPIQmlDSPView
 ///////////////////////////////////////////////////////////////////////////////
 
-QAAPIQmlDSPView::QAAPIQmlDSPView(AAPIConfig *config, AAPISignalProcessor *processor,
-                                 AAPIGenerator *generator, QObject *parent)
-    : QAAPIQmlView(config, processor, generator, parent)
+QAAPIQmlDSPView::QAAPIQmlDSPView(AAPIConfig *config, AAPISignalProcessor *dsp,
+                                 AAPIGenerator *gen, QObject *parent)
+    : QAAPIQmlView(config, dsp, gen, parent)
     , m_mutex(QMutex::Recursive)
     , m_frequency(3500000)
-    , m_tabIndex(0)
-    , m_VSeriesOscillosc(nullptr)
-    , m_ISeriesOscillosc(nullptr)
-    , m_VSeriesSpectrum(nullptr)
-    , m_ISeriesSpectrum(nullptr)
+    , m_tab_index(0)
+    , m_v_oscillosc_series(nullptr)
+    , m_i_oscillosc_series(nullptr)
+    , m_v_spectrum_series(nullptr)
+    , m_i_spectrum_series(nullptr)
 {
-    /* Subscribe for DSP events */
-    processor->add_callback(this);
+    // Subscribe for DSP events 
+    dsp->add_callback(this);
 }
 
 QAAPIQmlDSPView::~QAAPIQmlDSPView()
@@ -46,9 +46,9 @@ QAAPIQmlDSPView::~QAAPIQmlDSPView()
 
 int QAAPIQmlDSPView::load_view()
 {
-    if( !m_generator->is_locked() )
+    // If generator is not in use then set our frequency 
+    if( m_generator->is_locked() == false )
     {
-        /* If generator is not in use then set our frequency */
         m_generator->set_frequency( m_frequency );
     }
 
@@ -64,38 +64,39 @@ void QAAPIQmlDSPView::destroy_view()
 
 void QAAPIQmlDSPView::tab_changed(int index)
 {
-    m_tabIndex = index;
+    m_tab_index = index;
 }
 
 void QAAPIQmlDSPView::update_oscilloscope()
 {
-    if( !is_oscilloscope_tab() )
+    if( is_oscilloscope_tab() == false )
         return;
 
-    if( !m_VSeriesOscillosc || !m_ISeriesOscillosc )
+    if( m_v_oscillosc_series == nullptr || 
+        m_i_oscillosc_series == nullptr )
         return;
 
     QMutexLocker lock( &m_mutex );
     QList<QPointF> points;
     int i;
 
-    if( m_VOscilloscPoints.size() > 0 )
+    if( m_v_oscillosc_points.size() > 0 )
     {
-        for( i = 0; i < m_VOscilloscPoints.size(); i++ )
+        for( i = 0; i < m_v_oscillosc_points.size(); i++ )
         {
-            points.append(QPointF( i, m_VOscilloscPoints.at(i) ));
+            points.append( QPointF( i, m_v_oscillosc_points.at(i) ) );
         }
-        m_VSeriesOscillosc->replace(points);
+        m_v_oscillosc_series->replace( points );
         points.clear();
     }
 
-    if( m_IOscilloscPoints.size() > 0 )
+    if( m_i_oscillosc_points.size() > 0 )
     {
-        for( i = 0; i < m_IOscilloscPoints.size(); i++ )
+        for( i = 0; i < m_i_oscillosc_points.size(); i++ )
         {
-            points.append(QPointF( i, m_IOscilloscPoints.at(i) ));
+            points.append( QPointF( i, m_i_oscillosc_points.at(i) ) );
         }
-        m_ISeriesOscillosc->replace(points);
+        m_i_oscillosc_series->replace( points );
     }
 }
 
@@ -104,7 +105,8 @@ void QAAPIQmlDSPView::update_spectrum()
     if( !is_spectrum_tab() )
         return;
 
-    if( !m_VSeriesSpectrum || !m_ISeriesSpectrum)
+    if( m_v_spectrum_series == nullptr ||
+        m_i_spectrum_series == nullptr )
         return;
 
     QMutexLocker lock( &m_mutex );
@@ -116,47 +118,47 @@ void QAAPIQmlDSPView::update_spectrum()
     uint32_t bin_min = 0,/*num_fft*0.2,*/
             bin_max = num_samples/2-1;/*num_fft*0.8;*/
 
-    if( m_VSpectrumPoints.size() > 0 )
+    if( m_v_spectrum_points.size() > 0 )
     {
         for( i = 0, b = bin_min; b <= bin_max; i++, b++ )
         {
             points.append( QPointF(
                             m_config->get_bin_freq(b),
-                            AAPISignalProcessor::mag2db( m_VSpectrumPoints.at(i) )
+                            AAPISignalProcessor::mag2db( m_v_spectrum_points.at(i) )
                         ));
         }
-        m_VSeriesSpectrum->replace(points);
+        m_v_spectrum_series->replace( points );
         points.clear();
     }
 
-    if( m_ISpectrumPoints.size() > 0 )
+    if( m_i_spectrum_points.size() > 0 )
     {
         for( i = 0, b = bin_min; b <= bin_max; i++, b++ )
         {
             points.append( QPointF(
                             m_config->get_bin_freq(b),
-                            AAPISignalProcessor::mag2db( m_ISpectrumPoints.at(i) )
+                            AAPISignalProcessor::mag2db( m_i_spectrum_points.at(i) )
                         ));
         }
-        m_ISeriesSpectrum->replace(points);
+        m_i_spectrum_series->replace( points );
     }
 }
 
-void QAAPIQmlDSPView::setup_spectrum(QLineSeries *vSeries, QLineSeries *iSeries)
+void QAAPIQmlDSPView::setup_spectrum(QLineSeries *v_series, QLineSeries *i_series)
 {
-    m_VSeriesSpectrum = vSeries;
-    m_ISeriesSpectrum = iSeries;
+    m_v_spectrum_series = v_series;
+    m_i_spectrum_series = i_series;
 
-    m_VSeriesSpectrum->clear();
-    m_ISeriesSpectrum->clear();
+    m_v_spectrum_series->clear();
+    m_i_spectrum_series->clear();
 
-    QChart *vChart = m_VSeriesSpectrum->chart();
-    QChart *iChart = m_ISeriesSpectrum->chart();
+    QChart *v_chart = m_v_spectrum_series->chart();
+    QChart *i_chart = m_i_spectrum_series->chart();
 
-    QValueAxis *vAxisX = dynamic_cast<QValueAxis*>(vChart->axisX());
-    QValueAxis *vAxisY = dynamic_cast<QValueAxis*>(vChart->axisY());
-    QValueAxis *iAxisX = dynamic_cast<QValueAxis*>(iChart->axisX());
-    QValueAxis *iAxisY = dynamic_cast<QValueAxis*>(iChart->axisY());
+    QValueAxis *vAxisX = dynamic_cast<QValueAxis*>(v_chart->axisX());
+    QValueAxis *vAxisY = dynamic_cast<QValueAxis*>(v_chart->axisY());
+    QValueAxis *iAxisX = dynamic_cast<QValueAxis*>(i_chart->axisX());
+    QValueAxis *iAxisY = dynamic_cast<QValueAxis*>(i_chart->axisY());
 
     /* Strip ~20% from left and right */
     uint32_t num_samples = m_config->get_dsp_nsamples();
@@ -179,9 +181,9 @@ void QAAPIQmlDSPView::setup_spectrum(QLineSeries *vSeries, QLineSeries *iSeries)
     iAxisY->setTickCount(8);
     iAxisY->setMinorTickCount(4);
 
-    /* Setup chart backgrounds etc */
-    setup_chart(vChart);
-    setup_chart(iChart);
+    // Setup chart backgrounds etc 
+    setup_chart( v_chart );
+    setup_chart( i_chart );
 }
 
 void QAAPIQmlDSPView::setup_chart(QChart *chart)
@@ -214,64 +216,62 @@ void QAAPIQmlDSPView::setup_chart(QChart *chart)
 
 void QAAPIQmlDSPView::setup_oscilloscope(QLineSeries *v_series, QLineSeries *i_series)
 {
-    m_VSeriesOscillosc = v_series;
-    m_ISeriesOscillosc = i_series;
+    m_v_oscillosc_series = v_series;
+    m_i_oscillosc_series = i_series;
 
-    m_VSeriesOscillosc->clear();
-    m_ISeriesOscillosc->clear();
+    m_v_oscillosc_series->clear();
+    m_i_oscillosc_series->clear();
 
-    QChart *vChart = m_VSeriesOscillosc->chart();
-    QChart *iChart = m_ISeriesOscillosc->chart();
+    QChart *v_chart = m_v_oscillosc_series->chart();
+    QChart *i_chart = m_i_oscillosc_series->chart();
 
-    QAbstractAxis *vAxisX = vChart->axes(Qt::Horizontal).first();
-    QAbstractAxis *vAxisY = vChart->axes(Qt::Vertical).first();
+    QAbstractAxis *vAxisX = v_chart->axes(Qt::Horizontal).first();
+    QAbstractAxis *vAxisY = v_chart->axes(Qt::Vertical).first();
 
     vAxisX->setMin(0);
     vAxisX->setMax(m_config->get_dsp_nsamples());
     vAxisY->setMin(-1000);
     vAxisY->setMax(1000);
 
-    QAbstractAxis *iAxisX = iChart->axes(Qt::Horizontal).first();
-    QAbstractAxis *iAxisY = iChart->axes(Qt::Vertical).first();
+    QAbstractAxis *iAxisX = i_chart->axes(Qt::Horizontal).first();
+    QAbstractAxis *iAxisY = i_chart->axes(Qt::Vertical).first();
 
     iAxisX->setMin(0);
     iAxisX->setMax(m_config->get_dsp_nsamples());
     iAxisY->setMin(-1000);
     iAxisY->setMax(1000);
 
-    /* Setup chart backgrounds etc */
-    setup_chart(vChart);
-    setup_chart(iChart);
+    // Setup chart backgrounds etc 
+    setup_chart( v_chart );
+    setup_chart( i_chart );
 }
 
 bool QAAPIQmlDSPView::is_spectrum_tab() const
 {
-    return m_tabIndex == 0;
+    return m_tab_index == 0;
 }
 
 bool QAAPIQmlDSPView::is_oscilloscope_tab() const
 {
-    return m_tabIndex == 1;
+    return m_tab_index == 1;
 }
 
 void QAAPIQmlDSPView::dsp_raw_frame(float **buffers, uint32_t num_buffers, uint32_t buff_size)
 {
-    if( !is_oscilloscope_tab() )
+    if( is_oscilloscope_tab() == false )
         return;
 
-    /* do not block audio/dsp thread */
+    // do not block audio/dsp thread 
     if( m_mutex.tryLock() )
     {
         QT_TRY
         {
-            m_IOscilloscPoints.resize( buff_size );
-            m_VOscilloscPoints.resize( buff_size );
+            m_i_oscillosc_points.resize( buff_size );
+            m_v_oscillosc_points.resize( buff_size );
 
-            memcpy( m_IOscilloscPoints.data(), buffers[DSP_I_CHANNEL],
-                    buff_size * sizeof(float) );
+            memcpy( m_i_oscillosc_points.data(), buffers[DSP_I_CHANNEL], buff_size * sizeof(float) );
 
-            memcpy( m_VOscilloscPoints.data(), buffers[DSP_V_CHANNEL],
-                    buff_size * sizeof(float) );
+            memcpy( m_v_oscillosc_points.data(), buffers[DSP_V_CHANNEL], buff_size * sizeof(float) );
         }
         QT_CATCH(...)
         {
@@ -286,19 +286,17 @@ void QAAPIQmlDSPView::dsp_fft_frame(float **buffers, uint32_t num_buffers, uint3
     if (!is_spectrum_tab())
         return;
 
-    /* do not block audio/dsp thread */
+    // do not block audio/dsp thread 
     if (m_mutex.tryLock())
     {
         QT_TRY
         {
-            m_ISpectrumPoints.resize( buff_size );
-            m_VSpectrumPoints.resize( buff_size );
+            m_i_spectrum_points.resize( buff_size );
+            m_v_spectrum_points.resize( buff_size );
 
-            memcpy( m_ISpectrumPoints.data(), buffers[DSP_I_CHANNEL],
-                    buff_size * sizeof(float));
+            memcpy( m_i_spectrum_points.data(), buffers[DSP_I_CHANNEL], buff_size * sizeof(float));
 
-            memcpy( m_VSpectrumPoints.data(), buffers[DSP_V_CHANNEL],
-                    buff_size * sizeof(float));
+            memcpy( m_v_spectrum_points.data(), buffers[DSP_V_CHANNEL], buff_size * sizeof(float));
         }
         QT_CATCH(...)
         {

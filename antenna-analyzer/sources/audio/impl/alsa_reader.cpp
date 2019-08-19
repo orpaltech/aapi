@@ -41,8 +41,7 @@ namespace aapi
 /// \brief The ALSASource class
 ///
 
-class ALSASource :
-        public AAPIObject
+class ALSASource : public AAPIObject
 {
     DECLARE_AAPI_OBJECT(ALSASource)
 
@@ -99,14 +98,14 @@ public:
     {
         if( source->handle != nullptr )
         {
-            return AAPIAUDIO_E_ALREADY_OPEN;
+            return AAPI_E_INVALID_STATE;
         }
 
-        /* Period size in bytes. */
+        // Period size in bytes. 
         uint32_t period_size;
         int ret;
 
-        /* configure */
+        // configure 
         switch( sample_size )
         {
         case 16:
@@ -122,46 +121,42 @@ public:
             period_size = num_samples * 4 /*sample size = 4 bytes*/;
             break;
         default:
-            return AAPIAUDIO_E_INVALID_PARAM;
+            return AAPI_AUDIO_E_INVALID_PARAM;
         }
 
         source->channels = channels;
         source->rate = sample_rate;
         source->period_bytes = period_size * channels;
 
-        /* for debug */
+        // for debug 
         ret = snd_output_stdio_attach( &log, stderr, 0 );
 
-        /* open the alsa source */
-        ret = snd_pcm_open( &source->handle, device,
-                            SND_PCM_STREAM_CAPTURE, 0);
+        // open the alsa source 
+        ret = snd_pcm_open( &source->handle, device, SND_PCM_STREAM_CAPTURE, 0);
         if( ret < 0 )
         {
-            /* audio open error */;
-            return AAPIAUDIO_E_OPEN_DEVICE;
+            return AAPI_AUDIO_E_OPEN_DEVICE;
         }
 
-        /* configure audio */
+        // configure audio 
         ret = set_params( source );
         if( ret < 0 )
         {
-            /* set params error */
             snd_pcm_close( source->handle );
             source->handle = nullptr;
-            return AAPIAUDIO_E_INVALID_PARAM;
+            return AAPI_AUDIO_E_INVALID_PARAM;
         }
 
         source->buffer = reinterpret_cast<char *>(
                     malloc( source->period_bytes * APP_NUM_PERIODS ));
         if( !source->buffer )
         {
-            /* Unable to allocate a reader buffer. */
             snd_pcm_close( source->handle );
             source->handle = nullptr;
             return AAPI_E_OUT_OF_MEMORY;
         }
 
-        /* init mutex */
+        // init mutex 
         pthread_mutex_init( &source->mutex, nullptr );
 
         return 0;
@@ -196,6 +191,8 @@ public:
 
     static int start(ALSASource *source, AAPIAudioReaderEvents* callback)
     {
+        int ret;
+    
         if( source->rtid != 0 )
         {
             return 0;
@@ -217,68 +214,66 @@ public:
         sem_init( &source->sem, 0, 0 );
 
         /* init threads */
-        int ret = pthread_create( &source->rtid, nullptr,
-                                 read_thread, source );
+        ret = pthread_create( &source->rtid, nullptr, read_thread, source );
         if( ret < 0 )
         {
             /* failed to create thread */
-            return AAPI_E_CREATE_THREAD;
+            return AAPI_E_CREATE_THREAD_FAILED;
         }
 
         /* Sleep 10msec*/
         usleep( 10000 );
 
-        ret = pthread_create( &source->ctid, nullptr,
-                             client_thread, source );
+        ret = pthread_create( &source->ctid, nullptr, client_thread, source );
         if( ret < 0 )
         {
             pthread_detach( source->rtid );
             source->rtid = 0;
             /* failed to create thread */
-            return AAPI_E_CREATE_THREAD;
+            return AAPI_E_CREATE_THREAD_FAILED;
         }
 
         return 0;
     }
 
-    static void stop(ALSASource *alsa_data)
+    static void stop(ALSASource *alsa)
     {
-        if( alsa_data->rtid == 0 )
+        void *rend,*cend;
+    
+        if( alsa->rtid == 0 )
         {
             return;
         }
 
-        void *rend,*cend;
+        // Signal complete flag
+        alsa->complete = 1;
 
-        /* Set complete flag. */
-        alsa_data->complete = 1;
+        // Wait for workers to finish 
+        pthread_join( alsa->rtid, &rend );
+        pthread_join( alsa->ctid, &cend );
 
-        /* Wait for workers to finish */
-        pthread_join( alsa_data->rtid, &rend );
-        pthread_join( alsa_data->ctid, &cend );
+        alsa->rtid = 0;
+        alsa->ctid = 0;
 
-        alsa_data->rtid = 0;
-        alsa_data->ctid = 0;
-
-        /* Destroy semaphore */
-        sem_destroy( &alsa_data->sem );
+        // Destroy semaphore 
+        sem_destroy( &alsa->sem );
     }
 
     static void *read_thread(void *data)
     {
-        ALSASource *alsa_data = reinterpret_cast< ALSASource *>( data );
+        ALSASource *alsa = reinterpret_cast< ALSASource *>( data );
         sched_param sparam;
         int policy;
 
-        /* Alter thread priority */
+        // Alter thread priority 
         pthread_getschedparam( pthread_self(), &policy, &sparam );
         sparam.sched_priority = sched_get_priority_max( policy );
         pthread_setschedparam( pthread_self(), policy, &sparam );
 
-        /* Exit the loop after complete flag is set */
-        while( !alsa_data->complete )
+        // Exit the loop after complete flag is set 
+        while( !alsa->complete )
         {
-            pcm_read( alsa_data, alsa_data->period_bytes );
+            pcm_read( alsa, alsa->period_bytes );
         }
 
         return nullptr;
@@ -297,36 +292,36 @@ public:
         int policy, val;
         uint32_t bytes, i;
 
-        /* allocate buffer for every channel */
+        // allocate buffer for every channel 
         for( i = 0; i < source->channels; i++ )
         {
             channel_samples[ i ] =
                     reinterpret_cast<char *>( alloca( channel_bytes ) );
         }
 
-        /* alter thread priority */
+        // alter thread priority 
         pthread_getschedparam( pthread_self(), &policy, &sparam );
         sparam.sched_priority = sched_get_priority_max( policy );
         pthread_setschedparam( pthread_self(), policy, &sparam );
 
         while( true )
         {
-            /* Wait for next frame to be avail */
+            // Wait for next frame to be avail 
             sem_wait( &source->sem );
 
-            /* Pointer wrap ?*/
+            // Pointer wrap ?
             if( source->clnt_position == source->period_bytes * APP_NUM_PERIODS )
             {
                 source->clnt_position = 0;
                 buffer = source->buffer;
             }
 
-            /* Consume whole period */
+            // Consume whole period 
             bytes = source->period_bytes;
 
             if( source->callback )
             {
-                /* Split channels and notify separated buffers */
+                // Split channels and notify separated buffers 
                 for( i = 0; i < source->channels; i++ )
                 {
                     char *frame_data = buffer;
@@ -334,7 +329,7 @@ public:
 
                     for( uint f = 0; f < source->period_frames; f++ )
                     {
-                        /* Copy single channel sample data */
+                        // Copy single channel sample data 
                         memcpy( sample_data, frame_data + i*bytes_per_sample, bytes_per_sample );
                         frame_data += bytes_per_frame;
                         sample_data += bytes_per_sample;
@@ -346,16 +341,16 @@ public:
 
             source->clnt_periods++;
 
-            /* inc consumer pos */
+            // inc consumer pos 
             source->clnt_position += bytes;
 
-            /* inc buffer pointer */
+            // inc buffer pointer 
             buffer = source->buffer + source->clnt_position;
 
-            /* check how many periods are waiting to be consumed */
+            // check how many periods are waiting to be consumed 
             sem_getvalue( &source->sem, &val );
 
-            /* has consumer been overtaken by the reader ?*/
+            // has consumer been overtaken by the reader ?
             if( val >= APP_NUM_PERIODS )
             {
                 // overwrite
@@ -370,17 +365,17 @@ public:
             }
         }
 
-        /* Writer finished */
+        // Writer finished 
         return nullptr;
     }
 
-    /* sets the audio parameters */
     static int set_params(ALSASource *alsa_data)
     {
         snd_pcm_hw_params_t *params;
         snd_pcm_sw_params_t *swparams;
         int ret;
 
+        // set the audio parameters 
         snd_pcm_hw_params_alloca( &params );
         snd_pcm_sw_params_alloca( &swparams );
 
@@ -406,7 +401,8 @@ public:
 
         /* set pcm format to be interleaved (e.g. LRLRLR for stereo) */
         ret = snd_pcm_hw_params_set_access( alsa_data->handle,
-                            params, SND_PCM_ACCESS_RW_INTERLEAVED );
+                                            params,
+                                            SND_PCM_ACCESS_RW_INTERLEAVED );
         if( ret < 0 )
         {
             /* Access type not available */
@@ -415,7 +411,8 @@ public:
 
         /* sample format e.g. 16 bit little endian S16_LE */
         ret = snd_pcm_hw_params_set_format( alsa_data->handle,
-                            params, alsa_data->format );
+                                            params,
+                                            alsa_data->format );
         if( ret < 0 )
         {
             /* Sample format non available */
@@ -424,7 +421,8 @@ public:
 
         /* number of channels */
         ret = snd_pcm_hw_params_set_channels( alsa_data->handle,
-                            params, alsa_data->channels );
+                                            params,
+                                            alsa_data->channels );
         if( ret < 0 )
         {
             /* Channels count non available */
@@ -433,7 +431,9 @@ public:
 
         /* rate (or nearest) */
         ret = snd_pcm_hw_params_set_rate_near( alsa_data->handle,
-                            params, &alsa_data->rate, 0 );
+                                                params,
+                                                &alsa_data->rate,
+                                                0 );
         if( ret < 0 )
         {
             /* rate non available */
@@ -443,8 +443,8 @@ public:
         /* config hardware buffering */
 
         /* get max supported buffer size */
-        ret = snd_pcm_hw_params_get_buffer_size_max(
-                            params, &alsa_data->buffer_frames );
+        ret = snd_pcm_hw_params_get_buffer_size_max( params,
+                                                    &alsa_data->buffer_frames );
 
         /* we want buffer to be atleast DRIVER_PERIODS in size */
         if( (alsa_data->buffer_frames / alsa_data->period_frames) < DRIVER_PERIODS )
@@ -455,7 +455,9 @@ public:
 
         /* set required period size */
         ret = snd_pcm_hw_params_set_period_size( alsa_data->handle,
-                            params, alsa_data->period_frames, 0 );
+                                                params,
+                                                alsa_data->period_frames,
+                                                0 );
         if( ret < 0 )
         {
             /* period size not available */
@@ -464,7 +466,8 @@ public:
 
         /* set required buffer size (or nearest)*/
         ret = snd_pcm_hw_params_set_buffer_size_near( alsa_data->handle,
-                            params, &alsa_data->buffer_frames );
+                                                    params,
+                                                    &alsa_data->buffer_frames );
         if( ret < 0 )
         {
             /* buffer size not available */
@@ -483,7 +486,8 @@ public:
         snd_pcm_sw_params_current( alsa_data->handle, swparams );
 
         ret = snd_pcm_sw_params_set_avail_min( alsa_data->handle,
-                            swparams, alsa_data->period_frames );
+                                                swparams,
+                                                alsa_data->period_frames );
         if( ret < 0 )
         {
             /* failed to set avail min */
@@ -492,7 +496,7 @@ public:
 
         /* frames for alsa-lib/driver to buffer internally before starting */
         ret = snd_pcm_sw_params_set_start_threshold( alsa_data->handle,
-                            swparams, 1 );
+                                                    swparams, 1 );
         if( ret < 0 )
         {
             /* failed to set start threshold */
@@ -501,7 +505,8 @@ public:
 
         /* if free frames >= buffer frames then stop */
         ret = snd_pcm_sw_params_set_stop_threshold( alsa_data->handle,
-                            swparams, alsa_data->buffer_frames );
+                                                    swparams,
+                                                    alsa_data->buffer_frames );
         if( ret < 0 )
         {
             /* failed to set stop threshold */
@@ -782,9 +787,9 @@ const char *AAPIALSAReader::get_device_name(int index)
 }
 
 bool AAPIALSAReader::is_format_supported(int index,
-                                         enum AAPIAudioChannels channels,
-                                         enum AAPIAudioSampleRate sample_rate,
-                                         enum AAPIAudioSampleSize sample_size)
+                                         AAPIAudioChannels channels,
+                                         AAPIAudioSampleRate sample_rate,
+                                         AAPIAudioSampleSize sample_size)
 {
     int ret;
     snd_pcm_t *handle;
@@ -838,23 +843,21 @@ bool AAPIALSAReader::is_format_supported(int index,
 }
 
 int AAPIALSAReader::open(const char* device_name,
-                         enum AAPIAudioChannels channels,
-                         enum AAPIAudioSampleRate sample_rate,
-                         enum AAPIAudioSampleSize sample_size,
+                         AAPIAudioChannels channels,
+                         AAPIAudioSampleRate sample_rate,
+                         AAPIAudioSampleSize sample_size,
                          uint32_t nsamples)
 {
     if( m_source )
     {
-        /* Invalid state; must be closed before call. */
-        return AAPIAUDIO_E_ALREADY_OPEN;
+        return AAPI_E_INVALID_STATE;
     }
 
-    aapi_ptr<ALSASource> source(ALSASource::create(false));
+    AAPtr<ALSASource> source( ALSASource::create(false) );
     int ret;
 
     if( !source )
     {
-        /* Unable to allocate memory. */
         return AAPI_E_OUT_OF_MEMORY;
     }
 
@@ -878,8 +881,7 @@ void AAPIALSAReader::close()
     if( m_source )
     {
         ALSASource::close(m_source);
-        m_source->release();
-        m_source = nullptr;
+        AAPI_DISPOSE(m_source);
     }
 }
 
@@ -887,8 +889,8 @@ int AAPIALSAReader::start(AAPIAudioReaderEvents* callback)
 {
     int ret;
 
-    ret = ALSASource::start(m_source, callback);
-    if (AAPI_FAILED(ret))
+    ret = ALSASource::start( m_source, callback );
+    if( AAPI_FAILED( ret ) )
     {
         /* Failed to start alsa source. */
         return ret;
@@ -899,9 +901,9 @@ int AAPIALSAReader::start(AAPIAudioReaderEvents* callback)
 
 void AAPIALSAReader::stop()
 {
-    if (m_source)
+    if( m_source )
     {
-        ALSASource::stop(m_source);
+        ALSASource::stop( m_source );
     }
 }
 

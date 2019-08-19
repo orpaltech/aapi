@@ -24,22 +24,26 @@ namespace aapi
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// class AAPISignalProcessor
+// AAPISignalProcessor implementation
 ///////////////////////////////////////////////////////////////////////////////
 
 AAPISignalProcessor *AAPISignalProcessor::create(AAPIConfig *config, bool add_ref)
 {
     AAPISignalProcessor *dsp = create(add_ref);
-    if( dsp )
+    if( dsp ) {
         dsp->m_config = config;
+
+        AAPI_ADDREF(config);
+    }
     return dsp;
 }
 
 AAPISignalProcessor::AAPISignalProcessor()
-    : m_reader(AAPIAudioReader::create(false))
+    : m_reader(AAPIAudioReader::create())
     , fft_out(nullptr)
-    , window(nullptr)
-    , plan(nullptr)
+    , m_wnd(nullptr)
+    , m_plan(nullptr)
+    , m_config(nullptr)
 {
     fft_inp[0] = nullptr;
     fft_inp[1] = nullptr;
@@ -50,6 +54,9 @@ AAPISignalProcessor::AAPISignalProcessor()
 AAPISignalProcessor::~AAPISignalProcessor()
 {
     stop();
+
+    AAPI_DISPOSE(m_reader);
+    AAPI_DISPOSE(m_config);
 }
 
 void AAPISignalProcessor::free_buffers()
@@ -57,7 +64,7 @@ void AAPISignalProcessor::free_buffers()
     fftwf_free( fft_inp[0] );
     fftwf_free( fft_inp[1] );
     fftwf_free( fft_out );
-    fftwf_free( window );
+    fftwf_free( m_wnd );
     fftwf_free( fft_mags[0] );
     fftwf_free( fft_mags[1] );
 
@@ -65,7 +72,7 @@ void AAPISignalProcessor::free_buffers()
     fft_inp[1] = nullptr;
 
     fft_out = nullptr;
-    window = nullptr;
+    m_wnd = nullptr;
 
     fft_mags[0] = nullptr;
     fft_mags[1] = nullptr;
@@ -76,7 +83,7 @@ float AAPISignalProcessor::mag2db(float mag)
     return 20.f * std::log10( mag );
 }
 
-void AAPISignalProcessor::blackman(float *wnd, uint32_t num)
+void AAPISignalProcessor::set_blackman(float *wnd, uint32_t num)
 {
     for( uint i = 0; i < num; i++ )
     {
@@ -120,7 +127,7 @@ std::complex<float> AAPISignalProcessor::calc_magnitude(int channel)
 
 uint32_t AAPISignalProcessor::process_buffer(int channel, char *buffer, uint32_t /*buff_size*/)
 {
-    fftwf_plan plan = nullptr; //(fftwf_plan) this->plan; // TODO: remove
+    fftwf_plan plan = nullptr; //(fftwf_plan) m_plan; // TODO: remove
     uint32_t num_samples, num_fft, i;
     std::complex<float> *bf ;
     fftwf_complex *out = reinterpret_cast<fftwf_complex *>(fft_out);
@@ -128,11 +135,11 @@ uint32_t AAPISignalProcessor::process_buffer(int channel, char *buffer, uint32_t
             = static_cast<AAPIAudioSampleSize>( m_config->get_dsp_sample_size() );
     int32_t samp_val;
 
-    /* number of FFT points */
+    // number of FFT points 
     num_samples = m_config->get_dsp_nsamples();
     num_fft = num_samples / 2;
 
-    /* copy audio samples in the input array */
+    // copy audio samples in the input array 
     for( i = 0; i < num_samples; i++ )
     {
         switch( samp_size )
@@ -154,25 +161,25 @@ uint32_t AAPISignalProcessor::process_buffer(int channel, char *buffer, uint32_t
             }
         }
 
-        fft_inp [channel][i] = ( window[i] * samp_val );
+        fft_inp [channel][i] = ( m_wnd[i] * samp_val );
     }
 
     // TODO: optimization attempt
     // can we create a single plan for multiple frames ?
     //if ( plan == nullptr ) {
 
-    /* Create a new FFTW plan for "real-to-complex" 1-dim transform */
+    // Create a new FFTW plan for "real-to-complex" 1-dim transform 
     plan = fftwf_plan_dft_r2c_1d( num_samples, fft_inp [ channel ],
                                   out, FFTW_ESTIMATE );
 
-        /*Store calculated plan*/
-        //this->plan = plan;
+        // Store prepared plan
+        //m_plan = plan;
     //}
 
-    /* execute FFT */
+    // execute FFT
     fftwf_execute( plan );
 
-    /* release memory, associated with FFTW plan */
+    // release memory, associated with FFTW plan 
     fftwf_destroy_plan( plan );
 
     for( i = 0; i < num_fft; i++ )
@@ -194,13 +201,17 @@ uint32_t AAPISignalProcessor::process_buffer(int channel, char *buffer, uint32_t
 
 void AAPISignalProcessor::audio_reader_data(char **buffers, uint32_t num_channels, uint32_t buf_size)
 {
-    if( get_num_callbacks() == 0 )
+    if( m_callbacks.get_num_elements() == 0 )
+    {
         return;
+    }
 
     if( num_channels < 2 )
+    {
         return;
+    }
 
-    bool enabled = false;
+    bool is_enabled = false;
     int i, ch;
     AAPISignalProcessorEvents *cb;
     uint32_t num_inp, num_fft = 0;
@@ -209,16 +220,16 @@ void AAPISignalProcessor::audio_reader_data(char **buffers, uint32_t num_channel
     num_inp = m_config->get_dsp_nsamples();
 
     /* check if at least one callback is enabled */
-    for( i = 0; i < get_num_callbacks(); i++ )
+    for( i = 0; i < m_callbacks.get_num_elements(); i++ )
     {
-        if( get_callback(i)->is_signal_processing() )
+        if( m_callbacks.get_element(i)->is_signal_processing() )
         {
-            enabled = true;
+            is_enabled = true;
             break;
         }
     }
 
-    if( !enabled )
+    if( !is_enabled )
         return;
 
     for( ch = 0; ch < num_channels; ch++ )
@@ -226,9 +237,9 @@ void AAPISignalProcessor::audio_reader_data(char **buffers, uint32_t num_channel
         num_fft = process_buffer( ch, buffers[ch], buf_size );
     }
 
-    for( i = 0; i < get_num_callbacks(); i++ )
+    for( i = 0; i < m_callbacks.get_num_elements(); i++ )
     {
-        cb = get_callback(i);
+        cb = m_callbacks.get_element(i);
         if( cb && cb->is_signal_processing() )
         {
             /* run callbacks */
@@ -241,17 +252,16 @@ void AAPISignalProcessor::audio_reader_data(char **buffers, uint32_t num_channel
 
 int AAPISignalProcessor::start()
 {
-    /* read configuration parameters for ADC */
     QString dev_name;
     uint32_t num_samples;
     int dev_index = -1;
     int i, ret;
-    AAPIAudioSampleRate sample_rate;
-    AAPIAudioSampleSize sample_size;
+    AAPIAudioSampleRate srate;
+    AAPIAudioSampleSize ssize;
 
-    sample_rate = static_cast< AAPIAudioSampleRate > ( m_config->get_dsp_sample_rate() );
-    sample_size = static_cast< AAPIAudioSampleSize > ( m_config->get_dsp_sample_size() );
-
+    // Read configuration parameters for ADC
+    srate = static_cast< AAPIAudioSampleRate > ( m_config->get_dsp_sample_rate() );
+    ssize = static_cast< AAPIAudioSampleSize > ( m_config->get_dsp_sample_size() );
     dev_name = m_config->get_audio_input_device();
     num_samples = m_config->get_dsp_nsamples();
 
@@ -260,9 +270,9 @@ int AAPISignalProcessor::start()
         if( dev_name == m_reader->get_device_id(i) )
         {
             if( !m_reader->is_format_supported( i, AUDIO_CHANNELS_2,
-                                                sample_rate, sample_size ))
+                                                srate, ssize ))
             {
-                return AAPIDSP_E_AUDIO_UNSUPPORT_FORMAT;
+                return AAPI_DSP_E_AUDIO_UNSUPPORT_FORMAT;
             }
             dev_index = i;
             break;
@@ -270,42 +280,42 @@ int AAPISignalProcessor::start()
     }
     if( dev_index < 0 )
     {
-        return AAPIDSP_E_AUDIO_DEVICE_NOT_FOUND;
+        return AAPI_DSP_E_AUDIO_DEVICE_NOT_FOUND;
     }
 
-    /* open audio reader */
+    // Open audio reader
     ret = m_reader->open( dev_name.toLatin1(), AUDIO_CHANNELS_2,
-                          sample_rate, sample_size, num_samples );
-    if( AAPI_FAILED(ret) )
+                          srate, ssize, num_samples );
+    if( AAPI_FAILED( ret ) )
     {
-        /* failed to open audio reader. */
+        // failed to open audio reader.
         return ret;
     }
 
-    /* allocate required buffers */
+    // Allocate required buffers
     fft_inp[0] = fftwf_alloc_real( num_samples );
     fft_inp[1] = fftwf_alloc_real( num_samples );
     fft_mags[0] = fftwf_alloc_real( num_samples / 2 );
     fft_mags[1] = fftwf_alloc_real( num_samples / 2 );
     fft_out = reinterpret_cast<float *> ( fftwf_alloc_complex (( num_samples / 2 ) + 1));
-    window = fftwf_alloc_real( num_samples );
+    m_wnd = fftwf_alloc_real( num_samples );
 
-    /* Check if any of memory allocations has failed */
+    // Check if any of memory allocations has failed
     if (!fft_inp[0] || !fft_inp[1] ||
-            !fft_out || !window ||
+            !fft_out || !m_wnd ||
             !fft_mags[0] || !fft_mags[1]) {
         free_buffers();
         return AAPI_E_OUT_OF_MEMORY;
     }
 
-    /* prepare blackman window */
-    blackman( window, num_samples );
+    // Prepare blackman window 
+    set_blackman( m_wnd, num_samples );
 
-    /* Start audio reader, providing a callback pointer */
+    // Start audio reader, providing a callback pointer
     ret = m_reader->start( this );
-    if( AAPI_FAILED(ret) )
+    if( AAPI_FAILED( ret ) )
     {
-        /* Failed to start audio reader. */
+        // Failed to start audio reader.
         m_reader->close();
         free_buffers();
         return ret;
@@ -319,6 +329,11 @@ void AAPISignalProcessor::stop()
     m_reader->close();
 
     free_buffers();
+}
+
+void AAPISignalProcessor::add_callback(AAPISignalProcessorEvents *cb)
+{
+    m_callbacks.add_element(cb);
 }
 
 } //namespace aapi

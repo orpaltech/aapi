@@ -15,8 +15,8 @@
  * 	along with ORPAL-AA-Pi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AAPI_SERIAL_PORT_H
-#define AAPI_SERIAL_PORT_H
+#ifndef AAPI_UART_DEVICE_H
+#define AAPI_UART_DEVICE_H
 
 #include "error_codes.h"
 #include "analyzer_object.h"
@@ -28,13 +28,13 @@ namespace aapi
 // UART enum declarations
 ///////////////////////////////////////////////////////////////////////////////
 
-enum uart_open_mode {
+enum AAPIUartOpenMode {
 	UART_OM_READ_ONLY,
 	UART_OM_WRITE_ONLY,
 	UART_OM_READ_WRITE
 };
 
-enum uart_baudrate {
+enum AAPIUartBaudrate {
 	UART_BR_1200 = 1200u,
 	UART_BR_1800 = 1800u,
 	UART_BR_2400 = 2400u,
@@ -46,38 +46,38 @@ enum uart_baudrate {
 	UART_BR_115200 = 115200u
 };
 
-enum uart_char_size {
+enum AAPIUartCharSize {
 	UART_CHR_5BIT = 5,
-	UART_CHR_6BIT,
-	UART_CHR_7BIT,
-	UART_CHR_8BIT
+	UART_CHR_6BIT = 6,
+	UART_CHR_7BIT = 7,
+	UART_CHR_8BIT = 8
 };
 
-enum uart_stop_bits {
+enum AAPIUartStopBits {
 	UART_STOP_1BIT = 1,
-	UART_STOP_2BIT
+	UART_STOP_2BIT = 2
 };
 
-enum uart_flow_ctrl {
-    UART_FCTRL_NONE = 0,
+enum AAPIUartFlowCtrl {
+    UART_FCTRL_NONE     = 0,
     UART_FCTRL_RTSCTS   = 1
 };
 
-enum aapi_uart_device_error {
+enum AAPIUartError {
 	/* Unable to open underlying UART hardware*/
-    UART_E_OPEN_DEVICE = UART_ERROR_START,
-    UART_E_READ_FAILED = UART_ERROR_START - 1,
-    UART_E_WRITE_FAILED = UART_ERROR_START - 2,
-    UART_E_CALLBACK_FAILED = UART_ERROR_START - 3
+    AAPI_UART_E_OPEN_DEVICE_FAILED   = UART_ERROR_START,
+    AAPI_UART_E_READ_FAILED          = UART_ERROR_START - 1,
+    AAPI_UART_E_WRITE_FAILED         = UART_ERROR_START - 2,
+    AAPI_UART_E_CALLBACK_FAILED      = UART_ERROR_START - 3,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// uart_params
+// struct AAPIUartParams
 ///////////////////////////////////////////////////////////////////////////////
 
-struct uart_params
+struct AAPIUartParams
 {
-    uart_params()
+    AAPIUartParams()
         : open_mode ( UART_OM_READ_WRITE )
         , baud_rate ( UART_BR_9600 )
         , char_size ( UART_CHR_8BIT )
@@ -85,43 +85,44 @@ struct uart_params
         , flow_control ( UART_FCTRL_NONE )
     { }
 
-    uart_open_mode open_mode;
-    uart_baudrate baud_rate;
-    uart_char_size char_size;
-    uart_stop_bits stop_bits;
-    uart_flow_ctrl flow_control;
+    AAPIUartOpenMode open_mode;
+    AAPIUartBaudrate baud_rate;
+    AAPIUartCharSize char_size;
+    AAPIUartStopBits stop_bits;
+    AAPIUartFlowCtrl flow_control;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// uart_device_callback
+// class AAPIUartCallback
 ///////////////////////////////////////////////////////////////////////////////
 
-class uart_device_callback
+class AAPIUartCallback
 {
 public:
-    virtual ~uart_device_callback() { }
+    virtual ~AAPIUartCallback() { }
 
     virtual void uart_rx_data(const uint8_t *buffer, uint32_t len) = 0;
     virtual void uart_error(int code) = 0;
 };
 
+class AAPIUartContext;
+
 ///////////////////////////////////////////////////////////////////////////////
-// uart_device
+// class AAPIUart
 ///////////////////////////////////////////////////////////////////////////////
 
-class uart_device
-        : public AAPIObject
+class AAPIUart : public AAPIObject
 {
-    DECLARE_AAPI_OBJECT(uart_device)
+    DECLARE_AAPI_OBJECT(AAPIUart)
 
 protected:
-    uart_device();
-public:
-    ~uart_device();
+    AAPIUart();
+    ~AAPIUart();
 
-    virtual int open(const char *device_name, struct uart_params *params = nullptr);
+public:
+    virtual int open(const char *device_name, struct AAPIUartParams *params = nullptr);
 	virtual void close();
-    virtual int start(uart_device_callback *callback);
+    virtual int start(AAPIUartCallback *callback);
     virtual void stop();
 	virtual bool is_open() const;
     virtual bool is_listening() const;
@@ -129,8 +130,11 @@ public:
 
 protected:
     virtual int read(uint8_t *buffer, uint32_t len);
+
+private:
+    AAPIUartContext *m_priv;
 };
 
 } //namespace aapi
 
-#endif // AAPI_SERIAL_PORT_H
+#endif // AAPI_UART_DEVICE_H

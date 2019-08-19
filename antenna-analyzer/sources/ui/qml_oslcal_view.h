@@ -32,9 +32,9 @@ class QAAPIQmlOSLCalView : public QAAPIQmlView
 {
 public:
     enum ScanType {
-        SCAN_SHORT  = OSL_FILE_SHORT_SCANNED,
-        SCAN_LOAD   = OSL_FILE_LOAD_SCANNED,
-        SCAN_OPEN   = OSL_FILE_OPEN_SCANNED,
+        SCAN_SHORT  = CALIB_FILE_SHORT_SCANNED,
+        SCAN_LOAD   = CALIB_FILE_LOAD_SCANNED,
+        SCAN_OPEN   = CALIB_FILE_OPEN_SCANNED,
     };
 
     Q_OBJECT
@@ -53,20 +53,17 @@ public:
     Q_PROPERTY(uint r_open READ get_r_open WRITE set_r_open NOTIFY oslROpenChanged)
 
 public:
-    explicit QAAPIQmlOSLCalView(AAPIConfig *config, AAPISignalProcessor *processor,
+    explicit QAAPIQmlOSLCalView(AAPIConfig *config, AAPISignalProcessor *dsp,
                                 AAPIGenerator *gen, AAPICalibrator *cal,
                                 QObject *parent = Q_NULLPTR);
     ~QAAPIQmlOSLCalView();
 
 private:
-    /* Measurement callback */
-    virtual int on_measure_finished(AAPIMeasure *measure);
-
     virtual int load_view();
     virtual void destroy_view();
 
     /* Properties */
-    int get_osl_file() const { return m_OSLFile; }
+    int get_osl_file() const { return m_osl_file; }
     void set_osl_file(int osl_file);
 
     uint32_t get_file_num_options() const;
@@ -83,12 +80,15 @@ private:
     void set_r_load(uint32_t val) {}
     void set_r_open(uint32_t val) {}
 
+// Measurement callback
+    virtual int on_measure_finished(AAPIMeasure *measure);
+
 private:
-    aapi_ptr<AAPICalibrator> m_calibrator;
-    enum ScanType   m_scanType;
-    int         m_OSLFile;
-    uint32_t    m_scanIndex;
-    bool        m_scanCancelled;
+    AAPICalibrator  *m_calibrator;
+    ScanType    m_scan_type;
+    int         m_osl_file;
+    uint32_t    m_scan_index;
+    bool        m_scan_cancelled;
 
 signals:
     void oslFileChanged();

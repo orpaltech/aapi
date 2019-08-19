@@ -32,7 +32,9 @@
 #define AA_VERSION              "1.0"
 #define AA_APP_NAME             "orpal-aapi"
 
-/* Frequency range of the analyzer */
+/*
+ * Frequency range of the analyzer
+ */
 #define AA_BAND_FMIN 500000ul    //BAND_FMIN must be multiple 100000
 #define AA_BAND_FMAX 158000000ul //BAND_FMAX must be multiple of 100000
 
@@ -290,18 +292,18 @@ enum AAPIParamType {
     AA_PT_TEXT,     //char*
 };
 
-enum aapi_s1p_type {
+enum AAPIS1pType {
     AA_S1P_TYPE_S_MA = 0u,
     AA_S1P_TYPE_S_RI = 1u
 };
 
-enum aapi_xtal_rate {
+enum AAPIXtalRate {
 	AA_XTALF_25MHZ	= 25000000u,
 	AA_XTALF_27MHZ	= 27000000u
 };
 
-enum aapi_config_error {
-    AACFG_ERR_OPEN_FILE     = CONFIG_ERROR_START
+enum AAPIConfigError {
+    AAPI_CONFIG_E_OPEN_FILE_FAILED	= CONFIG_ERROR_START
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -327,8 +329,11 @@ class AAPIConfig : public AAPIObject
 {
     DECLARE_AAPI_OBJECT(AAPIConfig)
 
-public:
+protected:
     AAPIConfig();
+	~AAPIConfig();
+
+public:
     AAPIConfig& operator=(const AAPIConfig& config);
 
     uint32_t get_num_params() const;
@@ -340,10 +345,10 @@ public:
 
     uint32_t get_num_opt(enum AAPIParamId id) const;
     uint32_t get_num_opt(int index) const;
-    const QVariant* get_opt_values(enum AAPIParamId id) const;
-    const QVariant* get_opt_values(int index) const;
-    const QString* get_opt_labels(enum AAPIParamId id) const;
-    const QString* get_opt_labels(int index) const;
+    const QVariant *get_opt_values(enum AAPIParamId id) const;
+    const QVariant *get_opt_values(int index) const;
+    const QString *get_opt_labels(enum AAPIParamId id) const;
+    const QString *get_opt_labels(int index) const;
 
     QVariant get_value(enum AAPIParamId id) const;
     QVariant get_value(int index) const;
@@ -410,8 +415,9 @@ private:
     void set_defaults();
     void copy(const AAPIConfig& config);
 
-    QVariant    param_values[ NUM_AA_PARAMS ];
-    QMutex		mutex;
+private:
+    QVariant    m_values[ NUM_AA_PARAMS ];
+    QMutex		m_mutex;
 };
 
 } // namespace aapi

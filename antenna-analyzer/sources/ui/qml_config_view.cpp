@@ -21,18 +21,22 @@
 // class QAAPIQmlConfigView
 ///////////////////////////////////////////////////////////////////////////////
 
-QAAPIQmlConfigView::QAAPIQmlConfigView( AAPIConfig *config,
-                                        QObject *parent )
+QAAPIQmlConfigView::QAAPIQmlConfigView( AAPIConfig *config, QObject *parent )
     : QAAPIQmlView( config, nullptr, nullptr, parent )
-    , m_tmpConfig( AAPIConfig::create( false ) )
+    , m_tmpConfig( AAPIConfig::create() )
     , m_index( 0 )
     , m_numParams( 0 )
 {
 }
 
+QAAPIQmlConfigView::~QAAPIQmlConfigView()
+{
+    AAPI_DISPOSE(m_tmpConfig);
+}
+
 int QAAPIQmlConfigView::load_view()
 {
-    /* Copy configuration into temp */
+    // Copy configuration into temp 
     *m_tmpConfig = *m_config;
     m_index = 0;
     m_numParams = m_tmpConfig->get_num_params();
@@ -50,10 +54,9 @@ void QAAPIQmlConfigView::destroy_view()
     m_numParams = 0;
 }
 
-enum QAAPIQmlConfigView::ConfigParamType
-QAAPIQmlConfigView::get_type() const
+QAAPIQmlConfigView::ConfigParamType QAAPIQmlConfigView::get_type() const
 {
-    return static_cast< enum ConfigParamType > ( AAPIConfig::get_type( m_index ) );
+    return static_cast< ConfigParamType > ( AAPIConfig::get_type( m_index ) );
 }
 
 uint32_t QAAPIQmlConfigView::get_num_params() const
@@ -164,13 +167,13 @@ void QAAPIQmlConfigView::set_param_value(QString new_val)
 
 void QAAPIQmlConfigView::set_param_option(int opt)
 {
-    /* parameter has been changed */
     enum AAPIParamId param_id = AAPIConfig::get_id( m_index );
     QVariant old_val = m_tmpConfig->get_value( param_id );
     QVariant new_val = m_tmpConfig->get_opt_values( m_index )[ opt ];
 
     if( old_val != new_val )
     {
+        // parameter has been changed 
         m_tmpConfig->set_value(param_id, new_val);
 
         if( param_id == AA_PARAM_SHOW_ADVANCED )

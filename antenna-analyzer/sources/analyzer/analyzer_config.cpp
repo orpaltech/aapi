@@ -439,20 +439,19 @@ AAPIParam &AAPIParam::set_precision(uint32_t precision)
 
 AAPIParam &AAPIParam::add_audio_devices()
 {
-    aapi_ptr<AAPIAudioReader> ar;
-    ar.attach(AAPIAudioReader::create());
+    AAPtr<AAPIAudioReader>  reader( AAPIAudioReader::create( false ) );
 
-    for (uint i = 0; i < ar->get_num_devices();++ i)
+    for( uint i = 0; i < reader->get_num_devices(); i++ )
     {
         if (
-            ar->is_format_supported(i, AUDIO_CHANNELS_2, AUDIO_SRATE_48K, AUDIO_SSIZE_16) ||
-            ar->is_format_supported(i, AUDIO_CHANNELS_2, AUDIO_SRATE_48K, AUDIO_SSIZE_24) ||
-            ar->is_format_supported(i, AUDIO_CHANNELS_2, AUDIO_SRATE_96K, AUDIO_SSIZE_16) ||
-            ar->is_format_supported(i, AUDIO_CHANNELS_2, AUDIO_SRATE_96K, AUDIO_SSIZE_24)
+            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_48K, AUDIO_SSIZE_16 ) ||
+            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_48K, AUDIO_SSIZE_24 ) ||
+            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_96K, AUDIO_SSIZE_16 ) ||
+            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_96K, AUDIO_SSIZE_24 )
             )
         {
-            // Device does satisfy the requirements
-            add_option( ar->get_device_id(i), ar->get_device_name(i) );
+            // Device satisfies the requirements
+            add_option( reader->get_device_id(i), reader->get_device_name(i) );
         }
     }
 
@@ -484,9 +483,13 @@ AAPIRadioBand::AAPIRadioBand(uint32_t lo, uint32_t hi, const char *name)
 ///////////////////////////////////////////////////////////////////////////////
 
 AAPIConfig::AAPIConfig()
-    : mutex(QMutex::Recursive)
+    : m_mutex(QMutex::Recursive)
 {
     init();
+}
+
+AAPIConfig::~AAPIConfig()
+{
 }
 
 AAPIConfig& AAPIConfig::operator=(const AAPIConfig& config)
@@ -529,16 +532,17 @@ void AAPIConfig::copy (const AAPIConfig& config)
     // deep copy
     for( int i = 0; i < NUM_AA_PARAMS; i ++ )
     {
-        param_values[i] = config.param_values[i];
+        m_values[i] = config.m_values[i];
     }
 }
 
 void AAPIConfig::set_defaults()
 {
     int i;
+
     for( i = 0; i < NUM_AA_PARAMS; i ++ )
     {
-        param_values[i] = QVariant();
+        m_values[i] = QVariant();
     }
 
     // set defaults for all parameters
@@ -593,14 +597,14 @@ int AAPIConfig::init()
     /* set default values as fallback */
     set_defaults();
 
-    QMutexLocker locker(&mutex);
+    QMutexLocker locker(&m_mutex);
 
     QDir dir(get_config_dir());
     if(! dir.exists() )
     {
         if(! dir.mkpath( get_config_dir() ) )
         {
-            return AAPI_E_CREATE_DIRECTORY;
+            return AAPI_E_CREATE_DIR_FAILED;
         }
     }
 
@@ -623,7 +627,7 @@ int AAPIConfig::init()
             // read parameter values
             for( int i = 0; i < NUM_AA_PARAMS; i++ )
             {
-                in >> param_values[i];
+                in >> m_values[i];
             }
         }
         else
@@ -651,21 +655,19 @@ int AAPIConfig::init()
 
 int AAPIConfig::flush()
 {
-    QMutexLocker lock( &mutex );
+    QMutexLocker lock( &m_mutex );
 
     QDir dir( get_config_dir() );
     if( !dir.exists() )
     {
         if( !dir.mkpath( get_config_dir() ) )
-        {
-            return AAPI_E_CREATE_DIRECTORY;
-        }
+            return AAPI_E_CREATE_DIR_FAILED;
     }
 
     QFile file( get_config_path() );
     if( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
     {
-        return AACFG_ERR_OPEN_FILE;
+        return AAPI_CONFIG_E_OPEN_FILE_FAILED;
     }
 
     QDataStream out( &file ); // we will serialize the data into the file
@@ -680,7 +682,7 @@ int AAPIConfig::flush()
     /* flush param values */
     for( int i = 0; i < NUM_AA_PARAMS; i++ )
     {
-        out << param_values[i];
+        out << m_values[i];
     }
 
     /* Explicit close */
@@ -722,34 +724,34 @@ int AAPIConfig::get_index(enum AAPIParamId id)
 
 enum AAPIParamId AAPIConfig::get_id(int index)
 {
-    return g_param_table[index].id;
+    return g_param_table[ index ].id;
 }
 
 enum AAPIParamType AAPIConfig::get_type(int index)
 {
-    return g_param_table[index].type;
+    return g_param_table[ index ].type;
 }
 
 QString AAPIConfig::get_name(int index) const
 {
-    return g_param_table[index].name;
+    return g_param_table[ index ].name;
 }
 
 QString AAPIConfig::get_description(int index) const
 {
-    return g_param_table[index].description;
+    return g_param_table[ index ].description;
 }
 
 uint32_t AAPIConfig::get_precision(int index) const
 {
-    return g_param_table[index].precision;
+    return g_param_table[ index ].precision;
 }
 
 bool AAPIConfig::is_valid(int index) const
 {
-    if (g_param_table[index].is_valid)
+    if( g_param_table[ index ].is_valid )
     {
-        return g_param_table[index].is_valid(this);
+        return g_param_table[ index ].is_valid( this );
     }
     return true;
 }
@@ -765,7 +767,7 @@ uint32_t AAPIConfig::get_num_opt(enum AAPIParamId id) const
 
 uint32_t AAPIConfig::get_num_opt(int index) const
 {
-    return static_cast< uint32_t > ( g_param_table[index].opt_values.size() );
+    return static_cast< uint32_t > ( g_param_table[ index ].opt_values.size() );
 }
 
 const QVariant *AAPIConfig::get_opt_values(enum AAPIParamId id) const
@@ -779,10 +781,10 @@ const QVariant *AAPIConfig::get_opt_values(enum AAPIParamId id) const
 
 const QVariant *AAPIConfig::get_opt_values(int index) const
 {
-    if( get_num_opt(index) == 0 )
+    if( get_num_opt( index ) == 0 )
         return nullptr;
 
-    return g_param_table[index].opt_values.data();
+    return g_param_table[ index ].opt_values.data();
 }
 
 const QString *AAPIConfig::get_opt_labels(enum AAPIParamId id) const
@@ -796,15 +798,15 @@ const QString *AAPIConfig::get_opt_labels(enum AAPIParamId id) const
 
 const QString *AAPIConfig::get_opt_labels(int index) const
 {
-    if( g_param_table[index].opt_labels.size() == 0 )
+    if( g_param_table[ index ].opt_labels.size() == 0 )
         return nullptr;
 
-    return g_param_table[index].opt_labels.data();
+    return g_param_table[ index ].opt_labels.data();
 }
 
 QVariant AAPIConfig::get_value(int index) const
 {
-    return get_value( g_param_table[index].id );
+    return get_value( g_param_table[ index ].id );
 }
 
 QVariant AAPIConfig::get_value(enum AAPIParamId id) const
@@ -814,7 +816,7 @@ QVariant AAPIConfig::get_value(enum AAPIParamId id) const
         return QVariant( QVariant::Invalid );
     }
 
-    return param_values[ id ];
+    return m_values[ id ];
 }
 
 void AAPIConfig::set_value(int index, QVariant val)
@@ -856,7 +858,7 @@ void AAPIConfig::set_value(enum AAPIParamId id, QVariant val)
         }
     }
 
-    param_values[ id ] = val;
+    m_values[ id ] = val;
 }
 
 uint32_t AAPIConfig::get_bin_freq(uint32_t bin) const

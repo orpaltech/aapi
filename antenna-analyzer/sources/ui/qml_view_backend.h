@@ -42,8 +42,8 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 
 class QAAPIQmlView : public QObject,
-          public AAPISignalProcessorEvents,
-          public AAPIMeasurementEvents
+                     public AAPISignalProcessorEvents,
+                     public AAPIMeasurementEvents
 {
     Q_OBJECT
 
@@ -55,8 +55,10 @@ class QAAPIQmlView : public QObject,
 
 public:
     QAAPIQmlView(AAPIConfig *config, AAPISignalProcessor *dsp,
-                AAPIGenerator *gen, QObject *parent);
+                 AAPIGenerator *gen, QObject *parent);
     ~QAAPIQmlView();
+
+    typedef QList<AAPtr<AAPIMeasure>> AAPIMeasureList;
 
     enum ViewStatus {
         VS_IDLE = 0,
@@ -69,12 +71,10 @@ public:
 public:
     /* Property accessors */
     bool is_active() const { return m_active; }
-    QString get_error_message() const { return m_errorMsg; }
+    QString get_error_message() const { return m_error_msg; }
     uint32_t get_freq_min() const { return AA_BAND_FMIN;}
     uint32_t get_freq_max() const { return AA_BAND_FMAX; }
     uint32_t get_base_r0() const;
-
-    typedef QList<aapi_ptr<AAPIMeasure>> AAPIMeasureList;
 
 protected:
     void set_error_message(const char* message);
@@ -85,10 +85,7 @@ protected:
     void skip_frames() const;
 
     /* Initiates a new measurement sequence */
-    int start_measure(AAPIMeasureList& measures);
-
-    /* AAPISignalProcessorEvents */
-    virtual void dsp_magnitudes(std::complex<float> *mags, uint32_t num_mags);
+    int start_measure(const AAPIMeasureList& measure_steps);
 
     /* Override to add any view-specific logic*/
     virtual int load_view() { return 0; }
@@ -101,21 +98,25 @@ protected:
     virtual void on_measure_error(int error) {}
 
 private:
-    /* AnalyzerMeasureCallback */
+// AAPISignalProcessorEvents
+    virtual void dsp_magnitudes(std::complex<float> *mags, uint32_t num_mags);
+
+// AnalyzerMeasureCallback
     virtual void measure_finished(AAPIMeasure *measure);
 
 protected:
-    aapi_ptr<AAPIConfig>                m_config;
-    aapi_ptr<AAPIGenerator>             m_generator;
-    aapi_ptr<AAPISignalProcessor>       m_processor;
+    AAPIConfig          *m_config;
+    AAPIGenerator       *m_generator;
+    AAPISignalProcessor *m_dsp;
+    AAPIMeasureList     m_measures;
 
-    AAPIMeasureList                     m_allMeasures;
-    AAPIMeasureList::const_iterator     m_measureIter;
-    AAPIMeasure                        *m_currentMeasure;
+private:
+    AAPIMeasure         *m_current_measure;
+    AAPIMeasureList::const_iterator m_measure_iter;
 
-    QString                             m_errorMsg;
+    QString             m_error_msg;
     /* true means the view is now shown to user */
-    bool                                m_active;
+    bool                m_active;
 
 signals:
     void measureFinished(AAPIMeasure *measure);

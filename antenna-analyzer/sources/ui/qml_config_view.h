@@ -23,11 +23,10 @@
 using namespace aapi;
 
 ///////////////////////////////////////////////////////////////////////////////
-// QAAPIQmlConfigView
+// class QAAPIQmlConfigView
 ///////////////////////////////////////////////////////////////////////////////
 
-class QAAPIQmlConfigView :
-        public QAAPIQmlView
+class QAAPIQmlConfigView : public QAAPIQmlView
 {
 public:
     enum ConfigParamType {
@@ -55,8 +54,8 @@ public:
     Q_PROPERTY(bool is_dirty_config READ is_dirty_config)
 
 public:
-    explicit QAAPIQmlConfigView(AAPIConfig *config,
-                                QObject *parent = Q_NULLPTR);
+    explicit QAAPIQmlConfigView(AAPIConfig *config, QObject *parent = Q_NULLPTR);
+    ~QAAPIQmlConfigView();
 
     /* Property accessors */
     uint32_t get_num_params() const;
@@ -67,7 +66,7 @@ public:
     QString get_description() const;
     QString get_value() const;
     bool is_dirty_config() const;
-    enum ConfigParamType get_type() const;
+    ConfigParamType get_type() const;
 
 private:
     virtual int load_view();
@@ -76,7 +75,7 @@ private:
     QString format_value(QVariant value) const;
 
 private:
-    aapi_ptr<AAPIConfig> m_tmpConfig;
+    AAPIConfig  *m_tmpConfig;
     int         m_index;
     uint32_t    m_numParams;
 

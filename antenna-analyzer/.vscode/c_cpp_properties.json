@@ -61,33 +61,44 @@
             }
         },
         {
-            "name": "rpi3-arm",
+            "name": "rpi3-aplus-arm",
+            "compilerPath": "/file-path/gcc-arm-8.2-2019.01-x86_64-arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++",
             "includePath": [
-                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/c++/6",
-                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
-                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/include",
-                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/qt5pi/include",
-                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include",
-                "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/include",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtCore",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtGui",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtWidgets",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtQml",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtCharts",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include",
+                "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include/arm-linux-gnueabihf",
                 "${workspaceRoot}/sources"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [
-                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/c++/6",
-                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
-                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/include",
-                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/local/qt5pi/include",
-                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include",
-                    "${env:HOME}/Projects/orpaltech/boards/rpi3-arm/sysroot/usr/include/arm-linux-gnueabihf",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include/arm-linux-gnueabihf/c++/6",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/include",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtCore",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtGui",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtWidgets",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtQml",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/local/qt5pi/include/QtCharts",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include",
+                    "${env:HOME}/Projects/orpaltech/boards/rpi3-aplus-arm/sysroot/usr/include/arm-linux-gnueabihf",
                     "${workspaceRoot}/sources"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             },
             "env": {
-                "BOARD": "rpi3-arm"
+                "BOARD": "rpi3-aplus-arm"
             }
         }
     ],

@@ -31,8 +31,12 @@ namespace aapi
 ///////////////////////////////////////////////////////////////////////////////
 
 QAAPIApplication::QAAPIApplication(QObject *parent)
-    : QObject(parent)
-    , m_config(AAPIConfig::create(false))
+    : QObject( parent )
+    , m_config( AAPIConfig::create() )
+    , m_generator(nullptr)
+    , m_dsp(nullptr)
+    , m_calibrator(nullptr)
+    , m_antscope(nullptr)
 {
 }
 
@@ -43,92 +47,87 @@ QAAPIApplication::~QAAPIApplication()
 
 int QAAPIApplication::load()
 {
-    if( m_generator )
+    if( m_generator != nullptr )
     {
-        return AAPI_E_SUCCESS;
+        // Already loaded, just return OK
+        return AAPI_SUCCESS;
     }
 
+    int ret;
     QDir dir( get_snapshot_dir() );
     if( !dir.exists() )
     {
-        if( !dir.mkpath(get_snapshot_dir()) )
-            return AAPI_E_CREATE_DIRECTORY;
+        if( !dir.mkpath( get_snapshot_dir() ) )
+            return AAPI_E_CREATE_DIR_FAILED;
     }
 
-    aapi_ptr<AAPIGenerator>     generator;  generator.attach(AAPIGenerator::create( m_config ));
-    aapi_ptr<antscope_device>   antscope;   antscope.attach(antscope_device::create( m_config, generator ));
-    aapi_ptr<AAPISignalProcessor>   processor;  processor.attach(AAPISignalProcessor::create( m_config ));
-    aapi_ptr<AAPICalibrator> calibrator;    calibrator.attach(AAPICalibrator::create( m_config ));
+    AAPtr<AAPIGenerator>        generator( AAPIGenerator::create( m_config, false ) );
+    AAPtr<AAPISignalProcessor>  dsp( AAPISignalProcessor::create( m_config, false ) );
+    AAPtr<AAPICalibrator>   calibrator( AAPICalibrator::create( m_config, false ) );
+    AAPtr<AntScopeDevice>   antscope( AntScopeDevice::create( m_config, generator, false ) );
 
-    QPointer<QAAPIQmlConfigView> qmlConfigView ( new QAAPIQmlConfigView( m_config ) );
+    QPointer<QAAPIQmlConfigView>    qml_config_view ( new QAAPIQmlConfigView( m_config ) );
+    QPointer<QAAPIQmlDSPView>   qml_dsp_view ( new QAAPIQmlDSPView( m_config, dsp, generator ) );
+    QPointer<QAAPIQmlMeasureView>   qml_measure_view ( new QAAPIQmlMeasureView( m_config, dsp, generator ) );
+    QPointer<QAAPIQmlPanVSWRView>   qml_panvswr_view ( new QAAPIQmlPanVSWRView( m_config, dsp, generator, calibrator ) );
+    QPointer<QAAPIQmlOSLCalView>    qml_oslcal_view ( new QAAPIQmlOSLCalView( m_config, dsp, generator, calibrator ) );
+    QPointer<QAAPIQmlHWCalView> qml_hwcal_view ( new QAAPIQmlHWCalView( m_config, dsp, generator, calibrator ) );
+    QPointer<QAAPIQmlAboutView> qml_about_view ( new QAAPIQmlAboutView( m_config ) );
+    QPointer<QAAPIQmlStatusBackend> qml_status_backend ( new QAAPIQmlStatusBackend() );
 
-    QPointer<QAAPIQmlDSPView> qmlDSPView ( new QAAPIQmlDSPView( m_config, processor, generator) );
-
-    QPointer<QAAPIQmlMeasureView> qmlMeasureView ( new QAAPIQmlMeasureView( m_config, processor, generator) );
-
-    QPointer<QAAPIQmlPanVSWRView> qmlPanVSWRView ( new QAAPIQmlPanVSWRView( m_config, processor, generator, calibrator) );
-
-    QPointer<QAAPIQmlOSLCalView> qmlOSLCalView ( new QAAPIQmlOSLCalView( m_config, processor, generator, calibrator) );
-
-    QPointer<QAAPIQmlHWCalView> qmlHWCalView ( new QAAPIQmlHWCalView( m_config, processor, generator, calibrator) );
-
-    QPointer<QAAPIQmlAboutView> qmlAboutView ( new QAAPIQmlAboutView( m_config ) );
-
-    QPointer<QAAPIQmlStatusBackend> qmlStatusBackend ( new QAAPIQmlStatusBackend() );
-
-    int ret = calibrator->init();
-    if( AAPI_FAILED(ret) )
+    ret = calibrator->init();
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
     ret = generator->open();
-    if( AAPI_FAILED(ret) )
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
+    ret = dsp->start();
+    if( AAPI_FAILED( ret ) )
+    {
+        return ret;
+    }
+    
     ret = antscope->start();
-    if( AAPI_FAILED(ret) )
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
-    ret = processor->start();
-    if( AAPI_FAILED(ret) )
+    ret = qml_status_backend->init();
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
-    ret = qmlStatusBackend->init();
-    if( AAPI_FAILED(ret) )
-    {
-        return ret;
-    }
+    m_generator = generator.detach();
+    m_antscope  = antscope.detach();
+    m_dsp       = dsp.detach();
+    m_calibrator    = calibrator.detach();
 
-    m_generator   = generator;
-    m_antscope    = antscope;
-    m_processor   = processor;
-    m_calibrator  = calibrator;
-
-    m_qmlDSPView     = qmlDSPView;
-    m_qmlConfigView  = qmlConfigView;
-    m_qmlMeasureView = qmlMeasureView;
-    m_qmlPanVSWRView = qmlPanVSWRView;
-    m_qmlOSLCalView  = qmlOSLCalView;
-    m_qmlHWCalView   = qmlHWCalView;
-    m_qmlAboutView   = qmlAboutView;
-    m_qmlStatusBackend = qmlStatusBackend;
+    m_qml_config_view   = qml_config_view;
+    m_qml_dsp_view  = qml_dsp_view;
+    m_qml_measure_view  = qml_measure_view;
+    m_qml_panvswr_view  = qml_panvswr_view;
+    m_qml_oslcal_view   = qml_oslcal_view;
+    m_qml_hwcal_view    = qml_hwcal_view;
+    m_qml_about_view    = qml_about_view;
+    m_qml_status_backend = qml_status_backend;
 
     // Connect snapshot signal and slot
-    QObject::connect( m_qmlPanVSWRView, SIGNAL( snapshotTaken(QString, QImage) ),
+    QObject::connect( m_qml_panvswr_view, SIGNAL( snapshotTaken(QString, QImage) ),
                       this, SLOT( snapshot_taken( QString, QImage ) ));
 
     // Connect quit, reboot signals and slots
-    QObject::connect( m_qmlAboutView, SIGNAL( rebootApplication() ),
+    QObject::connect( m_qml_about_view, SIGNAL( rebootApplication() ),
                       this, SLOT( reboot_application() ) );
 
-    QObject::connect( m_qmlAboutView, SIGNAL( quitApplication() ),
+    QObject::connect( m_qml_about_view, SIGNAL( quitApplication() ),
                       this, SLOT( quit_application() ));
 
     /*===========================================================*/
@@ -143,56 +142,58 @@ int QAAPIApplication::load()
 
 void QAAPIApplication::unload()
 {
-    if (!m_generator)
+    if( m_generator == nullptr )
         return;
 
-    /* Stop digital signal processing component*/
-    m_processor->stop();
+    // Stop digital signal processing component
+    m_dsp->stop();
 
-    /* Stop Antscope component */
-    m_antscope->stop();
-
-    /* Close generator component */
+    // Close generator component 
     m_generator->close();
 
-    /* Release allocated memory*/
-    m_processor = nullptr;
-    m_generator = nullptr;
-    m_antscope = nullptr;
-    m_calibrator = nullptr;
+    // Stop Antscope component 
+    m_antscope->stop();
 
-    /* Release views */
-    m_qmlDSPView = nullptr;
-    m_qmlConfigView = nullptr;
-    m_qmlMeasureView = nullptr;
-    m_qmlPanVSWRView = nullptr;
-    m_qmlOSLCalView = nullptr;
-    m_qmlHWCalView = nullptr;
-    m_qmlAboutView = nullptr;
+    // Release allocated memory
+    AAPI_DISPOSE(m_dsp);
+    AAPI_DISPOSE(m_generator);
+    AAPI_DISPOSE(m_antscope);
+    AAPI_DISPOSE(m_calibrator);
+    AAPI_DISPOSE(m_config);
+
+    // Release views 
+    m_qml_config_view = nullptr;
+    m_qml_dsp_view = nullptr;
+    m_qml_measure_view = nullptr;
+    m_qml_panvswr_view = nullptr;
+    m_qml_oslcal_view = nullptr;
+    m_qml_hwcal_view = nullptr;
+    m_qml_about_view = nullptr;
+    m_qml_status_backend = nullptr;
 }
 
 QString QAAPIApplication::get_snapshot_dir()
 {
-    return QDir::cleanPath(AAPIConfig::get_app_dir() + QDir::separator() + tr("snapshot"));
+    return QDir::cleanPath( AAPIConfig::get_app_dir() + QDir::separator() + tr("snapshot") );
 }
 
 void QAAPIApplication::snapshot_taken(QString file_name, QImage snapshot)
 {
     QString format = m_config->get_snapshot_format();
     QString date_time = QDateTime::currentDateTimeUtc().toString("yyyyMMdd_HHmmss");
-    m_lastSnapshot = QDir::cleanPath( get_snapshot_dir() + QDir::separator()
+    m_last_snapshot = QDir::cleanPath( get_snapshot_dir() + QDir::separator()
                                      + QString("%1_%2.%3").arg( file_name, date_time, format ));
-    snapshot.save(m_lastSnapshot);
+    snapshot.save(m_last_snapshot);
 }
 
 void QAAPIApplication::quit_application()
 {
-    QApplication::exit(EXIT_SUCCESS);
+    QApplication::exit( EXIT_SUCCESS );
 }
 
 void QAAPIApplication::reboot_application()
 {
-    QApplication::exit(EXIT_REBOOT);
+    QApplication::exit( EXIT_REBOOT );
 }
 
 } // namespace aapi

@@ -36,6 +36,7 @@ class AAPIMeasurementEvents
 {
 protected:
     AAPIMeasurementEvents() {}
+
 public:
     virtual ~AAPIMeasurementEvents() {}
 
@@ -47,21 +48,29 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The AAPIMeasure class
 ///
-class AAPIMeasure :
-        public AAPIObject
+class AAPIMeasure : public AAPIObject
 {
     DECLARE_AAPI_OBJECT(AAPIMeasure)
 
-    static AAPIMeasure *create(AAPIConfig *config, AAPICalibrator *calibrator,
+    static AAPIMeasure *create(AAPIConfig *config,
+                               AAPICalibrator *calibrator,
                                AAPIMeasurementEvents *callback,
                                uint32_t frequency,
-                               bool correct_hwerr,
+                               bool correct_hwerror,
                                bool correct_osl,
                                uint32_t num_scans,
                                bool add_ref = true);
-private:
+protected:
     AAPIMeasure();
+    ~AAPIMeasure();
 
+public:
+
+    int process_mags(const std::complex<float>& mag_v, const std::complex<float>& mag_i);
+    bool calc_finalize();
+    bool is_signal_low() const;
+
+private:
     std::complex<float> calc_rx();
 
     static float calc_vswr(const std::complex<float>& z, float r0);
@@ -73,42 +82,35 @@ private:
      * standard deviation range. */
     static float filter_array(float *arr, uint32_t len, int retries);
 
-public:
-    ~AAPIMeasure();
-
-    int process_mags(const std::complex<float>& mag_v, const std::complex<float>& mag_i);
-    bool calc_finalize();
-    bool is_signal_low() const;
-
 private:
-    aapi_ptr<AAPICalibrator> calibrator;
-    AAPIMeasurementEvents   *callback;
+    AAPICalibrator      *m_calibrator;
+    AAPIMeasurementEvents   *m_callback;
 
 public:
     float               mag_mv_v;       /* Measured magnitude in mV for V-channel */
     float               mag_mv_i;       /* Measured magnitude in mV for I-channel */
     float               mag_ratio;      /* Measured magnitude ratio */
     float               mag_ratio_db;   /* Measured magnitude ratio, dB */
-    float               phas_diff;      /* Measured phase difference in radians */
-    float               phas_diff_d;    /* Measured phase difference in degrees */
+    float               Phas_diff;      /* Measured phase difference in radians */
+    float               Phas_diff_d;    /* Measured phase difference in degrees */
     std::complex<float> mag_v;          /* Measured complex magnitude for V-channel */
     std::complex<float> mag_i;          /* Measured complex magnitude for I-channel */
-    std::complex<float> rx;             /* Measured complex resistance */
+    std::complex<float> Rx;             /* Measured complex resistance */
     float               vswr;           /* Measured VSWR */
     int                 num_retries;
     int                 measure_iter;
     uint32_t            num_measures;
-    uint32_t            frequency;
-    bool                osl_corr;
-    bool                hwerr_corr;
+    uint32_t            Frequency;
+    bool                correct_osl;
+    bool                correct_hwerror;
     float               *mag_v_buf;
     float               *mag_i_buf;
     float               *phas_diff_buf;
-    float               r0;             /* System impedance (real value, i.e. 50 Ohm)*/
-    float               r_measure;      /* Bridge measurement resistor */
-    float               r_measure_add;  /* Bridge add resistor */
-    float               r_load;         /* Bridge load resistor */
-    float               r_total;
+    float               R0;             /* System impedance (real value, i.e. 50 Ohm)*/
+    float               R_measure;      /* Bridge measurement resistor */
+    float               R_measure_add;  /* Bridge add resistor */
+    float               R_load;         /* Bridge load resistor */
+    float               R_total;
 };
 
 } // namespace aapi

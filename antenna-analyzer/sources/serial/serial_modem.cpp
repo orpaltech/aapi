@@ -41,26 +41,25 @@ namespace aapi
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// serial_modem
+// AAPISerialModem
 ///////////////////////////////////////////////////////////////////////////////
 
-serial_modem::serial_modem()
+AAPISerialModem::AAPISerialModem()
 {
-	this->callback	= nullptr;
+    m_uart      = nullptr;
+	m_callback  = nullptr;
 	// allocate delimit char memory
-    this->rx_delimit =
-            reinterpret_cast<char *> (malloc (MAX_RX_DELIMIT_CHARS + 1));
-    this->tx_delimit =
-            reinterpret_cast<char *> (malloc (MAX_TX_DELIMIT_CHARS + 1));
+    rx_delimit  = reinterpret_cast<char *> (malloc (MAX_RX_DELIMIT_CHARS + 1));
+    tx_delimit  = reinterpret_cast<char *> (malloc (MAX_TX_DELIMIT_CHARS + 1));
 	set_rx_delimit_chars(nullptr);
 	set_tx_delimit_chars(nullptr);
 	// allocate command buffer
-	this->cmd_size = 260;
-    this->cmd_buff = reinterpret_cast<char *>(malloc(260));
-	this->cmd_buff[0] = '\0';
+	cmd_size    = 260;
+    cmd_buff    = reinterpret_cast<char *>(malloc(260));
+	cmd_buff[0] = '\0';
 }
 
-serial_modem::~serial_modem()
+AAPISerialModem::~AAPISerialModem()
 {
 	stop();
 
@@ -69,50 +68,56 @@ serial_modem::~serial_modem()
     free (this->tx_delimit);
 
     free (this->cmd_buff);
+
+    if ( m_uart )
+        m_uart->release();
 }
 
-const char *serial_modem::get_rx_delimit_chars() const
+const char *AAPISerialModem::get_rx_delimit_chars() const
 {
-	return this->rx_delimit;
+	return rx_delimit;
 }
 
-void serial_modem::set_rx_delimit_chars(const char *delimit_chars)
+void AAPISerialModem::set_rx_delimit_chars(const char *delimit_chars)
 {
     size_t len;
 
-    if (!delimit_chars)
+    if( !delimit_chars )
+    {
         delimit_chars = DEFAULT_DELIMIT_CHARS;
+    }
 
     len = min(MAX_RX_DELIMIT_CHARS, strlen (delimit_chars));
     strncpy (this->rx_delimit, delimit_chars, len);
     this->rx_delimit[len] = '\0';
-
 }
 
-const char *serial_modem::get_tx_delimit_chars() const
+const char *AAPISerialModem::get_tx_delimit_chars() const
 {
-	return this->tx_delimit;
+	return tx_delimit;
 }
 
-void serial_modem::set_tx_delimit_chars(const char *delimit_chars)
+void AAPISerialModem::set_tx_delimit_chars(const char *delimit_chars)
 {
     size_t len;
 
-    if (!delimit_chars)
+    if( !delimit_chars )
+    {
         delimit_chars = DEFAULT_DELIMIT_CHARS;
+    }
 
     len = min(MAX_TX_DELIMIT_CHARS, strlen (delimit_chars));
     strncpy (this->tx_delimit, delimit_chars, len);
     this->tx_delimit[len] = '\0';
 }
 
-int serial_modem::start(const char *device_name, struct uart_params *params,
-                        serial_modem_callback *callback)
+int AAPISerialModem::start(const char *device_name, struct AAPIUartParams *params,
+                        AAPISerialModemCallback *callback)
 {
-    aapi_ptr<uart_device> uart;
+    AAPtr<AAPIUart> uart;
     int ret;
 
-    if( this->uart )
+    if( m_uart != nullptr )
     {
         return AAPI_E_INVALID_STATE;
     }
@@ -123,68 +128,69 @@ int serial_modem::start(const char *device_name, struct uart_params *params,
     }
 
 	// allocate uart object
-    uart.attach(uart_device::create());
-    if( !uart )
+    uart.attach( AAPIUart::create() );
+    if( uart == nullptr )
     {
         return AAPI_E_OUT_OF_MEMORY;
     }
 
 	// open uart
-    ret = uart->open(device_name, params);
-    if (AAPI_FAILED(ret))
+    ret = uart->open( device_name, params );
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
 	// start asynchronous input
-    ret = uart->start(this);
-    if (AAPI_FAILED(ret))
+    ret = uart->start( this );
+    if( AAPI_FAILED( ret ))
     {
         return ret;
     }
 
-    this->callback = callback;
-    this->uart  = uart;
+    m_callback = callback;
+    m_uart  = uart.detach();
 
 	return 0;
 }
 
-void serial_modem::stop()
+void AAPISerialModem::stop()
 {
-    if (this->uart)
+    if( m_uart != nullptr )
 	{
-		this->uart->stop();
-		this->uart->close();
+		m_uart->stop();
+		m_uart->close();
+        m_uart->release();
 	}
 
-	this->callback	= nullptr;
-	this->uart		= nullptr;
+	m_callback	= nullptr;
+	m_uart		= nullptr;
 }
 
-int serial_modem::send(const char *command)
+int AAPISerialModem::send(const char *command)
 {
-    char *buffer;
-    int ret;
-    size_t len;
+    char    *buffer;
+    int     ret;
+    size_t  len;
 
-    if( !this->uart )
+    if( m_uart == nullptr )
     {
         return AAPI_E_INVALID_STATE;
     }
 
-    if (command == nullptr || (len = strlen(command)) == 0)
+    if( command == nullptr || (len = strlen( command )) == 0 )
     {
         return AAPI_E_INVALID_ARG;
     }
 
-    buffer = reinterpret_cast<char *>(
-                alloca (len + MAX_TX_DELIMIT_CHARS + 1));
-    strcpy (buffer, command);
-	strcat (buffer, tx_delimit);
+    buffer = reinterpret_cast< char *>(
+                        alloca( len + MAX_TX_DELIMIT_CHARS + 1 ) );
+    strcpy( buffer, command );
+	strcat( buffer, tx_delimit );
 
-    ret = uart->write (reinterpret_cast<uint8_t*>(buffer),
-                       strlen(buffer));
-    if (AAPI_FAILED(ret))
+    ret = m_uart->write( reinterpret_cast< uint8_t *>( buffer ),
+                         strlen( buffer ));
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
@@ -195,40 +201,36 @@ int serial_modem::send(const char *command)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// uart_device_callback
+// AAPIUartCallback implementation
 ///////////////////////////////////////////////////////////////////////////////
 
-void serial_modem::uart_rx_data(const uint8_t *buffer, uint32_t len)
+void AAPISerialModem::uart_rx_data(const uint8_t *buffer, uint32_t len)
 {
-    if (!callback)
+    if( !m_callback )
 		return;
 
-    if (len == 0)
+    if( len == 0 )
 		return;
 
 	// remove any delimit symbols and route the command to modem callback
-	std::string chars(this->rx_delimit);
+	std::string chars( this->rx_delimit );
 
-    for (unsigned i = 0; i < len; i++)
+    for( unsigned i = 0; i < len; i++ )
 	{
-        char ch = static_cast<char>(buffer[i]);
-		size_t len = strlen (cmd_buff);
+        char ch = static_cast< char >( buffer[i] );
+		size_t len = strlen( cmd_buff );
 
-        if (ch == 0 || chars.find(ch) != std::string::npos)
+        if( ch == 0 || chars.find(ch) != std::string::npos )
 		{
 			// delimiter character received
-			if (len > 0) 
+			if( len > 0 )
 			{
 				// there is an outstanding command, route the command to callback
 				// and clear the command buffer
 				try {
-                    callback->serial_modem_command (cmd_buff);
+                    m_callback->serial_modem_command( cmd_buff );
 				} catch (...) {
-					try {
-                        callback->serial_modem_error (MODEM_E_CALLBACK_FAILED);
-					} catch (...) {
-						// fatal error
-					}
+                    // ignore this error
 				}
 
 				// reset command buffer
@@ -238,38 +240,38 @@ void serial_modem::uart_rx_data(const uint8_t *buffer, uint32_t len)
 		else 
 		{
 			// this is a normal data character
-			if (len + 1 > cmd_size -1) 
+			if( len + 1 > cmd_size -1 )
 			{
 				// need to reallocate the command buffer
                 unsigned new_size = cmd_size + 260;
-                char *new_buff = reinterpret_cast<char *>(realloc(cmd_buff, new_size));
-                if (new_buff)
+                char *new_buff = reinterpret_cast< char *>( realloc( cmd_buff, new_size ) );
+                if( new_buff )
 				{
 					cmd_buff = new_buff;
 					cmd_size = new_size;
                 }
-				else 
+				else
 				{
 					try {
-                        callback->serial_modem_error( AAPI_E_OUT_OF_MEMORY );
+                        m_callback->serial_modem_error( AAPI_E_OUT_OF_MEMORY );
 					} catch (...) {
-						// fatal error
+						// ignore error
 					}
 				}
 			}
 			// append character to the command buffer
-            strncat (cmd_buff, &ch, 1);
+            strncat( cmd_buff, &ch, 1 );
 		}
 	}
 }
 
-void serial_modem::uart_error(int error)
+void AAPISerialModem::uart_error(int error)
 {
-    if (!callback)
-		return ;
+    if( !m_callback )
+		return;
 
 	try {
-        callback->serial_modem_error (error);
+        m_callback->serial_modem_error( error );
 	} catch (...) {
 		// fatal error
 	}

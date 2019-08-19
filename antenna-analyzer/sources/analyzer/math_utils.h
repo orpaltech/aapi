@@ -34,6 +34,10 @@
 namespace aapi
 {
 
+///////////////////////////////////////////////////////////////////////////////
+// class AAPIMathUtils
+///////////////////////////////////////////////////////////////////////////////
+
 class AAPIMathUtils
 {
 public:
@@ -62,7 +66,7 @@ public:
      *           [ u, v, w ]]
     */
     template<typename T>
-    static inline std::complex<T>
+    static std::complex<T>
     determinant_3(const std::complex<T>& a, const std::complex<T>& b,
                   const std::complex<T>& c,
                   const std::complex<T>& m, const std::complex<T>& n,

@@ -15,34 +15,36 @@
  * 	along with ORPAL-AA-PI. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "qml_panvswr_view.h"
 #include <QChart>
+#include "qml_panvswr_view.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPIQmlPanVSWRView
 ///////////////////////////////////////////////////////////////////////////////
 
-QAAPIQmlPanVSWRView::QAAPIQmlPanVSWRView(AAPIConfig *config, AAPISignalProcessor *processor,
+QAAPIQmlPanVSWRView::QAAPIQmlPanVSWRView(AAPIConfig *config, AAPISignalProcessor *dsp,
                                          AAPIGenerator *gen, AAPICalibrator *calibrator,
                                          QObject *parent)
-    : QAAPIQmlView(config, processor, gen, parent)
+    : QAAPIQmlView(config, dsp, gen, parent)
 {
     m_calibrator = calibrator;
+    AAPI_ADDREF(m_calibrator);
 
-    /* Subscribe for DSP events */
-    processor->add_callback(this);
+    // Subscribe for DSP events 
+    dsp->add_callback(this);
 }
 
 QAAPIQmlPanVSWRView::~QAAPIQmlPanVSWRView()
 {
+    AAPI_DISPOSE(m_calibrator);
 }
 
-void QAAPIQmlPanVSWRView::rx_setup(QLineSeries *seriesR, QLineSeries *seriesX)
+void QAAPIQmlPanVSWRView::rx_setup(QLineSeries *r_series, QLineSeries *x_series)
 {
-    m_RXSeries[0] = seriesR;
-    m_RXSeries[1] = seriesX;
+    m_rx_series[0] = r_series;
+    m_rx_series[1] = x_series;
 
-    QChart *chart = seriesR->chart();
+    QChart *chart = r_series->chart();
     chart->setBackgroundVisible();
     chart->setBackgroundRoundness(0);
     chart->setPlotAreaBackgroundVisible();
@@ -70,7 +72,7 @@ void QAAPIQmlPanVSWRView::rx_setup(QLineSeries *seriesR, QLineSeries *seriesX)
 
 void QAAPIQmlPanVSWRView::vswr_setup(QLineSeries *series)
 {
-    m_VSWRSeries = series;
+    m_vswr_series = series;
 
     QChart *chart = series->chart();
     chart->setBackgroundVisible();
@@ -100,13 +102,13 @@ void QAAPIQmlPanVSWRView::vswr_setup(QLineSeries *series)
 
 void QAAPIQmlPanVSWRView::smith_setup(QObject *chart)
 {
-    m_SmithChart = chart;
+    m_smith_chart = chart;
 }
 
 void QAAPIQmlPanVSWRView::set_plot_bgnd(QChart *chart)
 {
     QRectF plotArea = chart->plotArea();
-    QColor color(QRgb( COLOR_CHART_PLOT_AREA ));
+    QColor color( QRgb( COLOR_CHART_PLOT_AREA ) );
 
     /* setup background */
     QImage texture( plotArea.width(), plotArea.height(), QImage::Format_ARGB32_Premultiplied );
@@ -143,23 +145,23 @@ void QAAPIQmlPanVSWRView::set_plot_bgnd(QChart *chart)
     chart->setPlotAreaBackgroundBrush(areaBrush);
 }
 
-void QAAPIQmlPanVSWRView::update_plot_area(enum ChartType chart_type, QRectF rect)
+void QAAPIQmlPanVSWRView::update_plot_area(ChartType chart_type, QRectF rect)
 {
-    m_plotArea[chart_type] = QSize( rect.width(), rect.height() );
+    m_plot_area[chart_type] = QSize( rect.width(), rect.height() );
 
     switch ( chart_type )
     {
     case CHART_RX:
-        if ( m_RXSeries[0] != nullptr )
+        if ( m_rx_series[0] != nullptr )
         {
-            set_plot_bgnd( m_RXSeries[0]->chart() );
+            set_plot_bgnd( m_rx_series[0]->chart() );
         }
         break;
 
     case CHART_VSWR:
-        if ( m_VSWRSeries != nullptr )
+        if ( m_vswr_series != nullptr )
         {
-            set_plot_bgnd( m_VSWRSeries->chart() );
+            set_plot_bgnd( m_vswr_series->chart() );
         }
         break;
 
@@ -173,7 +175,8 @@ void QAAPIQmlPanVSWRView::update_plot_area(enum ChartType chart_type, QRectF rec
 
 uint32_t QAAPIQmlPanVSWRView::get_freq_start() const
 {
-    uint32_t freq_min;
+    uint32_t    freq_min;
+
     if( m_config->get_pan_is_center_freq() )
     {
         freq_min = m_freq1 - m_span/2;
@@ -187,50 +190,49 @@ uint32_t QAAPIQmlPanVSWRView::get_freq_start() const
 
 int QAAPIQmlPanVSWRView::start_scan(bool fast)
 {
-    uint32_t freq, i, freq_step, points, n_scans;
-    uint32_t freq_min = get_freq_start();
-    uint32_t band_span = this->m_span;
-    QAbstractAxis *axis;
-    int ret;
+    uint32_t        freq, i, freq_step, points, num_scans;
+    uint32_t        freq_min    = get_freq_start();
+    uint32_t        band_span   = this->m_span;
+    QAbstractAxis   *axis;
+    AAPIMeasureList measure_steps;
+    int             ret;
 
-    n_scans = qMin(m_config->get_pan_n_scans(), AA_MEASURE_MAX_SCANS);
+    num_scans = qMin( m_config->get_pan_n_scans(), AA_MEASURE_MAX_SCANS );
 
     freq_min *= 1000;
     band_span *= 1000;
 
     /* Find how many points to scan */
-    points = qMin((fast ? 100 : 800), m_plotArea[m_chartType].width());
+    points = qMin( ( fast ? 100 : 800 ), m_plot_area[m_chart_type].width() );
 
     /* Prepare scan steps */
-    AAPIMeasureList steps;
-    for (i = 0, freq_step = band_span/points; i <= points; i++)
+    for( i = 0, freq_step = band_span/points; i <= points; i++ )
     {
         freq = freq_min + i * freq_step;
-        aapi_ptr<AAPIMeasure> ptr( AAPIMeasure::create(m_config, m_calibrator, this,
-                                            freq, true, true, n_scans, false) );
-        steps.push_back(ptr);
+
+        AAPtr<AAPIMeasure> measure( AAPIMeasure::create( m_config, m_calibrator, this, freq, true, true, num_scans, false) );
+        measure_steps.push_back( measure );
     }
 
-    switch (m_chartType)
+    switch (m_chart_type)
     {
     case CHART_VSWR:
-        m_VSWRSeries->clear();   /* Clear chart series */
-        axis = m_VSWRSeries->chart()->axisY();
+        m_vswr_series->clear();   /* Clear chart series */
+        axis = m_vswr_series->chart()->axisY();
         axis->setMin(0);
         axis->setMax(20);
         break;
 
     case CHART_RX:
-        m_RXSeries[0]->clear();      /* Clear chart series */
-        m_RXSeries[1]->clear();
-        axis = m_RXSeries[0]->chart()->axisY();
+        m_rx_series[0]->clear();      /* Clear chart series */
+        m_rx_series[1]->clear();
+        axis = m_rx_series[0]->chart()->axisY();
         axis->setMin(-500);
         axis->setMax(500);
         break;
 
     case CHART_SMITH:
-        QMetaObject::invokeMethod(m_SmithChart,
-                                  "clear");    /* clear plot area */
+        QMetaObject::invokeMethod( m_smith_chart, "clear" );    /* clear plot area */
         break;
 
     case CHART_S11:
@@ -240,14 +242,14 @@ int QAAPIQmlPanVSWRView::start_scan(bool fast)
 
 
     /* Start measurement sequence */
-    ret = start_measure(steps);
-    if (AAPI_FAILED(ret))
+    ret = start_measure( measure_steps );
+    if( AAPI_FAILED( ret ) )
     {
         return ret;
     }
 
     /* Notify UI that scan has started */
-    emit scanStarted(steps.length());
+    emit scanStarted( measure_steps.length() );
 
     return 0;
 }
@@ -259,7 +261,7 @@ int QAAPIQmlPanVSWRView::get_params()
     m_span = m_config->get_pan_span();
 
     /* Default to VSWR chart */
-    m_chartType = CHART_VSWR;
+    m_chart_type = CHART_VSWR;
 
     /* Flag shows if we need to update configuration */
     bool update_config = false;
@@ -287,12 +289,12 @@ int QAAPIQmlPanVSWRView::get_params()
     }
     else
     {
-        /* Reset frequency and span to defaults */
+        // Reset frequency and span to defaults 
         m_freq1 = 14000;
         m_span = SPAN_800;
         update_config = true;
-        m_config->set_pan_freq1(m_freq1);
-        m_config->set_pan_span(m_span);
+        m_config->set_pan_freq1( m_freq1 );
+        m_config->set_pan_span( m_span);
     }
 
     if (update_config)
@@ -315,10 +317,10 @@ int QAAPIQmlPanVSWRView::load_view()
 
 void QAAPIQmlPanVSWRView::destroy_view()
 {
-    m_RXSeries[0] = nullptr;
-    m_RXSeries[1] = nullptr;
-    m_VSWRSeries = nullptr;
-    m_SmithChart = nullptr;
+    m_rx_series[0] = nullptr;
+    m_rx_series[1] = nullptr;
+    m_vswr_series = nullptr;
+    m_smith_chart = nullptr;
 }
 
 void QAAPIQmlPanVSWRView::update_axis_range()
@@ -327,15 +329,15 @@ void QAAPIQmlPanVSWRView::update_axis_range()
     QAbstractAxis *axis;
     int i, n;
 
-    switch (m_chartType)
+    switch (m_chart_type)
     {
     case CHART_RX:
         min = -1; max = 1;
         for (n = 0; n < 2; n++)
         {
-            for (i = 0; i < m_RXSeries[n]->points().size(); i++)
+            for (i = 0; i < m_rx_series[n]->points().size(); i++)
             {
-                const QPointF& pt = m_RXSeries[n]->points().at(i);
+                const QPointF& pt = m_rx_series[n]->points().at(i);
                 if (pt.y() > max)
                     max = pt.y();
                 else if (pt.y() < min)
@@ -345,22 +347,22 @@ void QAAPIQmlPanVSWRView::update_axis_range()
         max = std::ceil(max + std::abs(max)*0.1);
         min = std::floor(min - std::abs(min)*0.1);
 
-        axis = m_RXSeries[0]->chart()->axisY();
+        axis = m_rx_series[0]->chart()->axisY();
         axis->setMin(min);
         axis->setMax(max);
         break;
 
     case CHART_VSWR:
         min = 0; max = 1;
-        for (i = 0; i < m_VSWRSeries->points().size(); i++)
+        for (i = 0; i < m_vswr_series->points().size(); i++)
         {
-            const QPointF& pt = m_VSWRSeries->points().at(i);
+            const QPointF& pt = m_vswr_series->points().at(i);
             if (pt.y() > max)
                 max = pt.y();
         }
         max = std::ceil(max + max*0.1);
 
-        axis = m_VSWRSeries->chart()->axisY();
+        axis = m_vswr_series->chart()->axisY();
         axis->setMin(min);
         axis->setMax(max);
         break;
@@ -373,7 +375,7 @@ void QAAPIQmlPanVSWRView::update_axis_range()
 
 int QAAPIQmlPanVSWRView::on_measure_finished(AAPIMeasure *measure)
 {
-    float freq, vswr;
+    float               freq, vswr;
     std::complex<float> rx, gamma;
 
     if ( measure == nullptr )
@@ -384,33 +386,33 @@ int QAAPIQmlPanVSWRView::on_measure_finished(AAPIMeasure *measure)
     }
     else
     {
-        if ( measure->is_signal_low() )
+        if( measure->is_signal_low() )
         {
-            /* Hardware problem */
+            // Hardware problem 
             emit scanNoSignal();
             return 1;
         }
 
         // update chart series
-        rx = measure->rx;
+        rx = measure->Rx;
         vswr = measure->vswr;
-        freq = measure->frequency / 1000;
+        freq = measure->Frequency / 1000;
 
-        switch( m_chartType )
+        switch( m_chart_type )
         {
         case CHART_RX:
-            m_RXSeries[0]->append( freq, rx.real() );
-            m_RXSeries[1]->append( freq, rx.imag() );
+            m_rx_series[0]->append( freq, rx.real() );
+            m_rx_series[1]->append( freq, rx.imag() );
             break;
 
         case CHART_VSWR:
-            m_VSWRSeries->append( freq, vswr );
+            m_vswr_series->append( freq, vswr );
             break;
 
         case CHART_SMITH:
             gamma = AAPICalibrator::gamma_from_z( rx, m_config->get_base_r0() );
 
-            QMetaObject::invokeMethod(m_SmithChart, "append",
+            QMetaObject::invokeMethod( m_smith_chart, "append",
                                       Q_ARG(QVariant, QPointF(gamma.real(), gamma.imag())));
             break;
         }
@@ -440,42 +442,42 @@ void QAAPIQmlPanVSWRView::smith_plot_area(QRectF rect)
 
 void QAAPIQmlPanVSWRView::rx_fast_scan()
 {
-    m_chartType = CHART_RX;
+    m_chart_type = CHART_RX;
 
     start_scan(true);
 }
 
 void QAAPIQmlPanVSWRView::rx_slow_scan()
 {
-    m_chartType = CHART_RX;
+    m_chart_type = CHART_RX;
 
     start_scan(false);
 }
 
 void QAAPIQmlPanVSWRView::vswr_fast_scan()
 {
-    m_chartType = CHART_VSWR;
+    m_chart_type = CHART_VSWR;
 
     start_scan(true);
 }
 
 void QAAPIQmlPanVSWRView::vswr_slow_scan()
 {
-    m_chartType = CHART_VSWR;
+    m_chart_type = CHART_VSWR;
 
     start_scan(false);
 }
 
 void QAAPIQmlPanVSWRView::smith_fast_scan()
 {
-    m_chartType = CHART_SMITH;
+    m_chart_type = CHART_SMITH;
 
     start_scan(true);
 }
 
 void QAAPIQmlPanVSWRView::smith_slow_scan()
 {
-    m_chartType = CHART_SMITH;
+    m_chart_type = CHART_SMITH;
 
     start_scan(false);
 }

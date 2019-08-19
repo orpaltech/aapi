@@ -21,7 +21,7 @@
 #include <complex.h>
 #include "audio/audio_reader.h"
 #include "analyzer/analyzer_config.h"
-#include "analyzer/callback_holder.h"
+#include "analyzer/simple_array.h"
 
 namespace aapi
 {
@@ -36,8 +36,8 @@ enum AAPISignalProcessorChannel {
 };
 
 enum AAPISignalProcessorError {
-    AAPIDSP_E_AUDIO_DEVICE_NOT_FOUND    = AAPI_DSP_ERROR_START,
-    AAPIDSP_E_AUDIO_UNSUPPORT_FORMAT    = AAPI_DSP_ERROR_START - 1,
+    AAPI_DSP_E_AUDIO_DEVICE_NOT_FOUND    = AAPI_DSP_ERROR_START,
+    AAPI_DSP_E_AUDIO_UNSUPPORT_FORMAT    = AAPI_DSP_ERROR_START - 1,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,12 +49,11 @@ class AAPISignalProcessorEvents
 {
     volatile bool m_enabled;
 public:
-    virtual ~AAPISignalProcessorEvents() {}
-
     AAPISignalProcessorEvents()
     {
         m_enabled = false;
     }
+    virtual ~AAPISignalProcessorEvents() { }
 
     void enable_signal_processing(bool enable = true)
     {
@@ -66,9 +65,9 @@ public:
         return m_enabled;
     }
 
-    virtual void dsp_raw_frame(float **buffers, uint32_t num_buffers, uint32_t buf_size) {}
-    virtual void dsp_fft_frame(float **buffers, uint32_t num_buffers, uint32_t buf_size) {}
-    virtual void dsp_magnitudes(std::complex< float > *mags, uint32_t num_mags) {}
+    virtual void dsp_raw_frame(float **buffers, uint32_t num_buffers, uint32_t buf_size) { }
+    virtual void dsp_fft_frame(float **buffers, uint32_t num_buffers, uint32_t buf_size) { }
+    virtual void dsp_magnitudes(std::complex< float > *mags, uint32_t num_mags) { }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,25 +76,26 @@ public:
 /// \brief The AAPISignalProcessor class
 ///
 class AAPISignalProcessor : public AAPIObject,
-        public callback_holder<AAPISignalProcessorEvents>,
-        public AAPIAudioReaderEvents
+                            public AAPIAudioReaderEvents
 {
     DECLARE_AAPI_OBJECT(AAPISignalProcessor)
 
     static AAPISignalProcessor *create(AAPIConfig *config, bool add_ref = true);
 protected:
     AAPISignalProcessor();
-public:
     ~AAPISignalProcessor();
 
+public:
     int start();
     void stop();
 
-    static void blackman(float *wnd, uint32_t nsamples);
+    void add_callback(AAPISignalProcessorEvents *cb);
+
+    static void set_blackman(float *wnd, uint32_t nsamples);
     static float mag2db(float magnitude);
 
 private:
-    /* audio_reader_callback */
+// AAPIAudioReaderEvents
     virtual void audio_reader_data(char **buffers,
                                    uint32_t num_buffers,
                                    uint32_t buf_size);
@@ -110,14 +110,15 @@ private:
     void free_buffers();
 
 private:
-    aapi_ptr<AAPIConfig> m_config;
-    aapi_ptr<AAPIAudioReader> m_reader;
+    AAPIConfig          *m_config;
+    AAPIAudioReader     *m_reader;
+    SimpleArray<AAPISignalProcessorEvents>  m_callbacks;
     std::complex<float> fft_xmag[NUM_DSP_CHANNELS];
     float               *fft_inp[NUM_DSP_CHANNELS];
     float               *fft_out;
     float               *fft_mags[NUM_DSP_CHANNELS];
-    float               *window;
-    void                *plan;
+    float               *m_wnd;
+    void                *m_plan;
 };
 
 } //namespace aapi

@@ -26,30 +26,30 @@ class ALSASource;
 class ALSADevice;
 
 ///////////////////////////////////////////////////////////////////////////////
-// class AAPIPCMReader
+// class AAPIALSAReader
 ///////////////////////////////////////////////////////////////////////////////
 
-class AAPIALSAReader :
-        public AAPIAudioReader
+class AAPIALSAReader : public AAPIAudioReader
 {
     DECLARE_AAPI_OBJECT(AAPIALSAReader)
-public:
+protected:
     AAPIALSAReader();
     ~AAPIALSAReader();
 
+public:
     virtual uint32_t get_num_devices();
     virtual const char *get_device_id(int index);
     virtual const char *get_device_name(int index);
 
     virtual bool is_format_supported(int index,
-                                     enum AAPIAudioChannels channels,
-                                     enum AAPIAudioSampleRate sample_rate,
-                                     enum AAPIAudioSampleSize sample_size);
+                                     AAPIAudioChannels channels,
+                                     AAPIAudioSampleRate sample_rate,
+                                     AAPIAudioSampleSize sample_size);
 
     virtual int open(const char *device_id,
-                     enum AAPIAudioChannels channels,
-                     enum AAPIAudioSampleRate sample_rate,
-                     enum AAPIAudioSampleSize sample_size,
+                     AAPIAudioChannels channels,
+                     AAPIAudioSampleRate sample_rate,
+                     AAPIAudioSampleSize sample_size,
                      uint32_t nsamples);
     virtual void close();
 

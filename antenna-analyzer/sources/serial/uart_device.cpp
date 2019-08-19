@@ -25,26 +25,26 @@
 #include <memory.h>
 #include <pthread.h>
 #include <assert.h>
-#include <map>
+#include <list>
 #include <mutex>
 #include "uart_device.h"
 
 namespace aapi
 {
-class uart_context;
-
-typedef std::map<const uart_device*, uart_context*> uart_context_cache;
-typedef std::recursive_mutex uart_context_mutex;
 
 ///////////////////////////////////////////////////////////////////////////////
-// uart_context
+// class AAPIUartContext
 ///////////////////////////////////////////////////////////////////////////////
 
-class uart_context
+class AAPIUartContext
 {
-    friend class uart_device;
+    friend class AAPIUart;
+
+    typedef std::list<AAPIUartContext*> TCache;
+    typedef std::recursive_mutex TMutex;
+
 public:
-    uart_context()
+    AAPIUartContext()
         : fd ( -1 )
         , baudrate ( 0 )
         , char_size ( 0 )
@@ -64,47 +64,52 @@ public:
 	pthread_t pth;
 	volatile bool stopped;
 	volatile bool io_ready;
-    uart_device_callback *callback;
+    AAPIUartCallback *callback;
 
-    static uart_context *get(const uart_device *dev);
-    static void set(const uart_device *dev, uart_context *ctx);
-    static bool remove(const uart_device *dev);
+    static void set(AAPIUartContext *ctx);
+    static bool remove(AAPIUartContext *ctx);
 
 private:
     void thread_worker();
     static void *thread_func (void *arg);
 	static void io_sig_handler (int status);
 
-    static uart_context_cache context_cache;
-    static uart_context_mutex context_mtx;
+    static TCache m_cache;
+    static TMutex m_mtx;
 };
 
-uart_context_cache uart_context::context_cache;
-uart_context_mutex uart_context::context_mtx;
+AAPIUartContext::TCache AAPIUartContext::m_cache;
+AAPIUartContext::TMutex AAPIUartContext::m_mtx;
 
 ///////////////////////////////////////////////////////////////////////////////
-// uart_device
+// class AAPIUart
 ///////////////////////////////////////////////////////////////////////////////
 
-uart_device::uart_device()
+AAPIUart::AAPIUart()
 {
+    m_priv = nullptr;
 }
 
-uart_device::~uart_device()
+AAPIUart::~AAPIUart()
 {
 	close();
 }
 
-int uart_device::open(const char *device_name, struct uart_params* uart_params)
+int AAPIUart::open(const char *device_name, struct AAPIUartParams* uart_params)
 {
-	int fd;
-	int open_flag = O_RDONLY;
-	struct sigaction saio;           /* definition of signal action */
-    uart_context *ctx;
-    struct uart_params params;
-    uint32_t baudrate = B9600;
-    uint32_t char_size = CS8;
-    uint32_t stop_bits = 0;
+    int                     fd;
+	int                     open_flag = O_RDONLY;
+	struct sigaction        saio;           /* definition of signal action */
+    uint32_t                baudrate = B9600;
+    uint32_t                char_size = CS8;
+    uint32_t                stop_bits = 0;
+    struct AAPIUartParams   loc_params;
+    AAPIUartContext         *ctx;
+
+    if( m_priv )
+    {
+        return AAPI_E_INVALID_STATE;
+    }
 
     if( !device_name )
     {
@@ -113,7 +118,7 @@ int uart_device::open(const char *device_name, struct uart_params* uart_params)
 
     if( !uart_params )
     {
-        uart_params = &params;
+        uart_params = &loc_params;
     }
 
     switch( uart_params->open_mode )
@@ -128,18 +133,16 @@ int uart_device::open(const char *device_name, struct uart_params* uart_params)
         break;
 	}
 
-	/* open the device to be non-blocking (read will return immediately) */
-    fd = ::open( device_name, open_flag | O_NOCTTY | O_NONBLOCK );
-    if( fd < 0 )
+	// open the device to be non-blocking (read will return immediately) 
+    if( ( fd = ::open( device_name, open_flag | O_NOCTTY | O_NONBLOCK ) ) < 0 )
     {
-		// ERROR - CAN'T OPEN SERIAL PORT
-		// Error - Unable to open UART.  Ensure it is not in use by another application
-        return UART_E_OPEN_DEVICE;
+		// Unable to open UART. Ensure it is not in use by another application
+        return AAPI_UART_E_OPEN_DEVICE_FAILED;
 	}
 
 	/* install the signal handler before making the device asynchronous */
-    memset(&saio, 0, sizeof(saio));
-    saio.sa_handler = uart_context::io_sig_handler;
+    memset( &saio, 0, sizeof( saio ) );
+    saio.sa_handler = AAPIUartContext::io_sig_handler;
     sigaction( SIGIO, &saio, nullptr );
 
 	/* allow the process to receive SIGIO */
@@ -149,8 +152,7 @@ int uart_device::open(const char *device_name, struct uart_params* uart_params)
 	   O_APPEND and O_NONBLOCK, will work with F_SETFL...) */
     fcntl( fd, F_SETFL, fcntl(fd, F_GETFL) | O_ASYNC );
 
-    switch (uart_params->baud_rate)
-    {
+    switch (uart_params->baud_rate) {
     case UART_BR_1200: baudrate = B1200; break;
     case UART_BR_1800: baudrate = B1800; break;
     case UART_BR_2400: baudrate = B2400; break;
@@ -162,8 +164,7 @@ int uart_device::open(const char *device_name, struct uart_params* uart_params)
     case UART_BR_115200: baudrate = B115200; break;
 	}
 
-    switch (uart_params->char_size)
-    {
+    switch (uart_params->char_size) {
     case UART_CHR_5BIT: baudrate = CS5; break;
     case UART_CHR_6BIT: baudrate = CS6; break;
     case UART_CHR_7BIT: baudrate = CS7; break;
@@ -175,7 +176,7 @@ int uart_device::open(const char *device_name, struct uart_params* uart_params)
     case UART_STOP_2BIT: stop_bits = CSTOPB; break;
 	}
 
-    ctx = new uart_context();
+    ctx = new AAPIUartContext();
     ctx->fd = fd;
     ctx->baudrate = baudrate;
     ctx->char_size = char_size;
@@ -183,95 +184,97 @@ int uart_device::open(const char *device_name, struct uart_params* uart_params)
     ctx->flow_control = ( uart_params->flow_control == UART_FCTRL_RTSCTS
                           ? CRTSCTS : 0 );
 
-    uart_context::set(this, ctx);
+    m_priv = ctx;
+    // store private context to global cache
+    AAPIUartContext::set( ctx );
 
-	return 0;
+	return AAPI_SUCCESS;
 }
 
-void uart_device::close()
+void AAPIUart::close()
 {
-    uart_context *ctx = uart_context::get(this);
-
     //----- CLOSE -----
-    if (ctx != nullptr)
-	{
-		// stop listener
-		stop();
+    if( !is_open() )
+    {
+        return;
+    }
 
-        // close the file descriptor
-        if (ctx->fd != -1)
-		{
-            ::close(ctx->fd);
-            ctx->fd = -1;
-		}
-	}
+    // stop listener
+    stop();
 
-	// remove from the context cache
-    uart_context::remove(this);
+    // close the file descriptor
+    if( m_priv->fd != -1 )
+    {
+        ::close( m_priv->fd );
+        m_priv->fd = -1;
+    }
+
+    // remove the context from cache
+    AAPIUartContext::remove( m_priv );
+
+    // destroy the context
+    delete m_priv;
+    m_priv = nullptr;
 }
 
-int uart_device::write(const uint8_t *buffer, uint32_t length)
+int AAPIUart::write(const uint8_t *buffer, uint32_t length)
 {
-    uart_context *ctx = uart_context::get(this);
+    //----- TX BYTES -----
+    if( !is_open() )
+    {
+        return AAPI_E_INVALID_STATE;
+    }
 
-	//----- TX BYTES -----
-    if (ctx && ctx->fd != -1)
-	{
-        // Filestream, bytes to write, number of bytes to write
-        ssize_t tx_len = ::write(ctx->fd, buffer, length);
-        if (tx_len < 0)
-		{
-			// UART TX error
-            return UART_E_WRITE_FAILED;
-		}
+    // Filestream, bytes to write, number of bytes to write
+    ssize_t tx_len = ::write( m_priv->fd, buffer, length );
+    if( tx_len < 0 )
+    {
+        // UART TX error
+        return AAPI_UART_E_WRITE_FAILED;
+    }
 
-        return tx_len;
-	}
-
-    return AAPI_E_INVALID_STATE;
+    return tx_len;
 }
 
-int uart_device::read(uint8_t *buffer, uint32_t length)
+int AAPIUart::read(uint8_t *buffer, uint32_t length)
 {
-    uart_context *ctx = uart_context::get(this);
+    //----- CHECK FOR ANY RX BYTES -----
+    if( !is_open() )
+    {
+        return AAPI_E_INVALID_STATE;
+    }
 
-	//----- CHECK FOR ANY RX BYTES -----
-    if (ctx && ctx->fd != -1)
-	{
-		// Read characters from the port if they are there
-        // Filestream, buffer to store in, number of bytes to read (max)
-        ssize_t rx_len = ::read(ctx->fd, buffer, length);
-        if (rx_len < 0)
-		{
-			// An error occurred (will occur if there are no bytes)
-            return UART_E_READ_FAILED;
-		}
-        if (rx_len == 0)
-		{
-			// No data waiting
-			return 0;
-		}
+    // Read characters from the port if they are there
+    // Filestream, buffer to store in, number of bytes to read (max)
+    ssize_t rx_len = ::read( m_priv->fd, buffer, length );
+    if( rx_len < 0 )
+    {
+        // An error occurred (will occur if there are no bytes)
+        return AAPI_UART_E_READ_FAILED;
+    }
+    if( rx_len == 0 )
+    {
+        // No data pending
+        return 0;
+    }
 
-        // Bytes received; set zero after the last charaster
-        if (rx_len < static_cast<ssize_t> (length))
-        {
-            buffer[rx_len] = 0;
-        }
+    // Bytes received; set zero after the last charaster
+    if( rx_len < static_cast<ssize_t> (length) )
+    {
+        buffer[ rx_len ] = 0;
+    }
 
-        return rx_len;
-	}
-
-    return AAPI_E_INVALID_STATE;
+    return rx_len;
 }
 
-void uart_context::thread_worker()
+void AAPIUartContext::thread_worker()
 {
     ssize_t res;
-    uint8_t* rx_buf = reinterpret_cast<uint8_t*> (alloca(rx_bufsize));
+    uint8_t* rx_buf = reinterpret_cast< uint8_t *> ( alloca( rx_bufsize ) );
 	struct termios oldtio, newtio;
     struct pollfd pfd;
 
-    tcgetattr(this->fd, &oldtio); /* save current port settings */
+    tcgetattr( this->fd, &oldtio ); // save current port settings 
 
     /* set new port settings for canonical input processing */
 	/* The flags (defined in /usr/include/termios.h - see http://pubs.opengroup.org/onlinepubs/007908799/xsh/termios.h.html) */
@@ -279,98 +282,94 @@ void uart_context::thread_worker()
                     | this->flow_control
                     | this->char_size   /* Character size (in bits) */
                     | this->stop_bits   /* Stop bits (1 or 2) */
-                    | CLOCAL        /* Ignore modem status lines, i.e. CD */
-                    | CREAD         /* Enable receiver */
+                    | CLOCAL            /* Ignore modem status lines, i.e. CD */
+                    | CREAD             /* Enable receiver */
 					;
-    newtio.c_iflag = IGNPAR         /*Ignore characters with parity errors*/
-                    | ICRNL         /*Map CR to NL on input (Use for ASCII comms where you want to auto correct end of line characters - don't use for binary comms!)*/
+    newtio.c_iflag = IGNPAR             /*Ignore characters with parity errors*/
+                    | ICRNL             /*Map CR to NL on input (Use for ASCII comms where you want to auto correct end of line characters - don't use for binary comms!)*/
 					;
 	newtio.c_oflag = 0;
 	newtio.c_lflag = ICANON;
 	newtio.c_line = 0;
 	newtio.c_ispeed = 0;
 	newtio.c_ospeed = 0;
-    newtio.c_cc[VMIN] = 1; // http://www.unixwiz.net/techtips/termios-vmin-vtime.html
+    newtio.c_cc[VMIN] = 1;  // see http://www.unixwiz.net/techtips/termios-vmin-vtime.html
     newtio.c_cc[VTIME] = 1;
     tcflush(this->fd, TCIFLUSH);
     tcsetattr(this->fd, TCSANOW, &newtio);
 
-    /* loop while waiting for input */
+    // loop while waiting for input 
     while (!this->stopped)
     {
-        usleep(100000); //100msec
+        usleep(100000); //wait 100msec
 
-        /* after receiving SIGIO, ready flag = true, input is available
-          and can be read */
+        // after receiving SIGIO, ready flag = true, input is available
+        // and can be read 
         if (this->io_ready)
         {
-			/* poll parameters */
+			// poll parameters 
 			pfd.events = POLLRDNORM|POLLRDBAND;
 			pfd.revents = 0;
             pfd.fd = this->fd;
 
-			/* poll the file descriptor */
-			res = poll(&pfd, 1, 1);
+			// poll the file descriptor 
+			res = poll( &pfd, 1, 1 );
             if (res > 0)
             {
-				/* An event on the file descriptor has occurred. */
-                while ((res = read(this->fd, rx_buf, this->rx_bufsize-1)) > 0)
+				// An event on the file descriptor has occurred. 
+                while( ( res = read( this->fd, rx_buf, this->rx_bufsize-1 ) ) > 0 )
                 {
                     rx_buf[res] = 0; // set zero in the end
-                    if (callback)
-                        callback->uart_rx_data(rx_buf,
+                    if( callback )
+                        callback->uart_rx_data( rx_buf,
                                     static_cast<uint32_t> (res));
 				}
-                if (res < 0)
+                if( res < 0 )
                 {
                     // look at errno
-                    if (callback)
-                        callback->uart_error(errno);
+                    if( callback )
+                        callback->uart_error( errno );
 				}
             }
-            else if (res < 0)
+            else if( res < 0 )
             {
                 // look at errno
-                if (callback)
-                    callback->uart_error(errno);
+                if( callback )
+                    callback->uart_error( errno );
 			}
             this->io_ready = false;		/* wait for new input */
 		}
 	}
 
-	/* restore old port settings */
-    tcsetattr(this->fd, TCSANOW, &oldtio);
+	// restore old port settings 
+    tcsetattr( this->fd, TCSANOW, &oldtio );
 }
 
-void *uart_context::thread_func(void *arg)
+void *AAPIUartContext::thread_func(void *arg)
 {
-    uart_context *ctx = reinterpret_cast<uart_context *>(arg);
-    assert(ctx);
-    ctx->thread_worker();
+    AAPIUartContext *priv = reinterpret_cast< AAPIUartContext *>( arg );
+    assert( priv );
+    priv->thread_worker();
     return nullptr;
 }
 
-uart_context *uart_context::get(const uart_device *key)
+void AAPIUartContext::set( AAPIUartContext *ctx )
 {
-    std::lock_guard<uart_context_mutex> lock(context_mtx);
-	return context_cache[key];
+    std::lock_guard<AAPIUartContext::TMutex> lock( m_mtx );
+	m_cache.push_back( ctx );
 }
 
-void uart_context::set(const uart_device *key, uart_context *c)
+bool AAPIUartContext::remove( AAPIUartContext *ctx )
 {
-    std::lock_guard<uart_context_mutex> lock(context_mtx);
-	context_cache[key] = c;
-}
-
-bool uart_context::remove(const uart_device *key)
-{
-    std::lock_guard<uart_context_mutex> lock(context_mtx);
-    uart_context_cache::iterator iter = context_cache.find(key);
-    if (iter != context_cache.end())
+    std::lock_guard<AAPIUartContext::TMutex> lock( m_mtx );
+    AAPIUartContext::TCache::const_iterator iter = m_cache.begin();
+    for ( ; iter != m_cache.end(); ++iter )
     {
-		delete iter->second;
-		context_cache.erase(iter);
-		return true;
+        if( *iter == ctx )
+        {
+            m_cache.erase( iter );
+            return true;
+        }
 	}
 	return false;
 }
@@ -380,66 +379,60 @@ bool uart_context::remove(const uart_device *key)
 * characters have been received.                                           *
 ***************************************************************************/
 
-void uart_context::io_sig_handler(int status)
+void AAPIUartContext::io_sig_handler (int status)
 {
 	(void)status;
-    std::lock_guard<uart_context_mutex> lock(context_mtx);
-    uart_context_cache::iterator iter = context_cache.begin();
-    for (; iter != context_cache.end(); ++iter)
+    std::lock_guard<AAPIUartContext::TMutex> lock( m_mtx );
+    AAPIUartContext::TCache::iterator iter = m_cache.begin();
+    for (; iter != m_cache.end(); ++iter)
     {
-		iter->second->io_ready = true;
+		(*iter)->io_ready = true;
 	}
 }
 
 // http://www.tldp.org/HOWTO/Serial-Programming-HOWTO/x115.html
 
-int uart_device::start(uart_device_callback *callback)
+int AAPIUart::start(AAPIUartCallback *callback)
 {
-    uart_context *ctx = uart_context::get(this);
-    int ret;
+    if( !is_open() )
+    {
+        return AAPI_E_INVALID_STATE;
+    }
 
-    if (ctx && ctx->pth == 0)
-	{
-        ctx->callback = callback;
-        ret = pthread_create( &ctx->pth, nullptr, &uart_context::thread_func, ctx );
-        if( ret )
-        {
-            return AAPI_E_CREATE_THREAD;
-        }
+    m_priv->callback = callback;
+    if( pthread_create( &m_priv->pth, nullptr,
+                        &AAPIUartContext::thread_func,
+                        m_priv ) )
+    {
+        return AAPI_E_CREATE_THREAD_FAILED;
+    }
 
-		return 0;
-	}
-
-    return AAPI_E_INVALID_STATE;
+    return AAPI_SUCCESS;
 }
 
-void uart_device::stop()
+void AAPIUart::stop()
 {
-    uart_context *ctx = uart_context::get(this);
+    if( !is_open() )
+    {
+        return;
+    }
 
-    if (ctx && ctx->pth != 0)
-	{
-		// set stop flag
-        ctx->stopped = true;
-		// wait for worker thread to complete
-        pthread_join(ctx->pth, nullptr);
-		// reset thread handle
-        ctx->pth = 0;
-	}
+    // set stop flag
+    m_priv->stopped = true;
+    // wait for worker thread to complete
+    pthread_join( m_priv->pth, nullptr );
+    // reset thread handle
+    m_priv->pth = 0;
 }
 
-bool uart_device::is_open() const
+bool AAPIUart::is_open() const
 {
-    uart_context *ctx = uart_context::get(this);
-
-    return ( ctx != nullptr );
+    return ( m_priv != nullptr );
 }
 
-bool uart_device::is_listening() const
+bool AAPIUart::is_listening() const
 {
-    uart_context *ctx = uart_context::get(this);
-
-    return ( ctx && ctx->pth != 0 );
+    return is_open() && ( m_priv->pth != 0 );
 }
 
 } // namespace aapi
