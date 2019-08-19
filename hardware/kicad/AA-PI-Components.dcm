@@ -70,6 +70,27 @@ D Schottky Diodes & Rectifiers 5.5 Amp 30 Volt
 F https://componentsearchengine.com/Datasheets/1/50WQ03FN.pdf
 $ENDCMP
 #
+$CMP AZ23C2V7-AZ23C51
+D Zener Diodes 5.6V 300mW
+F https://www.diodes.com/assets/Datasheets/ds18003.pdf
+$ENDCMP
+#
+$CMP AZ23C5V6-7
+D 300mW DUAL SURFACE MOUNT ZENER DIODE
+K AZ23C5V6-7
+F https://www.diodes.com/assets/Datasheets/ds18003.pdf
+$ENDCMP
+#
+$CMP BAT_GND
+D GROUND power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP BQ34Z100PWR-G1
+D Multi-Chemistry Impedance Track Standalone Fuel Gauge | Battery Gas Gauge
+F http://www.ti.com/lit/ds/symlink/bq34z100-g1.pdf
+$ENDCMP
+#
 $CMP Barrel_Jack
 D DC Barrel Jack
 K DC power barrel jack connector
@@ -130,8 +151,20 @@ K connector
 F ~
 $ENDCMP
 #
+$CMP Conn_01x06
+D Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
 $CMP Conn_01x06_Shielded
 D Generic shielded connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x08_Shielded
+D Generic shielded connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)
 K connector
 F ~
 $ENDCMP
@@ -162,6 +195,18 @@ $ENDCMP
 #
 $CMP Conn_01x20_Shielded
 D Generic shielded connector, single row, 01x20, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x24_Shielded
+D Generic shielded connector, single row, 01x24, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x25_Shielded
+D Generic shielded connector, single row, 01x25, script generated (kicad-library-utils/schlib/autogen/connector/)
 K connector
 F ~
 $ENDCMP
@@ -214,9 +259,31 @@ K diode
 F ~
 $ENDCMP
 #
+$CMP D_Zener
+D Zener diode
+K diode
+F ~
+$ENDCMP
+#
+$CMP D_Zener_Small
+D Zener diode, small symbol
+K diode
+F ~
+$ENDCMP
+#
+$CMP FAN5331SX
+D FAN5331SX, LED Driver, 3.3, 5V, 5-Pin SOT-23
+F http://docs-emea.rs-online.com/webdocs/0d1d/0900766b80d1dadf.pdf
+$ENDCMP
+#
 $CMP FAN5333BSX
 D LED Driver, 30V Integrated Switch SOT23
 F http://www.onsemi.com/pub/Collateral/FAN5333B-D.pdf
+$ENDCMP
+#
+$CMP FH26-25S-0.3SHW
+D 0.3 mm Pitch, 1.0 mm Height FPC Connector
+F http://www.mouser.com/ds/2/185/FH26_catalog-939414.pdf
 $ENDCMP
 #
 $CMP FH26-33S-0.3SHW
@@ -348,6 +415,11 @@ K resettable fuse PTC PPTC polyfuse polyswitch
 F ~
 $ENDCMP
 #
+$CMP QTLP610C-4TR
+D Standard LEDs - SMD R/A GRN/CLR SMD LED
+F https://media.digikey.com/pdf/Data%20Sheets/Everlight%20PDFs/QTLP610C-2,3,4,7,B.pdf
+$ENDCMP
+#
 $CMP R
 D Resistor
 K r res resistor
@@ -382,6 +454,11 @@ D NXP SA612AD, Up-Down Converter & Mixer Circuit Gain=17 dB 4.5  8 V 8-Pin SOIC
 F https://www.nxp.com/docs/en/data-sheet/SA612A.pdf
 $ENDCMP
 #
+$CMP SN74HC164PW
+D Texas Instruments SN74HC164PW, 8-stage, Shift Register, Serial to Parallel, 2  6 V, 14-Pin TSSOP
+F http://www.ti.com/lit/ds/symlink/sn74hc164.pdf
+$ENDCMP
+#
 $CMP SW_DPDT
 D Switch, single pole double throw
 K switch single-pole double-throw spdt ON-ON
@@ -410,6 +487,12 @@ $ENDCMP
 $CMP SolderJumper_2_Open
 D Solder Jumper, 2-pole, open
 K solder jumper SPST
+F ~
+$ENDCMP
+#
+$CMP SolderJumper_3_Open
+D Solder Jumper, 3-pole, open
+K Solder Jumper SPDT
 F ~
 $ENDCMP
 #
@@ -445,6 +528,12 @@ $ENDCMP
 $CMP TPS62046DGQ
 D TPS62046 3.3V dc-dc SD converter, MSOP10
 F http://www.ti.com/lit/ds/symlink/tps62046.pdf
+$ENDCMP
+#
+$CMP TestPoint
+D test point
+K test point tp
+F ~
 $ENDCMP
 #
 $CMP Thermistor

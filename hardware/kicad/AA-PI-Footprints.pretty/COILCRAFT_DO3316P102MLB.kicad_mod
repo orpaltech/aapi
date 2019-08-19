@@ -1,4 +1,4 @@
-(module COILCRAFT_DO3316P102MLB (layer F.Cu) (tedit 5C719643)
+(module COILCRAFT_DO3316P102MLB (layer F.Cu) (tedit 5CFE7F27)
   (descr DO3316P-102MLB-1)
   (tags Inductor)
   (attr smd)
@@ -28,7 +28,7 @@
   (fp_line (start 1.845 -4.7) (end 5.08 -2.54) (layer F.SilkS) (width 0.1))
   (pad 1 smd rect (at -5.145 0 90) (size 2.79 2.92) (layers F.Cu F.Paste F.Mask))
   (pad 2 smd rect (at 5.145 0 90) (size 2.79 2.92) (layers F.Cu F.Paste F.Mask))
-  (model ${ORPAL_AAPI_DIR}/AA-PI-Footprints.3dshapes/Coilcraft-DO3316P.stp
+  (model ${ORPAL_AAPI_3DSHAPES_DIR}/Coilcraft-DO3316P.stp
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 90))

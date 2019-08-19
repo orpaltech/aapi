@@ -1,4 +1,4 @@
-(module JST_PH_B3B-PH-SM4-TB_1x03-1MP_P2.00mm_Vertical (layer F.Cu) (tedit 5B78AD87)
+(module JST_PH_B3B-PH-SM4-TB_1x03-1MP_P2.00mm_Vertical (layer F.Cu) (tedit 5D336CD6)
   (descr "JST PH series connector, B3B-PH-SM4-TB (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf), generated with kicad-footprint-generator")
   (tags "connector JST PH side entry")
   (attr smd)
@@ -44,8 +44,8 @@
   (pad 1 smd roundrect (at -2 0.5) (size 1 5.5) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25))
   (pad 2 smd roundrect (at 0 0.5) (size 1 5.5) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25))
   (pad 3 smd roundrect (at 2 0.5) (size 1 5.5) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25))
-  (pad MP smd roundrect (at -4.4 -1.75) (size 1.6 3) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.15625))
-  (pad MP smd roundrect (at 4.4 -1.75) (size 1.6 3) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.15625))
+  (pad SH smd roundrect (at -4.4 -1.75) (size 1.6 3) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.156))
+  (pad SH smd roundrect (at 4.4 -1.75) (size 1.6 3) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.156))
   (model ${KISYS3DMOD}/Connector_JST.3dshapes/JST_PH_B3B-PH-SM4-TB_1x03-1MP_P2.00mm_Vertical.wrl
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))

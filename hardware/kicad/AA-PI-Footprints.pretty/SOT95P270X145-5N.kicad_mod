@@ -1,4 +1,4 @@
-(module SOT95P270X145-5N (layer F.Cu) (tedit 5BC0C90C)
+(module SOT95P270X145-5N (layer F.Cu) (tedit 5CFE8CE1)
   (descr "5-Lead SOT23")
   (tags "Integrated Circuit")
   (attr smd)
@@ -27,7 +27,7 @@
   (pad 3 smd rect (at -1.25 0.95 90) (size 0.6 1.4) (layers F.Cu F.Paste F.Mask))
   (pad 4 smd rect (at 1.25 0.95 90) (size 0.6 1.4) (layers F.Cu F.Paste F.Mask))
   (pad 5 smd rect (at 1.25 -0.95 90) (size 0.6 1.4) (layers F.Cu F.Paste F.Mask))
-  (model ${KISYS3DMOD}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.wrl
+  (model ${ORPAL_AAPI_3DSHAPES_DIR}/SOT23-5.stp
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
