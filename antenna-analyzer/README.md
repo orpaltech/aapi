@@ -6,6 +6,8 @@ Antenna analyzer software for portable Linux-based devices
 Based on the Yuri Kuchura's EU1KY_AA_V3 
 https://bitbucket.org/kuchura/eu1ky_aa_v3/wiki/Home
 
+-- DOCUMENT OBSOLETE AND WILL BE CHANGED -- 
+
 Build process explained
 ==============
 
