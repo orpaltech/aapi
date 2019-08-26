@@ -1,7 +1,9 @@
-ORPAL AA-PI version 1.0
+ORPAL AA-PI
 ==============
 
 Antenna analyzer software for portable Linux-based devices
+
+Version 3.1
 
 Based on the Yuri Kuchura's EU1KY_AA_V3 
 https://bitbucket.org/kuchura/eu1ky_aa_v3/wiki/Home
