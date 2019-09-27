@@ -1,0 +1,568 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP +1V8
+D Power flag, +1.8V
+K power-flag
+$ENDCMP
+#
+$CMP +2V5
+D power-flag symbol +2.5V
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +2V8
+D Power flag, +2.8V
+K power-flag
+$ENDCMP
+#
+$CMP +3V3
+D power-flag symbol +3.3V
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +5V
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_ADC
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_BAT
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_IN
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_LCD
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_LCD_IO
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_LOAD
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP +V_RADIO
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP 24LC02B
+D 2K,256 X 8  2.5V Serial EE,SOT23
+F http://docs-emea.rs-online.com/webdocs/0b04/0900766b80b04763.pdf
+$ENDCMP
+#
+$CMP 50WQ03FN
+D Schottky Diodes & Rectifiers 5.5 Amp 30 Volt
+F https://componentsearchengine.com/Datasheets/1/50WQ03FN.pdf
+$ENDCMP
+#
+$CMP AZ23C2V7-AZ23C51
+D Zener Diodes 5.6V 300mW
+F https://www.diodes.com/assets/Datasheets/ds18003.pdf
+$ENDCMP
+#
+$CMP AZ23C5V6-7
+D 300mW DUAL SURFACE MOUNT ZENER DIODE
+K AZ23C5V6-7
+F https://www.diodes.com/assets/Datasheets/ds18003.pdf
+$ENDCMP
+#
+$CMP BAT_GND
+D GROUND power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP BQ34Z100PWR-G1
+D Multi-Chemistry Impedance Track Standalone Fuel Gauge | Battery Gas Gauge
+F http://www.ti.com/lit/ds/symlink/bq34z100-g1.pdf
+$ENDCMP
+#
+$CMP Barrel_Jack
+D DC Barrel Jack
+K DC power barrel jack connector
+F ~
+$ENDCMP
+#
+$CMP Barrel_Jack_Switch
+D DC Barrel Jack with an internal switch
+K DC power barrel jack connector
+F ~
+$ENDCMP
+#
+$CMP Battery
+D Battery (multiple cells)
+K batt voltage-source cell
+F ~
+$ENDCMP
+#
+$CMP Battery_Cell
+D single battery cell
+K battery cell
+F ~
+$ENDCMP
+#
+$CMP C
+D Unpolarized capacitor
+K cap capacitor
+F ~
+$ENDCMP
+#
+$CMP CP
+D Polarised capacitor
+K cap capacitor
+F ~
+$ENDCMP
+#
+$CMP CP_Small
+D Polarised capacitor
+K cap capacitor
+F ~
+$ENDCMP
+#
+$CMP C_Small
+D Unpolarized capacitor
+K capacitor cap
+F ~
+$ENDCMP
+#
+$CMP Conn_01x02
+D Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x03
+D Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x06
+D Generic connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x06_Shielded
+D Generic shielded connector, single row, 01x06, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x08_Shielded
+D Generic shielded connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x10_Shielded
+D Generic shielded connector, single row, 01x10, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x12_Shielded
+D Generic shielded connector, single row, 01x12, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x15_Shielded
+D Generic shielded connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x20
+D Generic connector, single row, 01x20, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x20_Shielded
+D Generic shielded connector, single row, 01x20, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x24_Shielded
+D Generic shielded connector, single row, 01x24, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x25_Shielded
+D Generic shielded connector, single row, 01x25, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x30
+D Generic connector, single row, 01x30, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_01x30_Shielded
+D Generic shielded connector, single row, 01x30, script generated (kicad-library-utils/schlib/autogen/connector/)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_Coaxial
+D coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, ...)
+K BNC SMA SMB SMC coaxial connector CINCH RCA
+F  ~
+$ENDCMP
+#
+$CMP Crystal
+D Two pin crystal
+K quartz ceramic resonator oscillator
+F ~
+$ENDCMP
+#
+$CMP D
+D Diode
+K diode
+F ~
+$ENDCMP
+#
+$CMP D_Schottky
+D Schottky diode
+K diode Schottky
+F ~
+$ENDCMP
+#
+$CMP D_Schottky_Small
+D Schottky diode, small symbol
+K diode schottky
+F ~
+$ENDCMP
+#
+$CMP D_Small
+D Diode, small symbol
+K diode
+F ~
+$ENDCMP
+#
+$CMP D_Zener
+D Zener diode
+K diode
+F ~
+$ENDCMP
+#
+$CMP D_Zener_Small
+D Zener diode, small symbol
+K diode
+F ~
+$ENDCMP
+#
+$CMP FAN5331SX
+D FAN5331SX, LED Driver, 3.3, 5V, 5-Pin SOT-23
+F http://docs-emea.rs-online.com/webdocs/0d1d/0900766b80d1dadf.pdf
+$ENDCMP
+#
+$CMP FAN5333BSX
+D LED Driver, 30V Integrated Switch SOT23
+F http://www.onsemi.com/pub/Collateral/FAN5333B-D.pdf
+$ENDCMP
+#
+$CMP FH26-25S-0.3SHW
+D 0.3 mm Pitch, 1.0 mm Height FPC Connector
+F http://www.mouser.com/ds/2/185/FH26_catalog-939414.pdf
+$ENDCMP
+#
+$CMP FH26-33S-0.3SHW
+D 0.3 mm Pitch, 1.0 mm Height FPC Connector
+F http://www.mouser.com/ds/2/185/FH26_catalog-939414.pdf
+$ENDCMP
+#
+$CMP FH26-51S-0.3SHW
+D Hirose 0.3mm Pitch 51 Way Right Angle SMT Female FPC Connector, ZIF Bottom Contact
+F https://www.hirose.com/product/en/download_file/key_name/FH26-51S-0.3SHW%2805%29/category/Drawing%20(2D)/doc_file_id/42931/?file_category_id=6&item_id=05800200905&is_series=
+$ENDCMP
+#
+$CMP GND
+D Power flag, digital ground
+K power-flag
+$ENDCMP
+#
+$CMP GNDA
+D GROUND power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP IRF7319
+D Dual N and P Channel MOSFET
+F https://www.infineon.com/dgdl/irf7319pbf.pdf?fileId=5546d462533600a4015355f5c82f1b41
+$ENDCMP
+#
+$CMP Jack-DC
+D DC Barrel Jack
+K DC power barrel jack connector
+F ~
+$ENDCMP
+#
+$CMP L
+D Inductor
+K inductor choke coil reactor magnetic
+F ~
+$ENDCMP
+#
+$CMP LED
+D LED generic
+K led diode
+F ~
+$ENDCMP
+#
+$CMP LED_Small
+D LED, small symbol
+K led diode light-emitting-diode
+F ~
+$ENDCMP
+#
+$CMP LTC2951
+D Supervisory Circuits Basic Push Button On/Off Controller (Adjustable Off and Kill Timers)
+F http://www.mouser.com/datasheet/2/609/295112fb-1272019.pdf
+$ENDCMP
+#
+$CMP LTC2954
+D Linear Technology LTC2954CTS8-1#TRMPBF, Voltage Controller 1V max., 8-Pin TSOT-23
+F http://www.farnell.com/datasheets/1705686.pdf
+$ENDCMP
+#
+$CMP LTC4412
+D Hot Swap Controller LTC4412ES6#TRMPBF, Positive Voltage, 2.5  28 V, TSOT-23, 6-Pin
+F https://www.arrow.com/en/products/ltc4412es6trmpbf/linear-technology
+$ENDCMP
+#
+$CMP L_Core_Ferrite
+D Inductor with Ferrite Core
+K inductor choke coil reactor magnetic
+F ~
+$ENDCMP
+#
+$CMP L_Core_Ferrite_Small
+D Inductor with ferrite core, small symbol
+K inductor choke coil reactor magnetic
+F ~
+$ENDCMP
+#
+$CMP L_Small
+D Inductor, small symbol
+K inductor choke coil reactor magnetic
+F ~
+$ENDCMP
+#
+$CMP MAX16054
+D On Off Controller, Debounce, 15kV ESD MAX16054AZT+T, Voltage Supervisor No Push Button Controller 6-Pin SOT-23
+F http://docs-emea.rs-online.com/webdocs/1050/0900766b810509a1.pdf
+$ENDCMP
+#
+$CMP MC4558
+D Wide bandwidth dual bipolar operational amplifier
+F https://www.st.com/resource/en/datasheet/mc4558.pdf
+$ENDCMP
+#
+$CMP MCP3421
+D 18-Bit Analog-to-Digital Converter with I2C Interface
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22003b.pdf
+$ENDCMP
+#
+$CMP MCP3422
+D A/D Converter 18-Bit 2.048V I2C SOIC8
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22088c.pdf
+$ENDCMP
+#
+$CMP MCP73833
+D Charge Management Li-Ion/Li-Pol
+F https://componentsearchengine.com/Datasheets/1/MCP73833-FCI_UN.pdf
+$ENDCMP
+#
+$CMP MP3302DJ
+D LED Lighting Drivers 1.3A, 1.3MHz WLED Driver
+F https://www.monolithicpower.com/pub/media/document/MP3302_r0.98.pdf
+$ENDCMP
+#
+$CMP PCA9306
+D 2-Bit Bidirectional I2C Bus and SMBus Voltage-Level Shifter
+F http://www.ti.com/lit/gpn/pca9306
+$ENDCMP
+#
+$CMP Polyfuse
+D resettable fuse, polymeric positive temperature coefficient (PPTC)
+K resettable fuse PTC PPTC polyfuse polyswitch
+F ~
+$ENDCMP
+#
+$CMP Polyfuse_Small
+D resettable fuse, polymeric positive temperature coefficient (PPTC), small symbol
+K resettable fuse PTC PPTC polyfuse polyswitch
+F ~
+$ENDCMP
+#
+$CMP QTLP610C-4TR
+D Standard LEDs - SMD R/A GRN/CLR SMD LED
+F https://media.digikey.com/pdf/Data%20Sheets/Everlight%20PDFs/QTLP610C-2,3,4,7,B.pdf
+$ENDCMP
+#
+$CMP R
+D Resistor
+K r res resistor
+F ~
+$ENDCMP
+#
+$CMP RT9193
+D 300mA, Ultra-Low Noise, Ultra-Fast CMOS LDO Regulator
+F http://www.richtek.com/assets/product_file/RT9193/DS9193-17.pdf
+$ENDCMP
+#
+$CMP R_POT
+D Potentiometer
+K resistor variable
+F ~
+$ENDCMP
+#
+$CMP R_Pack04
+D 4 resistor network, parallel topology, DIP package
+K R network parallel topology isolated
+F ~
+$ENDCMP
+#
+$CMP R_Small
+D Resistor, small symbol
+K r resistor
+F ~
+$ENDCMP
+#
+$CMP SA612A
+D NXP SA612AD, Up-Down Converter & Mixer Circuit Gain=17 dB 4.5  8 V 8-Pin SOIC
+F https://www.nxp.com/docs/en/data-sheet/SA612A.pdf
+$ENDCMP
+#
+$CMP SN74HC164PW
+D Texas Instruments SN74HC164PW, 8-stage, Shift Register, Serial to Parallel, 2  6 V, 14-Pin TSSOP
+F http://www.ti.com/lit/ds/symlink/sn74hc164.pdf
+$ENDCMP
+#
+$CMP SW_DPDT
+D Switch, single pole double throw
+K switch single-pole double-throw spdt ON-ON
+$ENDCMP
+#
+$CMP SW_Push
+D Push button switch, generic, two pins
+K switch normally-open pushbutton push-button
+$ENDCMP
+#
+$CMP SW_SPDT
+D Switch, single pole double throw
+K switch single-pole double-throw spdt ON-ON
+$ENDCMP
+#
+$CMP SW_SPST
+D Single Pole Single Throw (SPST) switch
+K switch lever
+$ENDCMP
+#
+$CMP Si5351A-B-GT
+D Clock Generator, Si5351A-B-GT Silicon Labs Si5351A-B-GT, Clock Generator 100MHz 55%, 10-Pin MSOP
+F http://uk.rs-online.com/web/p/products/1690077
+$ENDCMP
+#
+$CMP SolderJumper_2_Open
+D Solder Jumper, 2-pole, open
+K solder jumper SPST
+F ~
+$ENDCMP
+#
+$CMP SolderJumper_3_Open
+D Solder Jumper, 3-pole, open
+K Solder Jumper SPDT
+F ~
+$ENDCMP
+#
+$CMP TCA9802
+D Level-Translating I2C Bus Buffer/Repeater
+F http://www.ti.com/lit/gpn/tca9802
+$ENDCMP
+#
+$CMP TFP401APZP
+D TFP401x TI PanelBus™ Digital Receiver/De-Serializer with HSYNC
+F http://www.ti.com/lit/gpn/TFP401A
+$ENDCMP
+#
+$CMP TLV75728PDBVR
+D 2.8V 1A Low-Quiescent-Current Low-Dropout (LDO) Regulator
+$ENDCMP
+#
+$CMP TLV757P
+D 1A Low-Quiescent-Current Low-Dropout (LDO) Regulator
+F http://www.ti.com/lit/gpn/tlv757p
+$ENDCMP
+#
+$CMP TPS2051BDBVR
+D TEXAS INSTRUMENTS - TPS2051BDBVR - CURRENT LIMITED POWER SWITCH, 5.5V SOT23-5, FULL REEL
+F http://www.ti.com/lit/ds/symlink/tps2051b.pdf
+$ENDCMP
+#
+$CMP TPS61030PWP
+D TPS61030PWP, Boost Converter, Step Up 1A Adjustable, 1.8  5.5 V, 600 kHz, 16-Pin HTSSOP EP
+F http://uk.rs-online.com/web/p/products/1624898
+$ENDCMP
+#
+$CMP TPS62046DGQ
+D TPS62046 3.3V dc-dc SD converter, MSOP10
+F http://www.ti.com/lit/ds/symlink/tps62046.pdf
+$ENDCMP
+#
+$CMP TestPoint
+D test point
+K test point tp
+F ~
+$ENDCMP
+#
+$CMP Thermistor
+D Thermistor, temperature-dependent resistor
+K r res thermistor
+F ~
+$ENDCMP
+#
+$CMP Thermistor_NTC
+D temperature dependent resistor, negative temperature coefficient (NTC)
+K thermistor NTC resistor sensor RTD
+F ~
+$ENDCMP
+#
+$CMP USB_B_Micro
+D USB Micro Type B connector
+K connector USB micro
+F ~
+$ENDCMP
+#
+$CMP USB_B_Mini
+D USB Mini Type B connector
+K connector USB mini
+F ~
+$ENDCMP
+#
+$CMP WM8731
+D Interface - CODECs Stereo Codec w-H/P
+F https://componentsearchengine.com/Datasheets/1/WM8731SEDS_RV.pdf
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name LMV321M5_NOPB)(type Legacy)(uri /home/sergey/Projects2/ECAD/LIB_LMV321M5_NOPB/LMV321M5_NOPB/KiCad/LMV321M5_NOPB.mod)(options "")(descr "")(disabled))
+  (lib (name ams1117-3.3v)(type Legacy)(uri /home/sergey/Projects2/ECAD/LIB_ams1117-3.3v/ams1117-3.3v/KiCad/ams1117-3.3v.mod)(options "")(descr "")(disabled))
+)
