@@ -29,21 +29,21 @@ namespace aapi
 // Definitions
 ///////////////////////////////////////////////////////////////////////////////
 
-#define AAPI_ADDREF(p)  \
-    if (p) {            \
-        (p)->add_ref(); \
+#define AAPI_ADDREF(ptr)  \
+    if (ptr) {            \
+        (ptr)->add_ref(); \
     }
 
-#define AAPI_DISPOSE(p) \
-    if (p) {            \
-        (p)->release(); \
-        (p) = nullptr;  \
+#define AAPI_DISPOSE(ptr) \
+    if (ptr) {            \
+        (ptr)->release(); \
+        (ptr) = nullptr;  \
     }
 
 #define DECLARE_AAPI_OBJECT(clazz) \
 public:                                         \
     static clazz* create(bool add_ref = true)   \
-    { \
+    {                           \
         clazz *p = new clazz(); \
         if (!p)                 \
             return nullptr;     \
