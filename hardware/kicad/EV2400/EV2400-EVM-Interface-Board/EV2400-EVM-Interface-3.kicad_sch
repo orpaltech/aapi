@@ -1,0 +1,8274 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "1effc02b-08d3-44a2-9c5d-89dd89d29c6c")
+	(paper "A3")
+	(title_block
+		(title "EV2400 EVM Interface Board by Texas Instruments")
+		(date "2019-09-26")
+		(rev "1.0")
+		(company "ORPALTECH")
+	)
+	(lib_symbols
+		(symbol "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "EV2400-Components_+3V3"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+3V3-EV2400-Components_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3V3-EV2400-Components_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+3V3"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.254 1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "EV2400-Components_C_Small"
+				(at 0.254 -2.032 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_Small-EV2400-Components_0_1"
+				(polyline
+					(pts
+						(xy -1.524 0.508) (xy 1.524 0.508)
+					)
+					(stroke
+						(width 0.3048)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.524 -0.508) (xy 1.524 -0.508)
+					)
+					(stroke
+						(width 0.3302)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_Small-EV2400-Components_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 2.032)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 2.032)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "EV2400-Components_GND"
+				(at 0 -3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND-EV2400-Components_0_1"
+				(rectangle
+					(start -1.27 -1.524)
+					(end 1.27 -2.032)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.524)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND-EV2400-Components_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-EVM-Interface-Board-rescue:ISL90842-EV2400-Components"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -6.35 12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "EV2400-Components_ISL90842"
+				(at -3.81 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "EV2400-Footprints:SOP65P640X105-14N"
+				(at -10.16 -17.78 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 8.89 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "Digital Potentiometer ICs ISL90842UIV1427Z LW NOISE LW PWR I2C BUS"
+				(at -10.16 -20.32 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Height" "1.05"
+				(at -10.16 -25.4 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Renesas / Intersil"
+				(at -10.16 -22.86 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "ISL90842UIV1427Z"
+				(at -10.16 -27.94 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(symbol "ISL90842-EV2400-Components_0_0"
+				(pin bidirectional line
+					(at -12.7 7.62 0)
+					(length 5.08)
+					(name "RH3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -12.7 5.08 0)
+					(length 5.08)
+					(name "RW3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -12.7 2.54 0)
+					(length 5.08)
+					(name "SCL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -12.7 0 0)
+					(length 5.08)
+					(name "SDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -12.7 -2.54 0)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -12.7 -5.08 0)
+					(length 5.08)
+					(name "RW2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -12.7 -7.62 0)
+					(length 5.08)
+					(name "RH2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 7.62 180)
+					(length 5.08)
+					(name "RW0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 5.08 180)
+					(length 5.08)
+					(name "RH0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 2.54 180)
+					(length 5.08)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 0 180)
+					(length 5.08)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 -2.54 180)
+					(length 5.08)
+					(name "A0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 -5.08 180)
+					(length 5.08)
+					(name "RH1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 -7.62 180)
+					(length 5.08)
+					(name "RW1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "ISL90842-EV2400-Components_0_1"
+				(polyline
+					(pts
+						(xy -7.62 10.16) (xy 7.62 10.16) (xy 7.62 -10.16) (xy -7.62 -10.16) (xy -7.62 10.16)
+					)
+					(stroke
+						(width 0.2032)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 0.762 0.508 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "EV2400-Components_R_Small"
+				(at 0.762 -1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_Small-EV2400-Components_0_1"
+				(rectangle
+					(start -0.762 1.778)
+					(end 0.762 -1.778)
+					(stroke
+						(width 0.2032)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_Small-EV2400-Components_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 0.762)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 0.762)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components"
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -7.62 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "EV2400-Components_TPS73601DBV"
+				(at -6.35 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+				(at -8.89 -20.32 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at -8.89 -20.32 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+				(at -8.89 -22.86 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Height" "1.45"
+				(at -8.89 -17.78 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Texas Instruments"
+				(at -8.89 -25.4 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TPS73601DBV"
+				(at -8.89 -27.94 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(symbol "TPS73601DBV-EV2400-Components_0_0"
+				(pin bidirectional line
+					(at -8.89 2.54 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -8.89 0 0)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -8.89 -2.54 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 8.89 2.54 180)
+					(length 2.54)
+					(name "OUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 8.89 -2.54 180)
+					(length 2.54)
+					(name "NR/FB"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "TPS73601DBV-EV2400-Components_0_1"
+				(polyline
+					(pts
+						(xy -6.35 5.08) (xy 6.35 5.08) (xy 6.35 -5.08) (xy -6.35 -5.08) (xy -6.35 5.08)
+					)
+					(stroke
+						(width 0.2032)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(junction
+		(at 254 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "04b9b26a-928e-4565-93d8-152ff25f01b9")
+	)
+	(junction
+		(at 111.76 88.9)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "11f56739-1e19-4b51-8b0f-676f606a3e21")
+	)
+	(junction
+		(at 162.56 220.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "14f9dc64-b8af-4f50-98f8-36e565e6ee2f")
+	)
+	(junction
+		(at 254 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1b951ba5-2182-4e80-86da-f1a4abeac7c8")
+	)
+	(junction
+		(at 144.78 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "20efb1ef-cd46-4818-9aab-20a9fe2bbf89")
+	)
+	(junction
+		(at 116.84 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2950cc93-fd9c-4e04-a51d-160214ca3bf4")
+	)
+	(junction
+		(at 157.48 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2b5224f3-4bd6-4662-a53a-529480e5c900")
+	)
+	(junction
+		(at 157.48 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2eec5401-874d-47ca-8ee1-15b066b8471b")
+	)
+	(junction
+		(at 157.48 220.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "36218613-928f-4074-81f0-e127bd320564")
+	)
+	(junction
+		(at 119.38 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "39a38d1e-f30b-440a-81a5-40a500d26f56")
+	)
+	(junction
+		(at 157.48 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3dc1a3e7-1f04-45f1-aca2-53963698c106")
+	)
+	(junction
+		(at 208.28 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "42788111-9637-4ff2-889f-423d491782f2")
+	)
+	(junction
+		(at 213.36 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "42f1db82-cf01-4c16-a136-906fdfb0c81b")
+	)
+	(junction
+		(at 116.84 231.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "44976e58-43c2-4786-9e4a-453a0b5774f1")
+	)
+	(junction
+		(at 114.3 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4499a800-3144-4a7e-9502-3f25a7b5da79")
+	)
+	(junction
+		(at 208.28 165.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4606448c-c31d-426e-83c9-fd9e348aa835")
+	)
+	(junction
+		(at 121.92 220.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "488b8eeb-ac2b-4c9b-b15c-dcb3f14a7f70")
+	)
+	(junction
+		(at 116.84 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "49062135-d744-4af3-aee6-e72f9fac4707")
+	)
+	(junction
+		(at 144.78 231.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4cf39630-f761-49c0-8e9e-f8ceacec348e")
+	)
+	(junction
+		(at 254 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "50fa2975-429d-409f-ab66-8e182ee3084a")
+	)
+	(junction
+		(at 144.78 139.7)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5341745d-18ce-4ac4-bb09-9e86400df820")
+	)
+	(junction
+		(at 157.48 231.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "57e99dd8-8e6d-4beb-b891-a736f17f7315")
+	)
+	(junction
+		(at 226.06 139.7)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5948a758-6b25-4fcf-b44a-db9c68a8c8df")
+	)
+	(junction
+		(at 162.56 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "59f83a4b-af8a-445a-801d-41a381659149")
+	)
+	(junction
+		(at 226.06 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5e87850a-eb2d-4f9b-877e-09136eb24cd2")
+	)
+	(junction
+		(at 256.54 165.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "60a0241f-eb19-4114-9b25-981e78ffbfd4")
+	)
+	(junction
+		(at 157.48 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6cd186b9-71e8-47d7-bfc7-5e006546f733")
+	)
+	(junction
+		(at 208.28 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7e18f5df-e612-47b3-9a8d-1197ead0f4b5")
+	)
+	(junction
+		(at 111.76 104.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8100cfd7-0a48-425a-beca-3745f35f0f81")
+	)
+	(junction
+		(at 111.76 205.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "84491092-242d-4b95-9f25-cdc97d805a41")
+	)
+	(junction
+		(at 114.3 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "85033f2c-4c84-4ec9-95f3-921b26c16488")
+	)
+	(junction
+		(at 114.3 220.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "87464032-284d-406c-ab48-7d3cf1bbd3c8")
+	)
+	(junction
+		(at 213.36 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8a7224ad-a86f-4adb-aa35-b5bb79e2d14b")
+	)
+	(junction
+		(at 144.78 241.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9747b48c-04d7-47c7-a424-f69873407070")
+	)
+	(junction
+		(at 226.06 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9d872b31-3321-4576-b40f-413d5fcd58b9")
+	)
+	(junction
+		(at 144.78 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9e362be8-e121-4bd2-9e8a-366efa6b30be")
+	)
+	(junction
+		(at 226.06 185.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a1965307-e6d0-478d-8dc1-48cbb2498489")
+	)
+	(junction
+		(at 144.78 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a1a5c6c3-54ca-4126-9e67-3c3db95b3e0e")
+	)
+	(junction
+		(at 226.06 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a4b85525-c6f6-4e58-9a90-621a48da15ba")
+	)
+	(junction
+		(at 111.76 190.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a5dd1804-3801-4025-a72f-f53c46ec3cb2")
+	)
+	(junction
+		(at 208.28 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a997ac5c-0a3c-4ed6-88f0-cbcdf0f91759")
+	)
+	(junction
+		(at 213.36 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "aac4727d-cab3-4e2b-bb0c-178be80bcc23")
+	)
+	(junction
+		(at 256.54 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "af52f232-bb7e-457a-92b3-cb24049b89f3")
+	)
+	(junction
+		(at 256.54 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b82d6ceb-ab9d-47f6-8afc-bc8b50ecb22a")
+	)
+	(junction
+		(at 162.56 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bac5dd14-4256-467e-9007-14577fb1576f")
+	)
+	(junction
+		(at 248.92 165.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c43d58dd-7035-46ff-8b6f-6acde2ce7741")
+	)
+	(junction
+		(at 208.28 190.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d4bc2ee3-ade3-4a33-ab0d-949f5ceccdfc")
+	)
+	(junction
+		(at 226.06 175.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d52c8155-8d52-4a08-8ea0-e77e0ff06702")
+	)
+	(junction
+		(at 213.36 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d83da380-59be-4e76-a0c3-87b4a3dd4ea5")
+	)
+	(junction
+		(at 213.36 165.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e8b9e8a7-536a-4667-a5a5-dfb28a7b4348")
+	)
+	(junction
+		(at 213.36 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f26860d9-b7b1-4c4f-8fd1-32643ba1a309")
+	)
+	(junction
+		(at 119.38 193.04)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f7292640-aace-47d1-8241-f0589fbc4900")
+	)
+	(wire
+		(pts
+			(xy 114.3 220.98) (xy 106.68 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0092d149-7ed6-4626-8c39-aed9125764e3")
+	)
+	(wire
+		(pts
+			(xy 208.28 91.44) (xy 208.28 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00bca5d0-a4b6-455b-841a-000eb9257d2c")
+	)
+	(wire
+		(pts
+			(xy 162.56 66.548) (xy 162.56 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "042a6f94-9ff3-4f5c-bc0e-19541744bbeb")
+	)
+	(wire
+		(pts
+			(xy 198.12 88.9) (xy 264.16 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "058ac42d-6503-45e5-9c83-a77c6326f23c")
+	)
+	(wire
+		(pts
+			(xy 144.78 129.54) (xy 157.48 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "091ef0ab-9d54-4b53-b636-a57d09e5b252")
+	)
+	(wire
+		(pts
+			(xy 142.24 68.58) (xy 144.78 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "097eea5c-6848-4fb8-842f-e7d79d5b5d6a")
+	)
+	(wire
+		(pts
+			(xy 226.06 124.46) (xy 226.06 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ab28453-153d-493d-933b-cd7ef6667a68")
+	)
+	(wire
+		(pts
+			(xy 116.84 231.14) (xy 114.3 231.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0fec188c-5e60-4abf-bb78-1df5c6f8046d")
+	)
+	(wire
+		(pts
+			(xy 226.06 185.42) (xy 208.28 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10d1bb38-f6b2-4b81-8703-21660a5c9a39")
+	)
+	(wire
+		(pts
+			(xy 213.36 119.38) (xy 208.28 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12739efc-b66e-46d7-a946-b6249624bad3")
+	)
+	(wire
+		(pts
+			(xy 228.6 170.18) (xy 226.06 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "12767ebe-acf2-419b-9a7f-89feb0c4367c")
+	)
+	(wire
+		(pts
+			(xy 144.78 73.66) (xy 144.78 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "138b3246-5072-4ea6-bf4b-b75841b93bfa")
+	)
+	(wire
+		(pts
+			(xy 226.06 175.26) (xy 226.06 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "13e595c8-21af-48c9-82d5-6732fb40cf21")
+	)
+	(wire
+		(pts
+			(xy 256.54 175.26) (xy 256.54 173.228)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "14ab74fa-2ad3-4181-89d5-5910ae438a9c")
+	)
+	(wire
+		(pts
+			(xy 142.24 226.06) (xy 144.78 226.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "14bb0fda-4abc-4974-b0b7-61c13b7c7354")
+	)
+	(wire
+		(pts
+			(xy 167.64 119.38) (xy 162.56 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "151d8ae0-ae46-445f-8ed8-7d13fa34063a")
+	)
+	(wire
+		(pts
+			(xy 162.56 63.5) (xy 162.56 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "166756f0-282e-414c-b648-433634884785")
+	)
+	(wire
+		(pts
+			(xy 256.54 165.1) (xy 264.16 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "174c94d1-a087-4c1f-afa5-702c8370ec38")
+	)
+	(wire
+		(pts
+			(xy 172.72 190.5) (xy 111.76 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1921994a-cb92-40e9-b631-ed7a8516e779")
+	)
+	(wire
+		(pts
+			(xy 114.3 73.66) (xy 114.3 71.628)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b466a6e-d249-446f-ae53-33d8bbc960c4")
+	)
+	(wire
+		(pts
+			(xy 256.54 119.38) (xy 264.16 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b6578d4-6442-4b24-b633-fa1f358585e8")
+	)
+	(wire
+		(pts
+			(xy 144.78 226.06) (xy 144.78 231.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ecd6daf-ebbd-40f3-8dfc-200f47ddcc34")
+	)
+	(wire
+		(pts
+			(xy 251.46 66.04) (xy 251.46 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1fae83a8-c28f-4ef5-b24f-5853e49c3f89")
+	)
+	(wire
+		(pts
+			(xy 114.3 129.54) (xy 114.3 127.508)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20944970-8e43-4a79-8721-4705286d7403")
+	)
+	(wire
+		(pts
+			(xy 144.78 140.462) (xy 144.78 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2162f1d8-c69f-4fd7-8b23-b4779d78e38e")
+	)
+	(wire
+		(pts
+			(xy 124.46 66.04) (xy 119.38 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "21c6ca15-23e6-4dba-abf8-0d3ad5a3aee1")
+	)
+	(wire
+		(pts
+			(xy 251.46 175.26) (xy 254 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "22e1933c-ed98-45cc-bbae-07a2f89311e5")
+	)
+	(wire
+		(pts
+			(xy 208.28 165.1) (xy 208.28 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "236ac546-7a8f-4946-84cd-7564c243202a")
+	)
+	(wire
+		(pts
+			(xy 124.46 68.58) (xy 121.92 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "247950bd-4394-4bb2-b6f5-c0093b3e38cd")
+	)
+	(wire
+		(pts
+			(xy 124.46 63.5) (xy 114.3 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "26518a0b-9b99-413d-8786-25ceb2f06386")
+	)
+	(wire
+		(pts
+			(xy 111.76 205.74) (xy 106.68 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "265b9a2c-a691-4384-af84-aa402cb55b4a")
+	)
+	(wire
+		(pts
+			(xy 162.56 139.7) (xy 162.56 127.508)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2793e7fa-9445-4cd2-a227-9cf2ce8804a9")
+	)
+	(wire
+		(pts
+			(xy 208.28 168.148) (xy 208.28 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27ce256c-c8d5-4bbf-b1d5-72f143e2188f")
+	)
+	(wire
+		(pts
+			(xy 226.06 68.58) (xy 226.06 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28a80e94-35a7-4365-911f-70023379ab6f")
+	)
+	(wire
+		(pts
+			(xy 119.38 223.52) (xy 119.38 231.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "293ffbbc-e40d-4592-99f8-4d7e360c10bf")
+	)
+	(wire
+		(pts
+			(xy 121.92 76.2) (xy 106.68 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29e55ad1-438a-4fb9-bf38-ec9ecf7e1e9d")
+	)
+	(wire
+		(pts
+			(xy 226.06 139.7) (xy 226.06 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2acbd386-569b-4847-bc59-e1b7f7f7bd3c")
+	)
+	(wire
+		(pts
+			(xy 172.72 96.52) (xy 167.64 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b0b7de3-6ea9-44bd-9d4f-64d0bbeab3b8")
+	)
+	(wire
+		(pts
+			(xy 119.38 205.74) (xy 111.76 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b24bfda-505b-4ff0-b372-12e5d01284ea")
+	)
+	(wire
+		(pts
+			(xy 162.56 224.028) (xy 162.56 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b9636eb-ce28-4464-ba48-2df453d16477")
+	)
+	(wire
+		(pts
+			(xy 167.64 83.82) (xy 167.64 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2be2975e-5358-4ee3-a59a-c0cb98b2f81f")
+	)
+	(wire
+		(pts
+			(xy 167.64 198.12) (xy 167.64 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c34d139-a4be-495d-91c5-b0edebb4b9df")
+	)
+	(wire
+		(pts
+			(xy 119.38 193.04) (xy 106.68 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c5b0763-8f11-4d3b-8897-fc78d8e2b4b8")
+	)
+	(wire
+		(pts
+			(xy 124.46 124.46) (xy 121.92 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2db2dd05-aedc-49d8-a9f6-674411182557")
+	)
+	(wire
+		(pts
+			(xy 256.54 66.548) (xy 256.54 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "300ab231-6a8f-4686-8e6a-02acd7e6bebb")
+	)
+	(wire
+		(pts
+			(xy 162.56 93.98) (xy 162.56 94.742)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32f23c6b-cfff-48e8-b428-9513acb9a316")
+	)
+	(wire
+		(pts
+			(xy 119.38 202.438) (xy 119.38 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "332bb35c-bce5-4ced-a522-893c9ff44d76")
+	)
+	(wire
+		(pts
+			(xy 198.12 93.98) (xy 208.28 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "349bbfe4-26ec-4679-bf10-4b696b64c54c")
+	)
+	(wire
+		(pts
+			(xy 226.06 170.18) (xy 226.06 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35f0315e-8de8-445b-99af-e89e45f558ae")
+	)
+	(wire
+		(pts
+			(xy 162.56 195.58) (xy 162.56 196.342)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35ff6113-228f-44af-9912-c89b3289a10b")
+	)
+	(wire
+		(pts
+			(xy 142.24 220.98) (xy 157.48 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37a05b1c-213c-4073-947f-85f7b7b9f8ac")
+	)
+	(wire
+		(pts
+			(xy 172.72 195.58) (xy 162.56 195.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "390d9925-eb5e-4c39-8ebb-d24a6001d8a0")
+	)
+	(wire
+		(pts
+			(xy 228.6 68.58) (xy 226.06 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39a7ea84-a7b5-47f5-88bb-e164bf25a75e")
+	)
+	(wire
+		(pts
+			(xy 256.54 73.66) (xy 256.54 71.628)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3aa1a089-c028-4b7c-80f9-70b36687a1d2")
+	)
+	(wire
+		(pts
+			(xy 213.36 177.8) (xy 213.36 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3e69259b-7b08-4483-bf40-b929b3ea525b")
+	)
+	(wire
+		(pts
+			(xy 162.56 122.428) (xy 162.56 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f6c5565-55e2-4090-88b4-75f8e895452a")
+	)
+	(wire
+		(pts
+			(xy 114.3 122.428) (xy 114.3 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f742a0c-6a23-46b0-ae87-5e452f98f5c4")
+	)
+	(wire
+		(pts
+			(xy 124.46 226.06) (xy 121.92 226.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3fc70f36-54b7-432a-9ba3-cbb67ec92b63")
+	)
+	(wire
+		(pts
+			(xy 246.38 167.64) (xy 251.46 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "406a4cf4-bf76-42cf-a38e-44cfccc09f7e")
+	)
+	(wire
+		(pts
+			(xy 162.56 114.3) (xy 160.02 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "418afb1e-6341-4cbe-bcd5-e16a61b08cdf")
+	)
+	(wire
+		(pts
+			(xy 157.48 233.68) (xy 170.18 233.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42106564-9b62-4034-a93f-67ef10c3520e")
+	)
+	(wire
+		(pts
+			(xy 119.38 129.54) (xy 116.84 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4313fbf0-2b29-416a-943e-fcded262badd")
+	)
+	(wire
+		(pts
+			(xy 114.3 66.548) (xy 114.3 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44134a62-f703-4f27-b27f-09bd344f9ae9")
+	)
+	(wire
+		(pts
+			(xy 111.76 95.758) (xy 111.76 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4485f469-35f5-49d0-96a2-cb007c948636")
+	)
+	(wire
+		(pts
+			(xy 144.78 83.82) (xy 144.78 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "450fd9d5-879b-48b9-8190-17941e899087")
+	)
+	(wire
+		(pts
+			(xy 256.54 129.54) (xy 256.54 127.508)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4653a923-ed68-4d85-8696-02676058b7a6")
+	)
+	(wire
+		(pts
+			(xy 248.92 170.18) (xy 248.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48757e8e-7f65-4321-ba1a-6ffd8302dcb1")
+	)
+	(wire
+		(pts
+			(xy 121.92 226.06) (xy 121.92 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48b23d35-4378-4f5b-a33e-9815804b1c87")
+	)
+	(wire
+		(pts
+			(xy 144.78 129.54) (xy 144.78 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48cb22fb-5fec-4865-873a-4b8a8ad95371")
+	)
+	(wire
+		(pts
+			(xy 208.28 58.42) (xy 210.82 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49dd5ef4-7351-493a-8523-db1a6a311d61")
+	)
+	(wire
+		(pts
+			(xy 167.64 198.12) (xy 172.72 198.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bd6acad-ddc9-4871-b0cd-7f7be0e09caa")
+	)
+	(wire
+		(pts
+			(xy 116.84 79.502) (xy 116.84 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c35c07e-4937-4709-b818-b31f324efd42")
+	)
+	(wire
+		(pts
+			(xy 246.38 121.92) (xy 251.46 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c6257ca-393d-4599-9692-393deef7b2b7")
+	)
+	(wire
+		(pts
+			(xy 162.56 220.98) (xy 162.56 215.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c78c2a6-694a-4591-998f-b8df696672e1")
+	)
+	(wire
+		(pts
+			(xy 124.46 121.92) (xy 119.38 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4db84f36-a514-45b8-9e6d-8e4a5c5855c5")
+	)
+	(wire
+		(pts
+			(xy 208.28 160.02) (xy 210.82 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e497069-325a-4c31-8612-56465ed48633")
+	)
+	(wire
+		(pts
+			(xy 157.48 119.38) (xy 162.56 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e659c11-1e15-45eb-9a0c-94b0d573476e")
+	)
+	(wire
+		(pts
+			(xy 226.06 83.82) (xy 226.06 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fd378cf-db62-4014-8394-7b9732c7b374")
+	)
+	(wire
+		(pts
+			(xy 124.46 220.98) (xy 121.92 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "504c5abf-c1cf-431e-aced-2aba8863e873")
+	)
+	(wire
+		(pts
+			(xy 119.38 100.838) (xy 119.38 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "51a09f72-cb0c-4815-ae7d-715111cd0570")
+	)
+	(wire
+		(pts
+			(xy 246.38 170.18) (xy 248.92 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "554610b1-649d-4b1d-b6e1-31eddea761e3")
+	)
+	(wire
+		(pts
+			(xy 119.38 197.358) (xy 119.38 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5581950a-b01a-4d3f-9c95-8306b62ebbb1")
+	)
+	(wire
+		(pts
+			(xy 162.56 241.3) (xy 162.56 229.108)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "581cbb82-24bc-43b3-afd9-15a66eb45a65")
+	)
+	(wire
+		(pts
+			(xy 162.56 58.42) (xy 160.02 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5820af6a-a59f-4889-a63e-d4d2c5d2b280")
+	)
+	(wire
+		(pts
+			(xy 226.06 185.42) (xy 226.06 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58f9f4d5-1bb6-42cf-b8ce-ff240b031fda")
+	)
+	(wire
+		(pts
+			(xy 116.84 73.66) (xy 114.3 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59e9030f-defa-4772-9a3a-d552dc978d52")
+	)
+	(wire
+		(pts
+			(xy 251.46 73.66) (xy 254 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5bf41813-3f36-4aac-bd26-edaafe23207c")
+	)
+	(wire
+		(pts
+			(xy 157.48 224.028) (xy 157.48 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ec9676d-3e7e-4a12-b895-dc2105f157d7")
+	)
+	(wire
+		(pts
+			(xy 213.36 129.54) (xy 213.36 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5edfdffb-4c2f-4ebf-8f49-62e7b7901662")
+	)
+	(wire
+		(pts
+			(xy 198.12 185.42) (xy 200.66 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f1bf99c-0887-4d49-8a82-40c5262aebdc")
+	)
+	(wire
+		(pts
+			(xy 124.46 223.52) (xy 119.38 223.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63c45f94-fb62-45b6-8db4-7e4a00be7d53")
+	)
+	(wire
+		(pts
+			(xy 121.92 220.98) (xy 114.3 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64cc40c3-53cd-4d64-8ddf-fffc83424ce0")
+	)
+	(wire
+		(pts
+			(xy 162.56 215.9) (xy 160.02 215.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6a35e86a-2d05-44c2-aa9d-17bca1d3051d")
+	)
+	(wire
+		(pts
+			(xy 144.78 139.7) (xy 162.56 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6aa87fc2-13a3-4d4f-89c3-3f14ef854d11")
+	)
+	(wire
+		(pts
+			(xy 144.78 241.3) (xy 162.56 241.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c07742c-048b-4c4e-be62-a3eb5e552cd7")
+	)
+	(wire
+		(pts
+			(xy 246.38 66.04) (xy 251.46 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ce7eeb7-e953-4902-9159-f83799aca061")
+	)
+	(wire
+		(pts
+			(xy 213.36 63.5) (xy 208.28 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6cebad09-f498-4153-a712-3941b2baa05b")
+	)
+	(wire
+		(pts
+			(xy 203.2 99.06) (xy 203.2 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e5c5c63-4f15-49fa-bd46-9a09bd117056")
+	)
+	(wire
+		(pts
+			(xy 124.46 119.38) (xy 114.3 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e6274a4-256e-4f49-a090-e7b5fee665a0")
+	)
+	(wire
+		(pts
+			(xy 162.56 63.5) (xy 170.18 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ffb4fb3-9c28-41c5-9248-02f096912f2d")
+	)
+	(wire
+		(pts
+			(xy 226.06 73.66) (xy 213.36 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70c3d190-d881-4b01-9973-8b30eb20f9d6")
+	)
+	(wire
+		(pts
+			(xy 208.28 119.38) (xy 208.28 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7134bbcb-d1ff-44f2-826a-4029f037f692")
+	)
+	(wire
+		(pts
+			(xy 248.92 68.58) (xy 248.92 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73f56912-7b33-4da3-8682-01909bf4ef08")
+	)
+	(wire
+		(pts
+			(xy 254 175.26) (xy 256.54 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73f82ac9-322a-4291-94e3-1c5f4056792e")
+	)
+	(wire
+		(pts
+			(xy 226.06 175.26) (xy 213.36 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79382841-c793-40d4-8722-6e702abfb6d3")
+	)
+	(wire
+		(pts
+			(xy 157.48 63.5) (xy 162.56 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "799fc677-40dc-4858-89f9-271416b9fc40")
+	)
+	(wire
+		(pts
+			(xy 121.92 132.08) (xy 106.68 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79a1cb9f-946c-42d9-9464-0c63003cc691")
+	)
+	(wire
+		(pts
+			(xy 251.46 129.54) (xy 254 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79a2112b-e011-4ccc-9697-289e376ec632")
+	)
+	(wire
+		(pts
+			(xy 111.76 202.438) (xy 111.76 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79c13d87-50c6-4c52-b3ad-169d87ad0bbb")
+	)
+	(wire
+		(pts
+			(xy 228.6 119.38) (xy 213.36 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a2c4502-86e1-445e-9690-4dcbdc004270")
+	)
+	(wire
+		(pts
+			(xy 226.06 140.462) (xy 226.06 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b68e4e7-cc13-4efb-92e4-c3b8221cc1ef")
+	)
+	(wire
+		(pts
+			(xy 167.64 220.98) (xy 162.56 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bd236b3-39e4-4fe2-8195-fefa365ec1f6")
+	)
+	(wire
+		(pts
+			(xy 119.38 121.92) (xy 119.38 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c0116a7-6923-43f6-8bb6-c803097ddb39")
+	)
+	(wire
+		(pts
+			(xy 248.92 124.46) (xy 248.92 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cd12325-9966-4b1c-99f3-f8b0c26de3ce")
+	)
+	(wire
+		(pts
+			(xy 200.66 185.42) (xy 200.66 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7d3e0aa1-6d5e-492c-83a3-04056e0c764b")
+	)
+	(wire
+		(pts
+			(xy 116.84 135.382) (xy 116.84 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f59af9d-8741-4513-ae00-906ddc46794b")
+	)
+	(wire
+		(pts
+			(xy 157.48 132.08) (xy 170.18 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8135acf7-5734-4d8f-92f3-478a57a88eed")
+	)
+	(wire
+		(pts
+			(xy 157.48 122.428) (xy 157.48 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81bdd3fc-00b0-4602-ac91-d17e3805f6b1")
+	)
+	(wire
+		(pts
+			(xy 198.12 195.58) (xy 208.28 195.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8373e6c5-e1a7-444b-9882-960a44498595")
+	)
+	(wire
+		(pts
+			(xy 172.72 83.82) (xy 167.64 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "839f2d9c-4a15-4233-8ba4-1124d3eced33")
+	)
+	(wire
+		(pts
+			(xy 254 73.66) (xy 256.54 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88eb0ecf-0b62-497d-8909-11862f7cd7ae")
+	)
+	(wire
+		(pts
+			(xy 198.12 91.44) (xy 208.28 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8a24c848-ecf1-4ca9-b8a1-c2e0cbf4cb21")
+	)
+	(wire
+		(pts
+			(xy 251.46 121.92) (xy 251.46 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8a770fbf-7b03-4089-a3b8-0271f4f82835")
+	)
+	(wire
+		(pts
+			(xy 111.76 197.358) (xy 111.76 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b497215-b2bf-4625-a9da-9c5e23ae944c")
+	)
+	(wire
+		(pts
+			(xy 144.78 73.66) (xy 157.48 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b8c5d17-f598-40b8-99da-64077a5fd414")
+	)
+	(wire
+		(pts
+			(xy 144.78 84.582) (xy 144.78 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8bd2146b-a0bc-4e5f-b2f1-2d10b0dc4456")
+	)
+	(wire
+		(pts
+			(xy 226.06 139.7) (xy 208.28 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ce67203-b96f-49e6-8c35-7e9e192689df")
+	)
+	(wire
+		(pts
+			(xy 208.28 122.428) (xy 208.28 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ddb232f-6ee3-4f88-9a54-258b4db624b2")
+	)
+	(wire
+		(pts
+			(xy 144.78 231.14) (xy 157.48 231.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8df6882d-ecd4-4c10-b7cb-e340325781f4")
+	)
+	(wire
+		(pts
+			(xy 208.28 66.548) (xy 208.28 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8fdfd141-f876-4efd-950e-45986ee4fb06")
+	)
+	(wire
+		(pts
+			(xy 248.92 165.1) (xy 256.54 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "91186195-58d7-44d3-af95-cf83beaf104c")
+	)
+	(wire
+		(pts
+			(xy 226.06 186.182) (xy 226.06 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94bb5084-ce88-47d2-81d0-78cf1720daa3")
+	)
+	(wire
+		(pts
+			(xy 203.2 177.8) (xy 213.36 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9576e73b-b013-4210-8f50-f5dc84b77c64")
+	)
+	(wire
+		(pts
+			(xy 208.28 190.5) (xy 264.16 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97828876-d83f-48a3-9026-a6d021158c2b")
+	)
+	(wire
+		(pts
+			(xy 226.06 83.82) (xy 208.28 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9aef65b7-5873-40ca-abfa-b87428f8dfd2")
+	)
+	(wire
+		(pts
+			(xy 144.78 139.7) (xy 144.78 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9afdcb93-f2cc-4ba4-bfb2-3ebc4ea3a655")
+	)
+	(wire
+		(pts
+			(xy 213.36 165.1) (xy 208.28 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b072917-b616-4a08-ba83-48ef958cac00")
+	)
+	(wire
+		(pts
+			(xy 121.92 68.58) (xy 121.92 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b8f770b-f30f-49b0-945e-db1d58674786")
+	)
+	(wire
+		(pts
+			(xy 200.66 132.08) (xy 213.36 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9dea3d6c-8cfa-4789-950a-edc3a2c9c725")
+	)
+	(wire
+		(pts
+			(xy 208.28 185.42) (xy 208.28 173.228)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e91c6bb-631c-438d-87b9-5553191a95f4")
+	)
+	(wire
+		(pts
+			(xy 198.12 96.52) (xy 200.66 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9fb2f497-fd55-4cc7-ab94-9490c626f6ca")
+	)
+	(wire
+		(pts
+			(xy 246.38 63.5) (xy 256.54 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1af807f-c61a-4575-ba5a-9b29d50004c3")
+	)
+	(wire
+		(pts
+			(xy 213.36 175.26) (xy 213.36 173.228)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a516a6de-70f5-4eb5-ae14-e91ccf08b28a")
+	)
+	(wire
+		(pts
+			(xy 119.38 66.04) (xy 119.38 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a53fb3e9-1bfa-4649-aa10-52ebab5606be")
+	)
+	(wire
+		(pts
+			(xy 172.72 93.98) (xy 162.56 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a59148e3-789c-40f4-a83c-958ce66a199e")
+	)
+	(wire
+		(pts
+			(xy 114.3 63.5) (xy 106.68 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a779ec82-f037-434d-bd13-6292dafbacc3")
+	)
+	(wire
+		(pts
+			(xy 248.92 76.2) (xy 264.16 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8dd1b82-10e3-426c-9281-c51367fef70a")
+	)
+	(wire
+		(pts
+			(xy 157.48 129.54) (xy 157.48 127.508)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9cae669-fb14-4655-aa4f-379ce8e72c45")
+	)
+	(wire
+		(pts
+			(xy 119.38 95.758) (xy 119.38 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "abab589a-2324-4f04-afd1-a8e09d22c7bc")
+	)
+	(wire
+		(pts
+			(xy 121.92 124.46) (xy 121.92 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ad81d7d3-66d4-4d27-994b-2e94c45a1d4e")
+	)
+	(wire
+		(pts
+			(xy 144.78 242.062) (xy 144.78 241.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "adcdd533-b788-49e2-b41d-ded6d1f6d17d")
+	)
+	(wire
+		(pts
+			(xy 198.12 99.06) (xy 203.2 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aeef82df-3a03-42a4-8db8-ac7f4163a7f1")
+	)
+	(wire
+		(pts
+			(xy 162.56 119.38) (xy 162.56 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2668fbc-f918-4dda-ae42-03bd048c2fbf")
+	)
+	(wire
+		(pts
+			(xy 198.12 190.5) (xy 208.28 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b304c41c-d8aa-4038-9a62-9e957e330b11")
+	)
+	(wire
+		(pts
+			(xy 157.48 231.14) (xy 157.48 233.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b34fa9a1-dc3a-44d6-95fa-54f1da5676d6")
+	)
+	(wire
+		(pts
+			(xy 111.76 100.838) (xy 111.76 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b50c4348-e00a-4b73-a5c9-dcbee3e78500")
+	)
+	(wire
+		(pts
+			(xy 119.38 73.66) (xy 116.84 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b69f78a0-4691-4e4e-9e45-e614e6900ce2")
+	)
+	(wire
+		(pts
+			(xy 170.18 132.08) (xy 170.18 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8698a11-f3b6-4c86-a96b-b456b6ce2d99")
+	)
+	(wire
+		(pts
+			(xy 170.18 86.36) (xy 170.18 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8d7e828-23a7-4b45-86b5-963626e786fe")
+	)
+	(wire
+		(pts
+			(xy 172.72 193.04) (xy 119.38 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba015a77-a45f-4840-ace5-acbccf93f28f")
+	)
+	(wire
+		(pts
+			(xy 213.36 76.2) (xy 213.36 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba5f9bd2-1068-47a3-8af1-cad2eb648461")
+	)
+	(wire
+		(pts
+			(xy 208.28 190.5) (xy 208.28 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba6bccc3-6975-4d5f-9e76-d746766db67c")
+	)
+	(wire
+		(pts
+			(xy 246.38 68.58) (xy 248.92 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bab6b714-8c7c-40ea-8b9e-27ce4504c098")
+	)
+	(wire
+		(pts
+			(xy 226.06 129.54) (xy 213.36 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bbd70d97-61d8-4ebd-a4c1-5883e1f206a5")
+	)
+	(wire
+		(pts
+			(xy 226.06 84.582) (xy 226.06 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd3d00ee-bd30-4af1-9e73-963c3639f11d")
+	)
+	(wire
+		(pts
+			(xy 157.48 129.54) (xy 157.48 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf5784de-5343-4bd6-b66e-64a28e500373")
+	)
+	(wire
+		(pts
+			(xy 208.28 195.58) (xy 208.28 203.962)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfbfb253-df42-4b62-ae5c-05b0664f7248")
+	)
+	(wire
+		(pts
+			(xy 200.66 83.82) (xy 200.66 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c0e50ef5-bfea-47a0-b97f-b623a493d070")
+	)
+	(wire
+		(pts
+			(xy 172.72 86.36) (xy 170.18 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1021fd9-0e59-4973-970a-c7ead0c5505f")
+	)
+	(wire
+		(pts
+			(xy 200.66 96.52) (xy 200.66 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c29167f8-d3d8-4910-bd63-647e676dc5d2")
+	)
+	(wire
+		(pts
+			(xy 157.48 231.14) (xy 157.48 229.108)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c324cbe1-7701-4864-80a9-2a10a8da784a")
+	)
+	(wire
+		(pts
+			(xy 144.78 241.3) (xy 144.78 238.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4014628-9f94-4d22-8846-460f789a4502")
+	)
+	(wire
+		(pts
+			(xy 208.28 165.1) (xy 200.66 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4c99f7c-10fa-4ba9-8178-c42a5cf30b97")
+	)
+	(wire
+		(pts
+			(xy 198.12 86.36) (xy 203.2 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c58e5476-2e83-475c-8543-b99251ff4228")
+	)
+	(wire
+		(pts
+			(xy 213.36 122.428) (xy 213.36 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c69d0ad8-6671-4a7c-ba8c-a6e29181d693")
+	)
+	(wire
+		(pts
+			(xy 119.38 231.14) (xy 116.84 231.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6bd9322-2bab-40b6-bc7d-47f0f69d905c")
+	)
+	(wire
+		(pts
+			(xy 226.06 129.54) (xy 226.06 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6ff2ce9-f370-4a82-a4cb-2b4e69a8f0d4")
+	)
+	(wire
+		(pts
+			(xy 157.48 73.66) (xy 157.48 71.628)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c74ca7a2-7613-4c3c-82f5-c01d294b8715")
+	)
+	(wire
+		(pts
+			(xy 228.6 124.46) (xy 226.06 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c89e71ec-4e6d-49f2-8b21-7f1d44fd459d")
+	)
+	(wire
+		(pts
+			(xy 142.24 124.46) (xy 144.78 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9f53892-7760-4d04-a120-390a87729397")
+	)
+	(wire
+		(pts
+			(xy 167.64 96.52) (xy 167.64 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca6d6db8-258c-4d88-82af-dc6f377ba6f5")
+	)
+	(wire
+		(pts
+			(xy 172.72 91.44) (xy 119.38 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cba4c1e5-1a46-4932-881d-321b65bdd6ab")
+	)
+	(wire
+		(pts
+			(xy 208.28 63.5) (xy 208.28 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbd5dfc4-3665-4ce5-a5ff-b4d87aaf5d29")
+	)
+	(wire
+		(pts
+			(xy 142.24 63.5) (xy 157.48 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbf1a86c-376e-4896-a4f0-960f03edd7d1")
+	)
+	(wire
+		(pts
+			(xy 208.28 63.5) (xy 200.66 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce1810fe-ab0a-4311-86b4-25f8dcd23613")
+	)
+	(wire
+		(pts
+			(xy 116.84 236.982) (xy 116.84 231.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce861427-b907-46eb-b967-d79e087cabc4")
+	)
+	(wire
+		(pts
+			(xy 114.3 119.38) (xy 106.68 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cee89bfb-e557-4bca-9710-a6bc9e01e204")
+	)
+	(wire
+		(pts
+			(xy 228.6 165.1) (xy 213.36 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cff49e80-f706-4fec-a815-a3a369b3c241")
+	)
+	(wire
+		(pts
+			(xy 119.38 104.14) (xy 111.76 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d16ed649-fb11-4b14-be25-ac30b8ec79a4")
+	)
+	(wire
+		(pts
+			(xy 254 181.102) (xy 254 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d210fa5c-da74-4ff0-935c-c73d73bc210a")
+	)
+	(wire
+		(pts
+			(xy 254 129.54) (xy 256.54 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d27abc55-e683-4428-86f5-09b7e571ac98")
+	)
+	(wire
+		(pts
+			(xy 144.78 231.14) (xy 144.78 233.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4dba5a8-7db6-4d67-903f-0a20948caba3")
+	)
+	(wire
+		(pts
+			(xy 208.28 139.7) (xy 208.28 127.508)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d528b5e9-8e31-4e28-9823-17aa7e3fc739")
+	)
+	(wire
+		(pts
+			(xy 213.36 73.66) (xy 213.36 71.628)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6211857-8cdd-4c92-b285-018d92a03a37")
+	)
+	(wire
+		(pts
+			(xy 213.36 168.148) (xy 213.36 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6a441e9-9b9e-4739-b663-619f7c74f2ae")
+	)
+	(wire
+		(pts
+			(xy 254 135.382) (xy 254 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6f465fe-ff8e-4b8c-a34a-5f69aab1b422")
+	)
+	(wire
+		(pts
+			(xy 203.2 76.2) (xy 213.36 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d79bf46d-becf-4ce8-84d8-fdd8f76af07c")
+	)
+	(wire
+		(pts
+			(xy 226.06 73.66) (xy 226.06 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8bb76a8-73ca-4173-acca-0b0b3a584511")
+	)
+	(wire
+		(pts
+			(xy 114.3 224.028) (xy 114.3 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8cbeecf-0760-4e5e-a559-5b61b2b0c5f4")
+	)
+	(wire
+		(pts
+			(xy 246.38 165.1) (xy 248.92 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e0cd8d77-9595-49aa-9ad0-5f6cdf714a33")
+	)
+	(wire
+		(pts
+			(xy 208.28 114.3) (xy 210.82 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e31aac7e-d54b-4df8-b482-7e65a0869dd3")
+	)
+	(wire
+		(pts
+			(xy 167.64 76.2) (xy 157.48 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e568aece-79c3-48c1-acbc-a282c06304b6")
+	)
+	(wire
+		(pts
+			(xy 144.78 68.58) (xy 144.78 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e583e37e-ac79-47c7-8d4c-ccc85ffc236f")
+	)
+	(wire
+		(pts
+			(xy 246.38 119.38) (xy 256.54 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5ffb4e7-51ea-4930-bf0c-24859d62acbf")
+	)
+	(wire
+		(pts
+			(xy 157.48 220.98) (xy 162.56 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6aa838f-a710-4d9e-a2b5-2d7b73228735")
+	)
+	(wire
+		(pts
+			(xy 157.48 76.2) (xy 157.48 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e77cb110-36f1-4cec-bbd5-1b8cb21369cc")
+	)
+	(wire
+		(pts
+			(xy 203.2 76.2) (xy 203.2 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8580c3b-cab0-4ccd-b2a2-ffaa4de7beea")
+	)
+	(wire
+		(pts
+			(xy 170.18 99.06) (xy 172.72 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8a6b152-fea1-4614-9599-47d8ff1a32ac")
+	)
+	(wire
+		(pts
+			(xy 203.2 187.96) (xy 203.2 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e94438ba-f7e0-4f7a-b66f-c4578b5a4b10")
+	)
+	(wire
+		(pts
+			(xy 248.92 132.08) (xy 264.16 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e94908d0-a397-4c5e-a19b-217529762d33")
+	)
+	(wire
+		(pts
+			(xy 228.6 63.5) (xy 213.36 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eab51e43-a3c8-44e4-80df-08904312a920")
+	)
+	(wire
+		(pts
+			(xy 111.76 190.5) (xy 106.68 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb25bce2-3cc1-4019-a01d-7d176dbfac89")
+	)
+	(wire
+		(pts
+			(xy 198.12 187.96) (xy 203.2 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ebd3f32f-7667-4330-9d5e-a089762de2da")
+	)
+	(wire
+		(pts
+			(xy 208.28 83.82) (xy 208.28 71.628)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ec0913d2-571f-426c-a308-19ae1c3b3c63")
+	)
+	(wire
+		(pts
+			(xy 170.18 200.66) (xy 172.72 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecb93f92-8d45-4a45-86c8-121aa015d549")
+	)
+	(wire
+		(pts
+			(xy 116.84 129.54) (xy 114.3 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edf590b0-2636-4ca7-8aa4-5b2d634b5f96")
+	)
+	(wire
+		(pts
+			(xy 172.72 88.9) (xy 111.76 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eeb509a6-ac72-4589-9582-8d7c1997ba57")
+	)
+	(wire
+		(pts
+			(xy 213.36 66.548) (xy 213.36 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efeb87d5-e4b7-44da-b26f-46b161114a2e")
+	)
+	(wire
+		(pts
+			(xy 114.3 231.14) (xy 114.3 229.108)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f04764de-e87f-43bb-9bbd-e51bf49423ef")
+	)
+	(wire
+		(pts
+			(xy 256.54 168.148) (xy 256.54 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f18ecff5-a779-4dbe-b801-514f0baa7c95")
+	)
+	(wire
+		(pts
+			(xy 144.78 83.82) (xy 162.56 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f2bac905-cf9b-4001-99ce-f27fc362376d")
+	)
+	(wire
+		(pts
+			(xy 256.54 63.5) (xy 264.16 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3d3221e-f4ff-4379-a72e-d2b540902219")
+	)
+	(wire
+		(pts
+			(xy 157.48 66.548) (xy 157.48 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3dbb2ff-4267-45d1-9036-43f6a55b1a5b")
+	)
+	(wire
+		(pts
+			(xy 111.76 88.9) (xy 106.68 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3dc5d42-c75b-4410-a0f8-890fc809540c")
+	)
+	(wire
+		(pts
+			(xy 198.12 83.82) (xy 200.66 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f4e130c0-d968-4ba7-a2b4-3ea85c34de2f")
+	)
+	(wire
+		(pts
+			(xy 208.28 93.98) (xy 208.28 102.362)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f6701e4a-0f44-44cf-9f38-211b0ede8e6c")
+	)
+	(wire
+		(pts
+			(xy 246.38 124.46) (xy 248.92 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f7e6a680-da02-4013-afb1-65478261f3bc")
+	)
+	(wire
+		(pts
+			(xy 203.2 119.38) (xy 208.28 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8612286-e632-4a6d-96a0-e698731efaeb")
+	)
+	(wire
+		(pts
+			(xy 251.46 167.64) (xy 251.46 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9423c6a-4e52-4a30-87a3-13ebf8c4aa1d")
+	)
+	(wire
+		(pts
+			(xy 111.76 104.14) (xy 106.68 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fad686e5-1661-4d8d-8255-ba949699cf31")
+	)
+	(wire
+		(pts
+			(xy 254 79.502) (xy 254 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb205045-4ea2-4bad-86d9-8c4771aad112")
+	)
+	(wire
+		(pts
+			(xy 198.12 193.04) (xy 208.28 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb4ef674-7273-4596-b71c-b9ea793005af")
+	)
+	(wire
+		(pts
+			(xy 256.54 122.428) (xy 256.54 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb99b28f-ac22-480f-bab8-055392eeba15")
+	)
+	(wire
+		(pts
+			(xy 170.18 233.68) (xy 170.18 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbfa05c0-a176-4939-8812-8a9511f7b1ed")
+	)
+	(wire
+		(pts
+			(xy 213.36 129.54) (xy 213.36 127.508)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc20e145-8871-4c87-ab69-ab43e50d2463")
+	)
+	(wire
+		(pts
+			(xy 162.56 83.82) (xy 162.56 71.628)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fcde3642-0f86-498b-88c1-e8a52059aa90")
+	)
+	(wire
+		(pts
+			(xy 142.24 119.38) (xy 157.48 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fdaec43a-201d-4f8c-8a9a-8d35d0c2c158")
+	)
+	(wire
+		(pts
+			(xy 119.38 91.44) (xy 106.68 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff2b27f3-1c0f-485e-b457-dc77d9379832")
+	)
+	(wire
+		(pts
+			(xy 144.78 124.46) (xy 144.78 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fff8a03b-7c7d-4002-99ff-c960516c02ec")
+	)
+	(global_label "VPUV.1"
+		(shape passive)
+		(at 210.82 160.02 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "0d1e374d-97a4-4ea4-adfe-82fabfa291e2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 210.82 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.1"
+		(shape passive)
+		(at 160.02 58.42 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "1969fbfe-a025-412d-a166-ee2930a84b12")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 160.02 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 106.68 63.5 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "1eb0f6e1-38ca-4613-b4ee-b4a9a6e5e3e7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 264.16 165.1 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "1fa98308-bfcb-4b34-b600-cbbdcf74ca4b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 264.16 190.5 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "3f711066-bfa0-4d01-99e9-0077dc63698f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.3EN"
+		(shape passive)
+		(at 264.16 76.2 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "4249f082-9dd9-4d05-81ad-3fbd58846591")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 264.16 119.38 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "45f76737-b5e2-46d4-9038-37657f04a804")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.4"
+		(shape passive)
+		(at 210.82 114.3 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "50a01e5b-8803-4a5a-b4b5-2b7335607c63")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 210.82 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VPUV.2"
+		(shape passive)
+		(at 160.02 215.9 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "50ce170f-9ad0-4d54-be14-8ef65286201c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 160.02 215.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SDABRD"
+		(shape passive)
+		(at 106.68 193.04 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "5926b1d4-43a0-44ef-aec8-af9e2bac9a45")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.3"
+		(shape passive)
+		(at 210.82 58.42 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "68a8fef1-6ad1-4528-93a1-78e62c55f89b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 210.82 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.4EN"
+		(shape passive)
+		(at 264.16 132.08 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "7a6616e3-20ab-4c45-af7e-30f4720af975")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 106.68 119.38 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "81060e26-2583-43dc-a970-ba9e498e3603")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.1EN"
+		(shape passive)
+		(at 106.68 76.2 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "8ac65039-d0c4-45d0-a299-7dda9c5d2925")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SDABRD"
+		(shape passive)
+		(at 106.68 91.44 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "a4be2102-9c0b-4547-83e0-20fb2267e58d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 264.16 88.9 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "bae9eb77-78e9-471a-8ed1-9f1c5e25f729")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SCLBRD"
+		(shape passive)
+		(at 106.68 88.9 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "c1c96522-87bd-44bd-86b0-757dbb9aeb52")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 106.68 220.98 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "c696c75a-5315-4801-a302-8edccba940dc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 220.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.2EN"
+		(shape passive)
+		(at 106.68 132.08 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "cddb8d91-d8c5-49e0-bf6a-52f62428f19f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SCLBRD"
+		(shape passive)
+		(at 106.68 190.5 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "dcbf9e94-3e6a-4360-b734-d3114b97251b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 106.68 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VVOD.2"
+		(shape passive)
+		(at 160.02 114.3 180)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "e061acd9-8c66-472c-86dc-f1390097ae9e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 160.02 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "5V-MUX"
+		(shape passive)
+		(at 264.16 63.5 0)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "ebf4df37-ac0a-4640-b0a0-f362abf6bfc5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 264.16 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components")
+		(at 133.35 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed62174")
+		(property "Reference" "U10"
+			(at 132.842 59.436 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS73601DBV"
+			(at 133.35 73.152 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+			(at 124.46 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps736.pdf"
+			(at 124.46 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+			(at 124.46 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.45"
+			(at 124.46 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 124.46 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TPS73601DBV"
+			(at 124.46 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2e69085b-5235-4461-8404-f5b01be41fea")
+		)
+		(pin "2"
+			(uuid "0b777d1a-267a-45b3-85ca-f8fea4491344")
+		)
+		(pin "3"
+			(uuid "f921f9c8-271a-4b40-b418-4de512c7fc79")
+		)
+		(pin "4"
+			(uuid "1d6a4d0b-5459-4dbd-9900-d617b6d4ef66")
+		)
+		(pin "5"
+			(uuid "0d5943ff-e2e9-42b0-b8fa-b4029a432c86")
+		)
+		(instances
+			(project ""
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7"
+					(reference "U?")
+					(unit 1)
+				)
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 144.78 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed753ee")
+		(property "Reference" "R29"
+			(at 146.2786 77.5716 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 146.2786 79.883 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 144.78 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 144.78 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bdf3c4f2-ceb8-490c-a82e-6355668dd0a8")
+		)
+		(pin "2"
+			(uuid "27de02ab-c104-425e-8fa0-0d15a8f420cc")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 144.78 84.582 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed7727f")
+		(property "Reference" "#PWR0151"
+			(at 144.78 90.932 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 144.78 87.757 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 84.582 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 84.582 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 84.582 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "697d898f-cbc9-4b0d-8f99-9799ee529fa3")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0151")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 157.48 69.088 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed78fd1")
+		(property "Reference" "C19"
+			(at 151.384 67.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 151.384 70.358 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 157.48 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 157.48 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 157.48 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d28e3fa0-dbf0-45be-8759-a264b70e25ca")
+		)
+		(pin "2"
+			(uuid "455cb098-9d91-4afd-9bb2-7c85985acc27")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 162.56 69.088 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed7a6dd")
+		(property "Reference" "C20"
+			(at 164.8968 67.9196 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 164.8968 70.231 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 162.56 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "26d9a722-19ed-4c46-942d-c912104762a6")
+		)
+		(pin "2"
+			(uuid "2f206631-4836-40a8-9c47-3c927a90aa51")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 114.3 69.088 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed97319")
+		(property "Reference" "C18"
+			(at 108.204 67.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 108.204 70.358 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 114.3 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 114.3 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 114.3 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7ea4e3cc-0657-4013-bdb4-78d28761f070")
+		)
+		(pin "2"
+			(uuid "8e4b9f1e-3e35-429b-a6f9-25cfe131d785")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 116.84 79.502 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ed9a50a")
+		(property "Reference" "#PWR0152"
+			(at 116.84 85.852 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 116.84 82.677 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 116.84 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3d8e5207-7252-466f-b08c-4463c51edce2")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0152")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components")
+		(at 237.49 66.04 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb2f")
+		(property "Reference" "U11"
+			(at 232.918 58.928 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS73601DBV"
+			(at 237.49 73.152 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+			(at 246.38 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps736.pdf"
+			(at 246.38 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+			(at 246.38 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.45"
+			(at 246.38 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 246.38 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TPS73601DBV"
+			(at 246.38 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "af86dd07-0a79-44b8-8ba7-3243f045b7c4")
+		)
+		(pin "2"
+			(uuid "b83b954a-3d37-4ae7-919c-a6338b2d76e6")
+		)
+		(pin "3"
+			(uuid "c015aa90-eda8-4c7f-8bcc-58f45ac61225")
+		)
+		(pin "4"
+			(uuid "c24644c5-8c50-4125-87ee-75f1c76eea5f")
+		)
+		(pin "5"
+			(uuid "d672eecf-3851-425e-a89e-40d2ef5434c9")
+		)
+		(instances
+			(project ""
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7"
+					(reference "U?")
+					(unit 1)
+				)
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 226.06 78.74 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb3d")
+		(property "Reference" "R30"
+			(at 220.726 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "10K"
+			(at 220.726 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 226.06 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 226.06 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 226.06 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "097b0930-d7f4-4386-a696-acfff22ec4e0")
+		)
+		(pin "2"
+			(uuid "172c91a7-76a5-4419-b963-a6c609253546")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 226.06 84.582 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb47")
+		(property "Reference" "#PWR0153"
+			(at 226.06 90.932 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 226.06 87.757 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.06 84.582 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 84.582 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 226.06 84.582 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a81ac6f3-0666-4c41-a057-d1e9a34a54a5")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0153")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 213.36 69.088 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb52")
+		(property "Reference" "C22"
+			(at 219.456 67.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 219.456 70.358 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 213.36 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 213.36 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 213.36 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5b55c8a1-3867-4cc7-b643-ce81942e9a75")
+		)
+		(pin "2"
+			(uuid "6dcba720-d72a-4940-ae6c-f5a517a2304f")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 208.28 69.088 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb5c")
+		(property "Reference" "C23"
+			(at 202.692 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 202.184 70.358 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 208.28 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 208.28 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ae558810-aef8-4da1-9b05-721f63fe8a31")
+		)
+		(pin "2"
+			(uuid "0e99282a-9d00-4e77-96f0-3f1197905336")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 256.54 69.088 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb7f")
+		(property "Reference" "C21"
+			(at 262.636 67.564 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 263.144 70.358 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 256.54 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 256.54 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 69.088 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b850ba5b-7b37-4e13-b6d7-5a7899a60d7c")
+		)
+		(pin "2"
+			(uuid "6ad895ed-1282-4171-aa52-9d4d754f21f8")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 254 79.502 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edaeb8d")
+		(property "Reference" "#PWR0154"
+			(at 254 85.852 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 254 82.677 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 254 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 254 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "900205fb-a2e4-4714-a18e-0f430710f514")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0154")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 111.76 98.298 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edccaf5")
+		(property "Reference" "R31"
+			(at 113.03 97.282 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 113.284 99.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 111.76 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 111.76 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 111.76 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1d36e3fb-d243-4843-ac66-97cf4ddcf356")
+		)
+		(pin "2"
+			(uuid "61768d6f-9e03-4e9b-a119-6cc3b0d2e1ac")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 119.38 98.298 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edcd9fe")
+		(property "Reference" "R32"
+			(at 120.8786 97.1296 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 120.8786 99.441 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 119.38 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 119.38 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 119.38 98.298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a5d70596-3dab-48aa-a5d3-aaa2a4255af8")
+		)
+		(pin "2"
+			(uuid "74551c70-cbd8-438f-ae7f-923de38ec95b")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(at 106.68 104.14 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edd9dbe")
+		(property "Reference" "#PWR0155"
+			(at 110.49 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 103.4288 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 106.68 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0c3a79c2-5e5e-422a-b5b7-471687c9552e")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0155")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 162.56 94.742 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edec854")
+		(property "Reference" "#PWR0156"
+			(at 162.56 101.092 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 162.56 97.917 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 162.56 94.742 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 94.742 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 94.742 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "70488a4a-724d-4e8a-949f-c59713450df5")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0156")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components")
+		(at 133.35 121.92 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e2c")
+		(property "Reference" "U12"
+			(at 133.35 115.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS73601DBV"
+			(at 133.35 129.032 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+			(at 124.46 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps736.pdf"
+			(at 124.46 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+			(at 124.46 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.45"
+			(at 124.46 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 124.46 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TPS73601DBV"
+			(at 124.46 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6d17092b-0e84-42d5-b4d3-6147d2111592")
+		)
+		(pin "2"
+			(uuid "34354c27-2a66-4391-9b5f-3fdb901b248d")
+		)
+		(pin "3"
+			(uuid "df424720-6f16-4ceb-941d-fea7ffa22f5c")
+		)
+		(pin "4"
+			(uuid "ce82efc2-a8fd-4e7f-a3e6-611afbdd786f")
+		)
+		(pin "5"
+			(uuid "b15b21b2-cfd7-4627-b488-1bd8362e6678")
+		)
+		(instances
+			(project ""
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7"
+					(reference "U?")
+					(unit 1)
+				)
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 144.78 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e38")
+		(property "Reference" "R33"
+			(at 146.2786 133.4516 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 146.2786 135.763 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 144.78 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 144.78 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "29527e3c-db12-4296-9bd1-f8fb4064164d")
+		)
+		(pin "2"
+			(uuid "db9cc13c-2f10-4ab6-a4ad-acfa06275f81")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 144.78 140.462 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e42")
+		(property "Reference" "#PWR0157"
+			(at 144.78 146.812 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 144.78 143.637 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 140.462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 140.462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 140.462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d7593cb8-45db-48a9-bd51-de46c5bbbe06")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0157")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 157.48 124.968 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e4d")
+		(property "Reference" "C25"
+			(at 151.384 123.444 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 151.384 126.238 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 157.48 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 157.48 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 157.48 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6393845c-ac11-4a33-beb2-0e304620c0fb")
+		)
+		(pin "2"
+			(uuid "993b2c87-0551-41e0-8498-fb8c86fde48b")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 162.56 124.968 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e57")
+		(property "Reference" "C26"
+			(at 164.8968 123.7996 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 164.8968 126.111 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 162.56 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fd516085-3f86-4cdb-8ba5-54895c63bddc")
+		)
+		(pin "2"
+			(uuid "89b15b69-d3b6-4d5d-a8c0-22b621d0c241")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 114.3 124.968 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e78")
+		(property "Reference" "C24"
+			(at 108.204 123.444 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 108.204 126.238 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 114.3 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 114.3 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 114.3 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "48ca647d-1157-4f21-91a9-1e1a91fa90b4")
+		)
+		(pin "2"
+			(uuid "d824f296-0168-48d2-89ac-fe6da564c318")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 116.84 135.382 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005edf4e86")
+		(property "Reference" "#PWR0158"
+			(at 116.84 141.732 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 116.84 138.557 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 116.84 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d4a3b210-cdbd-4a0e-88d1-fff47f7d8dc9")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0158")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 226.06 134.62 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee838e2")
+		(property "Reference" "R34"
+			(at 220.472 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "10K"
+			(at 220.472 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 226.06 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 226.06 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 226.06 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2b635d8f-22fa-47f0-b706-56fd75e89a77")
+		)
+		(pin "2"
+			(uuid "76f80490-a6b2-4d1f-b1b7-3a06e2a04552")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 226.06 140.462 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee838ec")
+		(property "Reference" "#PWR0159"
+			(at 226.06 146.812 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 226.06 143.637 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.06 140.462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 140.462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 226.06 140.462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "cf2233cb-c45d-418e-9fa9-41299a72ef3e")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0159")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 213.36 124.968 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee838f7")
+		(property "Reference" "C28"
+			(at 219.456 123.444 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 219.71 126.492 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 213.36 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 213.36 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 213.36 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3a3aec81-07aa-4ef4-8897-286d5db8145e")
+		)
+		(pin "2"
+			(uuid "bb30ff85-4558-4300-810f-61240edcc4a3")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 208.28 124.968 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee83901")
+		(property "Reference" "C29"
+			(at 202.692 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 202.438 126.746 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 208.28 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 208.28 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "613c65a5-70a8-4b13-81bc-08eb363401bf")
+		)
+		(pin "2"
+			(uuid "d4a5defb-a9c4-4dc0-8372-37ed8a611361")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 256.54 124.968 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee8391e")
+		(property "Reference" "C27"
+			(at 262.636 123.444 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 263.398 126.238 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 256.54 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 256.54 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 124.968 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "30327e91-055d-4f1f-ae60-b171beb0b4c1")
+		)
+		(pin "2"
+			(uuid "143221b1-8bbe-4021-a039-b452e154720b")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 254 135.382 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee8392c")
+		(property "Reference" "#PWR0160"
+			(at 254 141.732 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 254 138.557 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 254 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 254 135.382 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "43950f11-025f-4d53-9c7f-13cadeba2b46")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0160")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components")
+		(at 237.49 121.92 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005ee83944")
+		(property "Reference" "U13"
+			(at 237.236 115.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS73601DBV"
+			(at 237.49 129.032 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+			(at 246.38 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps736.pdf"
+			(at 246.38 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+			(at 246.38 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.45"
+			(at 246.38 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 246.38 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TPS73601DBV"
+			(at 246.38 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7293afa5-1751-43e0-9214-4ae0c0aedf27")
+		)
+		(pin "2"
+			(uuid "84dc90bf-1b6b-4cb6-ba94-df5737994b8c")
+		)
+		(pin "3"
+			(uuid "d5cb1945-3528-4347-b8d5-3682d91348b1")
+		)
+		(pin "4"
+			(uuid "fcb2c905-1751-469b-beb9-75c97b2f7097")
+		)
+		(pin "5"
+			(uuid "e845ad0f-d2ae-4eab-8aea-b5cb4825c93e")
+		)
+		(instances
+			(project ""
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7"
+					(reference "U?")
+					(unit 1)
+				)
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 208.28 102.362 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efa2c3b")
+		(property "Reference" "#PWR0161"
+			(at 208.28 108.712 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 208.28 105.537 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 208.28 102.362 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 102.362 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 102.362 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "18776766-dc87-4336-b8b7-d23106b3a2e1")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0161")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 226.06 180.34 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc2d")
+		(property "Reference" "R37"
+			(at 220.726 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "10K"
+			(at 220.726 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 226.06 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 226.06 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 226.06 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2568b1b3-48d6-4a96-8d29-4e87f7abc92d")
+		)
+		(pin "2"
+			(uuid "6e65cf46-b910-44c2-a3d5-349d5a1dde8a")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 226.06 186.182 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc37")
+		(property "Reference" "#PWR0162"
+			(at 226.06 192.532 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 226.06 189.357 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.06 186.182 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 226.06 186.182 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 226.06 186.182 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "73c596f5-2d1d-440e-96e7-b1e89d8e3294")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0162")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 213.36 170.688 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc42")
+		(property "Reference" "C34"
+			(at 219.456 169.164 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 219.456 171.958 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 213.36 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 213.36 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 213.36 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "76c6867b-7a17-4736-b9b1-6c5a79c4936e")
+		)
+		(pin "2"
+			(uuid "0d32f3c1-202f-496d-8b2e-ef3e53787466")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 208.28 170.688 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc4c")
+		(property "Reference" "C33"
+			(at 202.692 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 202.184 171.958 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 208.28 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 208.28 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4ca3db7e-7a21-4002-8315-86810291f79b")
+		)
+		(pin "2"
+			(uuid "ceed1581-8769-4f9f-b9ad-c0021151c16b")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 256.54 170.688 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc6d")
+		(property "Reference" "C35"
+			(at 262.636 169.164 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 263.144 171.958 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 256.54 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 256.54 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 170.688 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fdd239fa-be5b-4953-9aa9-e588067d1812")
+		)
+		(pin "2"
+			(uuid "9b3c1765-e4e1-4c84-9f73-873201a3f3e9")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 254 181.102 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc7b")
+		(property "Reference" "#PWR0163"
+			(at 254 187.452 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 254 184.277 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 254 181.102 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 254 181.102 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 254 181.102 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1f3dddc8-4a06-433e-b36c-247efa46862d")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0163")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components")
+		(at 237.49 167.64 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005efecc91")
+		(property "Reference" "U15"
+			(at 236.728 160.782 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS73601DBV"
+			(at 237.49 174.752 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+			(at 246.38 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps736.pdf"
+			(at 246.38 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+			(at 246.38 190.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.45"
+			(at 246.38 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 246.38 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TPS73601DBV"
+			(at 246.38 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2a2dbf98-3054-48da-a4c6-dd7bccad4ee3")
+		)
+		(pin "2"
+			(uuid "3779748a-5cf2-4fd2-914e-d1adfd3b4180")
+		)
+		(pin "3"
+			(uuid "5d265fcf-30a3-45db-b056-d380f57ef532")
+		)
+		(pin "4"
+			(uuid "e0a925d5-6bca-4170-a17a-487162686a58")
+		)
+		(pin "5"
+			(uuid "ac945905-01dd-466f-a36b-0ce70145dc76")
+		)
+		(instances
+			(project ""
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7"
+					(reference "U?")
+					(unit 1)
+				)
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 208.28 203.962 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0939a4")
+		(property "Reference" "#PWR0164"
+			(at 208.28 210.312 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 208.28 207.137 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 208.28 203.962 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 203.962 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 203.962 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "44c7a381-4b3f-4919-bfc0-0850e02adb0f")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0164")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 111.76 199.898 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0cd277")
+		(property "Reference" "R35"
+			(at 113.03 198.882 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 113.284 201.168 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 111.76 199.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 111.76 199.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 111.76 199.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8a1f71c9-1bd0-481d-a589-166aaa4b8810")
+		)
+		(pin "2"
+			(uuid "fc7df4ab-db88-4530-a677-9fd3d76114be")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 119.38 199.898 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0cd281")
+		(property "Reference" "R36"
+			(at 120.8786 198.7296 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 120.8786 201.041 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 119.38 199.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 119.38 199.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 119.38 199.898 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dafaedc7-e1a2-40b3-9f50-aa1ed3897dfb")
+		)
+		(pin "2"
+			(uuid "a26d1a60-8aa5-47b4-8241-7486a7f2678d")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(at 106.68 205.74 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0cd296")
+		(property "Reference" "#PWR0165"
+			(at 110.49 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 103.4288 205.74 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 106.68 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f5898176-054f-4b30-a574-6c33858ad3cf")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0165")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 162.56 196.342 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0e87a5")
+		(property "Reference" "#PWR0166"
+			(at 162.56 202.692 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 162.56 199.517 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 162.56 196.342 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 196.342 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 196.342 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7d287042-9dce-472f-92fa-0dba03d6d933")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0166")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:R_Small-EV2400-Components")
+		(at 144.78 236.22 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcbb9")
+		(property "Reference" "R38"
+			(at 146.2786 235.0516 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10K"
+			(at 146.2786 237.363 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:R_0603_1608Metric"
+			(at 144.78 236.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 144.78 236.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 236.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c750d041-a613-43ab-8ad7-5bef6dd3129c")
+		)
+		(pin "2"
+			(uuid "88323fc8-7fb6-4875-bdb8-df87e442418f")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "R38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 144.78 242.062 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcbc3")
+		(property "Reference" "#PWR0167"
+			(at 144.78 248.412 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 144.78 245.237 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 242.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 242.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 242.062 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "43208b03-b5f5-47ac-9084-39523effde37")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0167")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 157.48 226.568 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcbce")
+		(property "Reference" "C31"
+			(at 151.384 225.044 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 151.384 227.838 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 157.48 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 157.48 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 157.48 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "808417f1-3507-4131-bd0f-e9321bbf1e85")
+		)
+		(pin "2"
+			(uuid "d09408ba-f9c6-40bb-8d38-432051c8f55f")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 162.56 226.568 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcbd8")
+		(property "Reference" "C32"
+			(at 164.8968 225.3996 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 164.8968 227.711 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 162.56 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "283fa184-5392-4b39-a115-c326b7b1e557")
+		)
+		(pin "2"
+			(uuid "a2844948-2397-40bf-a240-379becaebc29")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:C_Small-EV2400-Components")
+		(at 114.3 226.568 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcbf5")
+		(property "Reference" "C30"
+			(at 108.204 225.044 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 108.204 227.838 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:C_0603_1608Metric"
+			(at 114.3 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 114.3 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 114.3 226.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e4cfcd34-3020-4dc8-b121-59e1e95f928a")
+		)
+		(pin "2"
+			(uuid "a660841b-c56f-4ab8-9d8f-d25679ea668f")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "C30")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(at 116.84 236.982 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcc03")
+		(property "Reference" "#PWR0168"
+			(at 116.84 243.332 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 116.84 240.157 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 236.982 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 236.982 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 116.84 236.982 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8311b436-08ed-48bb-bce1-f4878951c83b")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "#PWR0168")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS73601DBV-EV2400-Components")
+		(at 133.35 223.52 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f0fcc1c")
+		(property "Reference" "U18"
+			(at 132.842 216.662 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS73601DBV"
+			(at 133.35 230.632 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOT95P280X145-5N"
+			(at 124.46 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps736.pdf"
+			(at 124.46 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "LDO Voltage Regulators Cap-Free NMOS 400mA"
+			(at 124.46 246.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.45"
+			(at 124.46 241.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 124.46 248.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TPS73601DBV"
+			(at 124.46 251.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f4f9c2a4-a752-4f19-88f7-eb6eb2f599d7")
+		)
+		(pin "2"
+			(uuid "f58b3a03-5561-46bc-ba82-acff44ae06fc")
+		)
+		(pin "3"
+			(uuid "0a9bbd73-1ad0-4f05-bb8a-0b3b7c93d2b1")
+		)
+		(pin "4"
+			(uuid "e18f3708-6857-4a8c-8f01-b710f58af5d7")
+		)
+		(pin "5"
+			(uuid "d16c510e-19fb-4d48-872a-7b6a7c4dd527")
+		)
+		(instances
+			(project ""
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7"
+					(reference "U?")
+					(unit 1)
+				)
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:ISL90842-EV2400-Components")
+		(at 185.42 193.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f26bf49")
+		(property "Reference" "U14"
+			(at 184.912 180.848 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ISL90842UIV1427Z"
+			(at 185.166 205.486 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOP65P640X105-14N"
+			(at 175.26 210.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.mouser.com/datasheet/2/698/isl90842-1529542.pdf"
+			(at 194.31 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Digital Potentiometer ICs ISL90842UIV1427Z LW NOISE LW PWR I2C BUS"
+			(at 175.26 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.05"
+			(at 175.26 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Renesas / Intersil"
+			(at 175.26 215.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "ISL90842UIV1427Z"
+			(at 175.26 220.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "aae2e19a-3299-4c13-98d5-a884fe499410")
+		)
+		(pin "10"
+			(uuid "be25b944-7bbb-486c-8401-0eef01c477e9")
+		)
+		(pin "11"
+			(uuid "1bcd27b3-e3c0-4d2d-80d8-8ec7580c4a2b")
+		)
+		(pin "12"
+			(uuid "ad916fcf-3f8d-4526-955a-01f24f5cc013")
+		)
+		(pin "13"
+			(uuid "57b6fc92-01d7-4dd1-aa9e-826166f190f1")
+		)
+		(pin "14"
+			(uuid "5cda3710-eda5-4652-a015-563d3517155f")
+		)
+		(pin "2"
+			(uuid "7d5c56cc-c618-4832-8460-efe17c89920b")
+		)
+		(pin "3"
+			(uuid "b7eebc67-1802-4d8e-b194-1473d8515fb5")
+		)
+		(pin "4"
+			(uuid "ba299f84-b0c8-4f8c-b5e5-1936eb0008c8")
+		)
+		(pin "5"
+			(uuid "02c5e72e-b9ae-40de-aee5-7ffdd6938f79")
+		)
+		(pin "6"
+			(uuid "0fcc0058-f9b9-4e24-902f-0a61c67b9289")
+		)
+		(pin "7"
+			(uuid "11540344-ad6d-4a25-9f6a-710f70bb89fc")
+		)
+		(pin "8"
+			(uuid "5463e5c8-ec6f-48a3-afbb-5bf8859a7743")
+		)
+		(pin "9"
+			(uuid "a9b8b549-e35d-47e2-b1e2-8e82cad1fddf")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "EV2400-EVM-Interface-Board-rescue:ISL90842-EV2400-Components")
+		(at 185.42 91.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005f26e3ff")
+		(property "Reference" "U9"
+			(at 185.42 79.502 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ISL90842UIV1427Z"
+			(at 184.912 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "EV2400-Footprints:SOP65P640X105-14N"
+			(at 175.26 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.mouser.com/datasheet/2/698/isl90842-1529542.pdf"
+			(at 194.31 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Digital Potentiometer ICs ISL90842UIV1427Z LW NOISE LW PWR I2C BUS"
+			(at 175.26 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.05"
+			(at 175.26 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Renesas / Intersil"
+			(at 175.26 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "ISL90842UIV1427Z"
+			(at 175.26 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "11bb162f-21ad-41c5-911d-fc01598ce238")
+		)
+		(pin "10"
+			(uuid "3b238f9c-556e-493c-b1ad-634b67ea6ed2")
+		)
+		(pin "11"
+			(uuid "cbb2f162-cebf-46fa-b64d-c63e7a86a101")
+		)
+		(pin "12"
+			(uuid "71c53582-3f40-45b6-b229-ea6e17e9760c")
+		)
+		(pin "13"
+			(uuid "fc7ea3b2-acb0-4536-af20-6ad0c72b610f")
+		)
+		(pin "14"
+			(uuid "1b036e46-08e3-4e92-8513-4f46a598c610")
+		)
+		(pin "2"
+			(uuid "f16f7b86-a742-418d-96c0-2ec981499f44")
+		)
+		(pin "3"
+			(uuid "d644a3e6-cbe2-43b1-bb25-85c6433a13bf")
+		)
+		(pin "4"
+			(uuid "08376494-68a5-4502-84c4-511a42b61e85")
+		)
+		(pin "5"
+			(uuid "ad752eda-865a-4133-8399-40e4fdff1329")
+		)
+		(pin "6"
+			(uuid "6577f2aa-5872-4168-b1ec-284162adbe4c")
+		)
+		(pin "7"
+			(uuid "69645ca2-270b-4dd0-9d20-1a739ba2917c")
+		)
+		(pin "8"
+			(uuid "d976b870-ea6a-4caa-8d6b-89d4d0687c09")
+		)
+		(pin "9"
+			(uuid "c73eef53-a0a6-48d9-9243-43858f0c2ade")
+		)
+		(instances
+			(project "EV2400-EVM-Interface-Board"
+				(path "/98add506-d6a0-47a4-b0c9-ee81dae105b7/00000000-0000-0000-0000-00005d8ce23e"
+					(reference "U9")
+					(unit 1)
+				)
+			)
+		)
+	)
+)
