@@ -1,5 +1,5 @@
-(module DC-050-SMD-Power-Jack (layer F.Cu) (tedit 5BBCC35D)
-  (descr "<h3>DC Barrel Power Jack/Connector -SMD</h3>\n5.5mm jack, 2.1mm center pole diameter. \n<p>Specifications:\n<ul><li>Pin count:4</li>\n</ul></p>")
+(module DC-050-SMD-Power-Jack (layer F.Cu) (tedit 5D8770CE)
+  (descr "DC Barrel Power Jack/Connector SMD")
   (fp_text reference REF** (at 0 -8) (layer F.SilkS)
     (effects (font (size 1.2065 1.2065) (thickness 0.254)) (justify left bottom))
   )

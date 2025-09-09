@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "AA-PI-Components")(type "KiCad")(uri "/srv/projects2/kicad/ORPAL-AA-PI/AA-PI-Components.kicad_sym")(options "")(descr ""))
+)
