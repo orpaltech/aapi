@@ -11,7 +11,757 @@
 		(company "ORPALTECH")
 	)
 	(lib_symbols
-		(symbol "Dreamstalker-Components:C_Small"
+		(symbol "EV2400-Components:+3V3"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+3V3"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol +3.3V"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+3V3_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3V3_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+3V3"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:+V_PLUG"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+V_PLUG"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+V_PLUG_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+V_PLUG_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+V_PLUG"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:+V_USB"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+V_USB"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "power-flag symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Power Flag Symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+V_USB_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+V_USB_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(hide yes)
+					(name "+V_USB"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0 0)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:Barrel_Jack_Switch"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.334 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Barrel_Jack_Switch"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.27 -1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 1.27 -1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "DC Barrel Jack with an internal switch"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "DC power barrel jack connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "BarrelJack*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Barrel_Jack_Switch_0_1"
+				(rectangle
+					(start -5.08 3.81)
+					(end 5.08 -3.81)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -2.54) (xy -2.54 -2.54) (xy -1.27 -1.27) (xy 0 -2.54) (xy 2.54 -2.54) (xy 5.08 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -3.302 1.905)
+					(mid -3.937 2.54)
+					(end -3.302 3.175)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -3.302 1.905)
+					(mid -3.937 2.54)
+					(end -3.302 3.175)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -2.286) (xy 1.905 -1.651)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.683 3.175)
+					(end -3.302 1.905)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 3.81 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 1.27 0) (xy 1.27 -2.286) (xy 0.635 -1.651)
+					)
+					(stroke
+						(width 0.254)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Barrel_Jack_Switch_1_1"
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:CP_Small"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.254 1.778 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "CP_Small"
+				(at 0.254 -2.032 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Polarised capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "CP_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "CP_Small_0_1"
+				(rectangle
+					(start -1.524 0.6858)
+					(end 1.524 0.3048)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.524 -0.3048)
+					(end 1.524 -0.6858)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 1.524) (xy -0.762 1.524)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.016 1.27) (xy -1.016 1.778)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "CP_Small_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 1.8542)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 1.8542)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:C_Small"
 			(pin_numbers
 				(hide yes)
 			)
@@ -151,33 +901,28 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Dreamstalker-Components:R_Small"
-			(pin_numbers
-				(hide yes)
-			)
+		(symbol "EV2400-Components:Conn_01x04"
 			(pin_names
-				(offset 0.254)
+				(offset 1.016)
 				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "R"
-				(at 0.762 0.508 0)
+			(property "Reference" "J"
+				(at 0 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
-			(property "Value" "R_Small"
-				(at 0.762 -1.016 0)
+			(property "Value" "Conn_01x04"
+				(at 0 -7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
 			(property "Footprint" ""
@@ -198,7 +943,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Resistor, small symbol"
+			(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -207,972 +952,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "r resistor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "R_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "R_Small_0_1"
-				(rectangle
-					(start -0.762 1.778)
-					(end 0.762 -1.778)
-					(stroke
-						(width 0.2032)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "R_Small_1_1"
-				(pin passive line
-					(at 0 2.54 270)
-					(length 0.762)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 0.762)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Dreamstalker-Components:SW_Push"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "SW"
-				(at 1.27 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "SW_Push"
-				(at 0 -1.524 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Push button switch, generic, two pins"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "switch normally-open pushbutton push-button"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "SW_Push_0_1"
-				(circle
-					(center -2.032 0)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 1.27) (xy 0 3.048)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 0)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 1.27) (xy -2.54 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 0 180)
-					(length 2.54)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "EV2400-Components_+3V3"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+3V3-EV2400-Components_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+3V3-EV2400-Components_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(hide yes)
-					(name "+3V3"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:+V_PLUG-EV2400-Components"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "EV2400-Components_+V_PLUG"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+V_PLUG-EV2400-Components_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+V_PLUG-EV2400-Components_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(hide yes)
-					(name "+V_PLUG"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:+V_USB-EV2400-Components"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "EV2400-Components_+V_USB"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+V_USB-EV2400-Components_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+V_USB-EV2400-Components_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(hide yes)
-					(name "+V_USB"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0 0)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:Barrel_Jack_Switch-EV2400-Components"
-			(pin_names
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 5.334 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "EV2400-Components_Barrel_Jack_Switch"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 1.27 -1.016 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 1.27 -1.016 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "BarrelJack*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Barrel_Jack_Switch-EV2400-Components_0_1"
-				(rectangle
-					(start -5.08 3.81)
-					(end 5.08 -3.81)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.81 -2.54) (xy -2.54 -2.54) (xy -1.27 -1.27) (xy 0 -2.54) (xy 2.54 -2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start -3.302 1.905)
-					(mid -3.937 2.54)
-					(end -3.302 3.175)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start -3.302 1.905)
-					(mid -3.937 2.54)
-					(end -3.302 3.175)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -2.286) (xy 1.905 -1.651)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 3.683 3.175)
-					(end -3.302 1.905)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 3.81 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 0) (xy 1.27 0) (xy 1.27 -2.286) (xy 0.635 -1.651)
-					)
-					(stroke
-						(width 0.254)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Barrel_Jack_Switch-EV2400-Components_1_1"
-				(pin passive line
-					(at 7.62 2.54 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 0 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 -2.54 180)
-					(length 2.54)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:CP_Small-EV2400-Components"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.254)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "C"
-				(at 0.254 1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "EV2400-Components_CP_Small"
-				(at 0.254 -2.032 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "CP_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "CP_Small-EV2400-Components_0_1"
-				(rectangle
-					(start -1.524 0.6858)
-					(end 1.524 0.3048)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.524 -0.3048)
-					(end 1.524 -0.6858)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 1.524) (xy -0.762 1.524)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.016 1.27) (xy -1.016 1.778)
-					)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "CP_Small-EV2400-Components_1_1"
-				(pin passive line
-					(at 0 2.54 270)
-					(length 1.8542)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 1.8542)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:Conn_01x04-EV2400-Components"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "EV2400-Components_Conn_01x04"
-				(at 0 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
+			(property "ki_keywords" "connector"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1190,7 +970,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Conn_01x04-EV2400-Components_1_1"
+			(symbol "Conn_01x04_1_1"
 				(rectangle
 					(start -1.27 3.81)
 					(end 1.27 -6.35)
@@ -1321,7 +1101,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:Conn_02x01-EV2400-Components"
+		(symbol "EV2400-Components:Conn_02x01"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1337,7 +1117,7 @@
 					)
 				)
 			)
-			(property "Value" "EV2400-Components_Conn_02x01"
+			(property "Value" "Conn_02x01"
 				(at 1.27 -2.54 0)
 				(effects
 					(font
@@ -1354,7 +1134,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at -1.27 0 0)
 				(effects
 					(font
@@ -1363,7 +1143,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Generic connector, double row, 02x01, this symbol is compatible with counter-clockwise, top-bottom and odd-even numbering schemes., script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1381,7 +1170,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Conn_02x01-EV2400-Components_1_1"
+			(symbol "Conn_02x01_1_1"
 				(rectangle
 					(start -2.54 1.27)
 					(end 2.54 -1.27)
@@ -1454,7 +1243,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:Conn_02x12_Odd_Even-EV2400-Components"
+		(symbol "EV2400-Components:Conn_02x12_Odd_Even"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -1470,7 +1259,7 @@
 					)
 				)
 			)
-			(property "Value" "EV2400-Components_Conn_02x12_Odd_Even"
+			(property "Value" "Conn_02x12_Odd_Even"
 				(at 0 -15.24 0)
 				(effects
 					(font
@@ -1487,7 +1276,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at -1.27 2.54 0)
 				(effects
 					(font
@@ -1496,7 +1285,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1514,7 +1312,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Conn_02x12_Odd_Even-EV2400-Components_1_1"
+			(symbol "Conn_02x12_Odd_Even_1_1"
 				(rectangle
 					(start -2.54 16.51)
 					(end 2.54 -13.97)
@@ -2225,7 +2023,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:Crystal-EV2400-Components"
+		(symbol "EV2400-Components:Crystal"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2244,7 +2042,7 @@
 					)
 				)
 			)
-			(property "Value" "EV2400-Components_Crystal"
+			(property "Value" "Crystal"
 				(at 0 -3.81 0)
 				(effects
 					(font
@@ -2261,7 +2059,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2270,7 +2068,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Two pin crystal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "quartz ceramic resonator oscillator"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2288,7 +2095,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Crystal-EV2400-Components_0_1"
+			(symbol "Crystal_0_1"
 				(polyline
 					(pts
 						(xy -2.54 0) (xy -1.905 0)
@@ -2349,7 +2156,7 @@
 					)
 				)
 			)
-			(symbol "Crystal-EV2400-Components_1_1"
+			(symbol "Crystal_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 1.27)
@@ -2389,7 +2196,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components"
+		(symbol "EV2400-Components:GND"
 			(power)
 			(pin_names
 				(offset 0)
@@ -2406,7 +2213,7 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "EV2400-Components_GND"
+			(property "Value" "GND"
 				(at 0 -3.175 0)
 				(effects
 					(font
@@ -2433,7 +2240,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Power flag, digital ground"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2442,7 +2249,16 @@
 					(hide yes)
 				)
 			)
-			(symbol "GND-EV2400-Components_0_1"
+			(property "ki_keywords" "power-flag"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
 				(rectangle
 					(start -1.27 -1.524)
 					(end 1.27 -2.032)
@@ -2467,7 +2283,7 @@
 					)
 				)
 			)
-			(symbol "GND-EV2400-Components_1_1"
+			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 270)
 					(length 0)
@@ -2490,7 +2306,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:LED_ALT-EV2400-Components"
+		(symbol "EV2400-Components:LED_ALT"
 			(pin_numbers
 				(hide yes)
 			)
@@ -2509,7 +2325,7 @@
 					)
 				)
 			)
-			(property "Value" "EV2400-Components_LED_ALT"
+			(property "Value" "LED_ALT"
 				(at 0 -2.54 0)
 				(effects
 					(font
@@ -2526,7 +2342,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2535,7 +2351,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Light emitting diode, filled shape"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "LED diode"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2553,7 +2378,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "LED_ALT-EV2400-Components_0_1"
+			(symbol "LED_ALT_0_1"
 				(polyline
 					(pts
 						(xy -3.048 -0.762) (xy -4.572 -2.286) (xy -3.81 -2.286) (xy -4.572 -2.286) (xy -4.572 -1.524)
@@ -2615,7 +2440,7 @@
 					)
 				)
 			)
-			(symbol "LED_ALT-EV2400-Components_1_1"
+			(symbol "LED_ALT_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
@@ -2655,7 +2480,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:MSP430F5529IPNR-EV2400-Components"
+		(symbol "EV2400-Components:MSP430F5529IPNR"
 			(pin_names
 				(offset 0.762)
 			)
@@ -2671,7 +2496,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "EV2400-Components_MSP430F5529IPNR"
+			(property "Value" "MSP430F5529IPNR"
 				(at 38.1 54.61 0)
 				(effects
 					(font
@@ -2690,7 +2515,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "http://www.ti.com/lit/gpn/msp430f5529"
 				(at -25.4 -87.63 0)
 				(effects
 					(font
@@ -2700,7 +2525,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "16-Bit Ultra-Low-Power Microcontroller, 128KB Flash, 8KB RAM, USB, 12Bit ADC, 2 USCIs, 32Bit HW MPY"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2749,7 +2574,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "MSP430F5529IPNR-EV2400-Components_0_0"
+			(symbol "MSP430F5529IPNR_0_0"
 				(pin bidirectional line
 					(at -41.91 26.67 0)
 					(length 5.08)
@@ -4191,7 +4016,7 @@
 					)
 				)
 			)
-			(symbol "MSP430F5529IPNR-EV2400-Components_0_1"
+			(symbol "MSP430F5529IPNR_0_1"
 				(polyline
 					(pts
 						(xy -36.83 52.07) (xy 36.83 52.07) (xy 36.83 -54.61) (xy -36.83 -54.61) (xy -36.83 52.07)
@@ -4207,7 +4032,284 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:TPS2550DBV-EV2400-Components"
+		(symbol "EV2400-Components:R_Small"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 0.762 0.508 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "R_Small"
+				(at 0.762 -1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor, small symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "r resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_Small_0_1"
+				(rectangle
+					(start -0.762 1.778)
+					(end 0.762 -1.778)
+					(stroke
+						(width 0.2032)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_Small_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 0.762)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 0.762)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:SW_Push"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "SW"
+				(at 1.27 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "SW_Push"
+				(at 0 -1.524 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Push button switch, generic, two pins"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "switch normally-open pushbutton push-button"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SW_Push_0_1"
+				(circle
+					(center -2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.27) (xy 0 3.048)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 1.27) (xy -2.54 1.27)
+					)
+					(stroke
+						(width 0)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "EV2400-Components:TPS2550DBV"
 			(pin_names
 				(offset 0.254)
 			)
@@ -4223,7 +4325,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "EV2400-Components_TPS2550DBV"
+			(property "Value" "TPS2550DBV"
 				(at -6.35 -7.62 0)
 				(effects
 					(font
@@ -4242,7 +4344,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "http://www.ti.com/lit/gpn/TPS2550"
 				(at -8.89 -13.97 0)
 				(effects
 					(font
@@ -4252,7 +4354,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Texas Instruments TPS2550DBV, USB Power Switch High Side, 85m, 2.5 V min., 6-Pin SOT-23"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4291,7 +4393,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TPS2550DBV-EV2400-Components_0_0"
+			(symbol "TPS2550DBV_0_0"
 				(pin bidirectional line
 					(at -8.89 2.54 0)
 					(length 2.54)
@@ -4401,7 +4503,7 @@
 					)
 				)
 			)
-			(symbol "TPS2550DBV-EV2400-Components_0_1"
+			(symbol "TPS2550DBV_0_1"
 				(polyline
 					(pts
 						(xy -6.35 5.08) (xy 6.35 5.08) (xy 6.35 -5.08) (xy -6.35 -5.08) (xy -6.35 5.08)
@@ -4417,7 +4519,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:TestPoint-EV2400-Components"
+		(symbol "EV2400-Components:TestPoint"
 			(pin_numbers
 				(hide yes)
 			)
@@ -4436,7 +4538,7 @@
 					)
 				)
 			)
-			(property "Value" "EV2400-Components_TestPoint"
+			(property "Value" "TestPoint"
 				(at 0 5.08 0)
 				(effects
 					(font
@@ -4453,7 +4555,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at 5.08 0 0)
 				(effects
 					(font
@@ -4462,7 +4564,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "test point"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "test point tp"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4480,7 +4591,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TestPoint-EV2400-Components_0_1"
+			(symbol "TestPoint_0_1"
 				(circle
 					(center 0 3.302)
 					(radius 0.762)
@@ -4493,7 +4604,7 @@
 					)
 				)
 			)
-			(symbol "TestPoint-EV2400-Components_1_1"
+			(symbol "TestPoint_1_1"
 				(pin passive line
 					(at 0 0 90)
 					(length 2.54)
@@ -4515,7 +4626,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:TestPoint_Alt-EV2400-Components"
+		(symbol "EV2400-Components:TestPoint_Alt"
 			(pin_numbers
 				(hide yes)
 			)
@@ -4534,7 +4645,7 @@
 					)
 				)
 			)
-			(property "Value" "EV2400-Components_TestPoint_Alt"
+			(property "Value" "TestPoint_Alt"
 				(at 0 5.08 0)
 				(effects
 					(font
@@ -4551,7 +4662,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at 5.08 0 0)
 				(effects
 					(font
@@ -4560,7 +4671,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "test point (alternative shape)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "test point tp"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4578,7 +4698,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TestPoint_Alt-EV2400-Components_0_1"
+			(symbol "TestPoint_Alt_0_1"
 				(polyline
 					(pts
 						(xy 0 2.54) (xy -0.762 3.302) (xy 0 4.064) (xy 0.762 3.302) (xy 0 2.54)
@@ -4592,7 +4712,7 @@
 					)
 				)
 			)
-			(symbol "TestPoint_Alt-EV2400-Components_1_1"
+			(symbol "TestPoint_Alt_1_1"
 				(pin passive line
 					(at 0 0 90)
 					(length 2.54)
@@ -4614,7 +4734,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "EV2400-EVM-Interface-Board-rescue:USB_B-EV2400-Components"
+		(symbol "EV2400-Components:USB_B"
 			(pin_numbers
 				(hide yes)
 			)
@@ -4633,7 +4753,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "EV2400-Components_USB_B"
+			(property "Value" "USB_B"
 				(at 3.81 -7.62 0)
 				(effects
 					(font
@@ -4651,7 +4771,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "~"
 				(at 1.27 -1.27 0)
 				(effects
 					(font
@@ -4660,7 +4780,16 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "USB Type B connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector USB"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4678,7 +4807,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "USB_B-EV2400-Components_0_0"
+			(symbol "USB_B_0_0"
 				(text "Case"
 					(at -1.016 6.858 0)
 					(effects
@@ -4696,7 +4825,7 @@
 					)
 				)
 			)
-			(symbol "USB_B-EV2400-Components_0_1"
+			(symbol "USB_B_0_1"
 				(rectangle
 					(start -2.54 -5.08)
 					(end 2.54 7.62)
@@ -4753,7 +4882,7 @@
 					)
 				)
 			)
-			(symbol "USB_B-EV2400-Components_1_1"
+			(symbol "USB_B_1_1"
 				(pin passive line
 					(at 0 10.16 270)
 					(length 2.54)
@@ -8779,7 +8908,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(lib_id "EV2400-Components:+3V3")
 		(at 82.55 220.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8823,7 +8952,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol +3.3V"
 			(at 82.55 220.98 0)
 			(effects
 				(font
@@ -8845,7 +8974,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:MSP430F5529IPNR-EV2400-Components")
+		(lib_id "EV2400-Components:MSP430F5529IPNR")
 		(at 217.17 176.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8892,12 +9021,11 @@
 			)
 		)
 		(property "Description" "16-Bit Ultra-Low-Power Microcontroller, 128KB Flash, 8KB RAM, USB, 12Bit ADC, 2 USCIs, 32Bit HW MPY"
-			(at 191.77 266.7 0)
+			(at 217.17 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 				(hide yes)
 			)
 		)
@@ -8923,6 +9051,16 @@
 		)
 		(property "Manufacturer_Part_Number" "MSP430F5529IPNR"
 			(at 191.77 274.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "16-Bit Ultra-Low-Power Microcontroller, 128KB Flash, 8KB RAM, USB, 12Bit ADC, 2 USCIs, 32Bit HW MPY"
+			(at 191.77 266.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9181,7 +9319,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 215.9 88.9 0)
 		(mirror x)
 		(unit 1)
@@ -9226,7 +9364,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 215.9 88.9 0)
 			(effects
 				(font
@@ -9251,7 +9389,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 203.2 69.342 0)
 		(mirror x)
 		(unit 1)
@@ -9294,7 +9432,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 203.2 69.342 0)
 			(effects
 				(font
@@ -9319,7 +9457,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:Conn_02x01-EV2400-Components")
+		(lib_id "EV2400-Components:Conn_02x01")
 		(at 223.52 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9345,7 +9483,7 @@
 			)
 		)
 		(property "Footprint" "EV2400-Footprints:PinHeader_1x02_P2.54mm_Vertical"
-			(at 223.52 76.2 0)
+			(at 222.25 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9354,7 +9492,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 223.52 76.2 0)
+			(at 222.25 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9362,7 +9500,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Generic connector, double row, 02x01, this symbol is compatible with counter-clockwise, top-bottom and odd-even numbering schemes., script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 223.52 76.2 0)
 			(effects
 				(font
@@ -9387,7 +9525,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 223.52 88.9 0)
 		(mirror x)
 		(unit 1)
@@ -9432,7 +9570,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 223.52 88.9 0)
 			(effects
 				(font
@@ -9457,7 +9595,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 219.71 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9501,7 +9639,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 219.71 96.52 0)
 			(effects
 				(font
@@ -9523,7 +9661,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(lib_id "EV2400-Components:+3V3")
 		(at 203.2 63.5 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9566,7 +9704,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol +3.3V"
 			(at 203.2 63.5 0)
 			(effects
 				(font
@@ -9588,7 +9726,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 243.84 88.9 0)
 		(mirror x)
 		(unit 1)
@@ -9631,7 +9769,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 243.84 88.9 0)
 			(effects
 				(font
@@ -9656,7 +9794,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 241.3 76.2 0)
 		(mirror x)
 		(unit 1)
@@ -9699,7 +9837,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 241.3 76.2 0)
 			(effects
 				(font
@@ -9724,7 +9862,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 243.84 76.2 0)
 		(mirror x)
 		(unit 1)
@@ -9767,7 +9905,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 243.84 76.2 0)
 			(effects
 				(font
@@ -9792,7 +9930,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:USB_B-EV2400-Components")
+		(lib_id "EV2400-Components:USB_B")
 		(at 243.84 58.42 90)
 		(mirror x)
 		(unit 1)
@@ -9818,7 +9956,7 @@
 			)
 		)
 		(property "Footprint" "EV2400-Footprints:USB_B_OST_USB-B1HSxx_Horizontal"
-			(at 245.11 62.23 0)
+			(at 245.11 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9827,7 +9965,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 245.11 62.23 0)
+			(at 245.11 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9835,7 +9973,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "USB Type B connector"
 			(at 243.84 58.42 0)
 			(effects
 				(font
@@ -9872,7 +10010,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 256.54 65.278 0)
 		(mirror x)
 		(unit 1)
@@ -9915,7 +10053,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 256.54 65.278 0)
 			(effects
 				(font
@@ -9940,7 +10078,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 266.7 64.008 0)
 		(mirror x)
 		(unit 1)
@@ -9985,7 +10123,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 266.7 64.008 0)
 			(effects
 				(font
@@ -10010,7 +10148,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 170.18 79.502 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10053,7 +10191,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 170.18 79.502 0)
 			(effects
 				(font
@@ -10075,7 +10213,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 256.54 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10118,7 +10256,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 256.54 78.74 0)
 			(effects
 				(font
@@ -10140,7 +10278,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 219.71 105.41 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10184,7 +10322,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 219.71 105.41 0)
 			(effects
 				(font
@@ -10206,7 +10344,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 256.54 113.03 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10250,7 +10388,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 256.54 113.03 0)
 			(effects
 				(font
@@ -10272,7 +10410,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TPS2550DBV-EV2400-Components")
+		(lib_id "EV2400-Components:TPS2550DBV")
 		(at 285.75 60.96 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10316,13 +10454,12 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Texas Instruments TPS2550DBVT, USB Power Switch High Side, 85m, 2.5 V min., 6-Pin SOT-23"
-			(at 276.86 77.47 0)
+		(property "Description" "Texas Instruments TPS2550DBV, USB Power Switch High Side, 85m, 2.5 V min., 6-Pin SOT-23"
+			(at 285.75 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 				(hide yes)
 			)
 		)
@@ -10338,6 +10475,16 @@
 		)
 		(property "Manufacturer_Part_Number" "TPS2550DBV"
 			(at 276.86 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "Texas Instruments TPS2550DBVT, USB Power Switch High Side, 85m, 2.5 V min., 6-Pin SOT-23"
+			(at 276.86 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10374,7 +10521,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 274.32 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10417,7 +10564,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 274.32 78.74 0)
 			(effects
 				(font
@@ -10439,7 +10586,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 299.72 71.12 0)
 		(mirror x)
 		(unit 1)
@@ -10482,7 +10629,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 299.72 71.12 0)
 			(effects
 				(font
@@ -10507,7 +10654,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 299.72 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10550,7 +10697,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 299.72 78.74 0)
 			(effects
 				(font
@@ -10572,7 +10719,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:Conn_02x12_Odd_Even-EV2400-Components")
+		(lib_id "EV2400-Components:Conn_02x12_Odd_Even")
 		(at 76.2 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10598,7 +10745,7 @@
 			)
 		)
 		(property "Footprint" "EV2400-Footprints:PinHeader_2x12_P2.54mm_Horizontal"
-			(at 76.2 167.64 0)
+			(at 74.93 165.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10607,7 +10754,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 76.2 167.64 0)
+			(at 74.93 165.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10615,7 +10762,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 76.2 167.64 0)
 			(effects
 				(font
@@ -10706,7 +10853,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 66.04 183.642 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10750,7 +10897,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 66.04 183.642 0)
 			(effects
 				(font
@@ -10772,7 +10919,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 172.72 208.788 0)
 		(mirror x)
 		(unit 1)
@@ -10817,7 +10964,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 172.72 208.788 0)
 			(effects
 				(font
@@ -10842,7 +10989,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 172.72 214.122 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10886,7 +11033,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 172.72 214.122 0)
 			(effects
 				(font
@@ -10908,7 +11055,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 160.02 198.628 0)
 		(mirror x)
 		(unit 1)
@@ -10953,7 +11100,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 160.02 198.628 0)
 			(effects
 				(font
@@ -10978,7 +11125,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 152.4 209.55 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11022,7 +11169,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 152.4 209.55 0)
 			(effects
 				(font
@@ -11044,7 +11191,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(lib_id "EV2400-Components:+3V3")
 		(at 152.4 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11087,7 +11234,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol +3.3V"
 			(at 152.4 167.64 0)
 			(effects
 				(font
@@ -11109,7 +11256,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 281.94 181.61 0)
 		(mirror x)
 		(unit 1)
@@ -11154,7 +11301,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 281.94 181.61 0)
 			(effects
 				(font
@@ -11179,7 +11326,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(lib_id "EV2400-Components:+3V3")
 		(at 287.02 168.91 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11222,7 +11369,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol +3.3V"
 			(at 287.02 168.91 0)
 			(effects
 				(font
@@ -11244,7 +11391,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 287.02 190.5 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11288,7 +11435,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 287.02 190.5 0)
 			(effects
 				(font
@@ -11310,7 +11457,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:LED_ALT-EV2400-Components")
+		(lib_id "EV2400-Components:LED_ALT")
 		(at 364.49 137.16 0)
 		(mirror x)
 		(unit 1)
@@ -11353,7 +11500,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Light emitting diode, filled shape"
 			(at 364.49 137.16 0)
 			(effects
 				(font
@@ -11386,7 +11533,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:LED_ALT-EV2400-Components")
+		(lib_id "EV2400-Components:LED_ALT")
 		(at 351.79 144.78 0)
 		(mirror x)
 		(unit 1)
@@ -11429,7 +11576,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Light emitting diode, filled shape"
 			(at 351.79 144.78 0)
 			(effects
 				(font
@@ -11462,7 +11609,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:LED_ALT-EV2400-Components")
+		(lib_id "EV2400-Components:LED_ALT")
 		(at 339.09 152.4 0)
 		(mirror x)
 		(unit 1)
@@ -11505,7 +11652,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Light emitting diode, filled shape"
 			(at 339.09 152.4 0)
 			(effects
 				(font
@@ -11538,7 +11685,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 374.142 137.16 270)
 		(mirror x)
 		(unit 1)
@@ -11581,7 +11728,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 374.142 137.16 0)
 			(effects
 				(font
@@ -11606,7 +11753,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 374.142 144.78 270)
 		(mirror x)
 		(unit 1)
@@ -11649,7 +11796,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 374.142 144.78 0)
 			(effects
 				(font
@@ -11674,7 +11821,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:R_Small")
+		(lib_id "EV2400-Components:R_Small")
 		(at 374.142 152.4 270)
 		(mirror x)
 		(unit 1)
@@ -11717,7 +11864,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Resistor, small symbol"
 			(at 374.142 152.4 0)
 			(effects
 				(font
@@ -11742,7 +11889,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(lib_id "EV2400-Components:+3V3")
 		(at 381 132.08 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11785,7 +11932,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol +3.3V"
 			(at 381 132.08 0)
 			(effects
 				(font
@@ -11807,7 +11954,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:Crystal-EV2400-Components")
+		(lib_id "EV2400-Components:Crystal")
 		(at 87.63 107.95 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11849,7 +11996,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Two pin crystal"
 			(at 87.63 107.95 0)
 			(effects
 				(font
@@ -11874,7 +12021,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 80.01 114.3 270)
 		(mirror x)
 		(unit 1)
@@ -11919,7 +12066,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 80.01 114.3 0)
 			(effects
 				(font
@@ -11944,7 +12091,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 80.01 101.6 270)
 		(mirror x)
 		(unit 1)
@@ -11989,7 +12136,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 80.01 101.6 0)
 			(effects
 				(font
@@ -12014,7 +12161,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 68.58 107.95 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12057,7 +12204,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 68.58 107.95 0)
 			(effects
 				(font
@@ -12079,7 +12226,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+V_USB-EV2400-Components")
+		(lib_id "EV2400-Components:+V_USB")
 		(at 231.14 105.41 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12122,7 +12269,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol"
 			(at 231.14 105.41 0)
 			(effects
 				(font
@@ -12144,7 +12291,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:Barrel_Jack_Switch-EV2400-Components")
+		(lib_id "EV2400-Components:Barrel_Jack_Switch")
 		(at 349.25 219.71 0)
 		(mirror y)
 		(unit 1)
@@ -12189,7 +12336,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "DC Barrel Jack with an internal switch"
 			(at 349.25 219.71 0)
 			(effects
 				(font
@@ -12217,7 +12364,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+V_PLUG-EV2400-Components")
+		(lib_id "EV2400-Components:+V_PLUG")
 		(at 330.2 213.36 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12261,7 +12408,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol"
 			(at 330.2 213.36 0)
 			(effects
 				(font
@@ -12283,7 +12430,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:CP_Small-EV2400-Components")
+		(lib_id "EV2400-Components:CP_Small")
 		(at 330.2 223.52 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12327,7 +12474,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Polarised capacitor"
 			(at 330.2 223.52 0)
 			(effects
 				(font
@@ -12352,7 +12499,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 330.2 234.95 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12396,7 +12543,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 330.2 234.95 0)
 			(effects
 				(font
@@ -12418,7 +12565,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+V_USB-EV2400-Components")
+		(lib_id "EV2400-Components:+V_USB")
 		(at 299.72 53.34 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12462,7 +12609,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol"
 			(at 299.72 53.34 0)
 			(effects
 				(font
@@ -12484,7 +12631,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:Conn_01x04-EV2400-Components")
+		(lib_id "EV2400-Components:Conn_01x04")
 		(at 73.66 229.87 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12528,7 +12675,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 73.66 229.87 0)
 			(effects
 				(font
@@ -12559,7 +12706,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 82.55 238.76 0)
 		(mirror y)
 		(unit 1)
@@ -12604,7 +12751,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 82.55 238.76 0)
 			(effects
 				(font
@@ -12626,7 +12773,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+V_USB-EV2400-Components")
+		(lib_id "EV2400-Components:+V_PLUG")
 		(at 328.93 189.738 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12670,7 +12817,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol"
 			(at 328.93 189.738 0)
 			(effects
 				(font
@@ -12692,7 +12839,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+V_PLUG-EV2400-Components")
+		(lib_id "EV2400-Components:+V_PLUG")
 		(at 336.55 189.738 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12735,7 +12882,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol"
 			(at 336.55 189.738 0)
 			(effects
 				(font
@@ -12757,7 +12904,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:+3V3-EV2400-Components")
+		(lib_id "EV2400-Components:+3V3")
 		(at 344.17 189.738 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12800,7 +12947,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "power-flag symbol +3.3V"
 			(at 344.17 189.738 0)
 			(effects
 				(font
@@ -12822,7 +12969,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:GND-EV2400-Components")
+		(lib_id "EV2400-Components:GND")
 		(at 351.79 190.5 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12865,7 +13012,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power flag, digital ground"
 			(at 351.79 190.5 0)
 			(effects
 				(font
@@ -12887,7 +13034,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint")
 		(at 328.93 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12932,7 +13079,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point"
 			(at 328.93 185.42 0)
 			(effects
 				(font
@@ -12962,7 +13109,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint")
 		(at 336.55 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13007,7 +13154,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point"
 			(at 336.55 185.42 0)
 			(effects
 				(font
@@ -13037,7 +13184,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint")
 		(at 344.17 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13082,7 +13229,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point"
 			(at 344.17 185.42 0)
 			(effects
 				(font
@@ -13112,7 +13259,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint")
 		(at 351.79 185.42 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13157,7 +13304,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point"
 			(at 351.79 185.42 0)
 			(effects
 				(font
@@ -13187,7 +13334,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint_Alt-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint_Alt")
 		(at 236.22 238.76 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13231,7 +13378,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point (alternative shape)"
 			(at 236.22 238.76 0)
 			(effects
 				(font
@@ -13253,7 +13400,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint_Alt-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint_Alt")
 		(at 233.68 238.76 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13297,7 +13444,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point (alternative shape)"
 			(at 233.68 238.76 0)
 			(effects
 				(font
@@ -13319,7 +13466,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint_Alt-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint_Alt")
 		(at 228.6 238.76 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13363,7 +13510,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point (alternative shape)"
 			(at 228.6 238.76 0)
 			(effects
 				(font
@@ -13385,7 +13532,7 @@
 		)
 	)
 	(symbol
-		(lib_id "EV2400-EVM-Interface-Board-rescue:TestPoint_Alt-EV2400-Components")
+		(lib_id "EV2400-Components:TestPoint_Alt")
 		(at 218.44 238.76 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13429,7 +13576,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "test point (alternative shape)"
 			(at 218.44 238.76 0)
 			(effects
 				(font
@@ -13451,7 +13598,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:C_Small")
+		(lib_id "EV2400-Components:C_Small")
 		(at 185.42 82.55 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13495,7 +13642,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Unpolarized capacitor"
 			(at 185.42 82.55 0)
 			(effects
 				(font
@@ -13520,7 +13667,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Dreamstalker-Components:SW_Push")
+		(lib_id "EV2400-Components:SW_Push")
 		(at 185.42 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13562,7 +13709,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Push button switch, generic, two pins"
 			(at 185.42 76.2 0)
 			(effects
 				(font

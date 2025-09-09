@@ -1,4 +1,4 @@
 (sym_lib_table
   (version 7)
-  (lib (name "EV2400-EVM-Interface-Board-rescue")(type "KiCad")(uri "${KIPRJMOD}/EV2400-EVM-Interface-Board-rescue.kicad_sym")(options "")(descr ""))
+  (lib (name "EV2400-Components")(type "KiCad")(uri "/srv/projects2/kicad/EV2400/EV2400-Components.kicad_sym")(options "")(descr ""))
 )
