@@ -4,10 +4,9 @@ ORPAL AA-PI
 
 Antenna analyzer project for portable Linux-based devices
 
-Version 4.1
+Version 4.2
 
-Based on the Yuri Kuchura's EU1KY_AA_V3 
-https://bitbucket.org/kuchura/eu1ky_aa_v3/wiki/Home
+Based on the Yuri Kuchura's EU1KY_AA_V3 https://github.com/EU1KY/eu1ky_aa_v3
 
 
 Build process explained
