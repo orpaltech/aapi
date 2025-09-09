@@ -1,1 +1,2 @@
-build-antenna-analyzer-*/
+build/
+*.txt.user

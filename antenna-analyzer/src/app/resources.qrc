@@ -1,0 +1,18 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource prefix="/">
+		<file>qtquickcontrols2.conf</file>
+	</qresource>
+
+<!--	<qresource prefix="/">
+		<file>styles/AquishStyle.qml</file>
+	</qresource>-->
+
+	<qresource prefix="/images">
+		<file alias="battery-empty">images/battery-empty.svg</file>
+		<file alias="battery-full">images/battery-full.svg</file>
+		<file alias="battery-half-power">images/battery-half-power.svg</file>
+		<file alias="battery-one-quarter">images/battery-one-quarter.svg</file>
+		<file alias="battery-three-quarters">images/battery-three-quarters.svg</file>
+	</qresource>
+</RCC>
