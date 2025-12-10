@@ -23,6 +23,7 @@ namespace fs = std::filesystem;
 #include <fstream>
 #include "aapi_calibrator.h"
 #include "utils/aapi_math_utils.h"
+#include <QDebug>
 
 ///////////////////////////////////////////////////////////////////////////////
 // OSL definitions
@@ -38,21 +39,13 @@ namespace aapi
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// AAPICalibrator implementation
+// AAPICalibrator
 ///////////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(AAPiCalibrator)
 
 AAPiString AAPiCalibrator::m_dir = AAPiCalibrator::get_calibration_dir(true);
 
-AAPiCalibrator *AAPiCalibrator::create(AAPiConfig *config, bool addRef)
-{
-    AAPiCalibrator *obj = create(addRef);
-    if( obj ) {
-        obj->m_config = config;
-
-        AAPI_ADDREF(config);
-    }
-    return obj;
-}
 
 AAPiCalibrator::AAPiCalibrator()
     : m_config(nullptr)

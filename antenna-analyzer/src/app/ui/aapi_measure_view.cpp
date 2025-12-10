@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "aapi_measurement_view.h"
+#include "aapi_measure_view.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPiMeasurementView

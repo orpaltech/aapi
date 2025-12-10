@@ -21,7 +21,7 @@
 #define AAPI_MEASURE_TASK_H
 
 #include <complex>
-#include "analyzer/aapi_configuration.h"
+#include "analyzer/aapi_config.h"
 #include "analyzer/aapi_calibrator.h"
 
 namespace aapi

@@ -20,7 +20,7 @@
 #ifndef AAPI_GENERATOR_H
 #define AAPI_GENERATOR_H
 
-#include "analyzer/aapi_configuration.h"
+#include "aapi_config.h"
 
 namespace aapi
 {
@@ -43,9 +43,8 @@ enum AAPiGeneratorError {
 
 class AAPiGenerator : public AAPiObject
 {
-    DECLARE_AAPI_OBJECT(AAPiGenerator)
+    DECLARE_AAPI_OBJECT_WITH_CONFIG(AAPiGenerator)
 
-    static AAPiGenerator *create(AAPiConfig *config, bool addRef = true);
 protected:
     AAPiGenerator();
     ~AAPiGenerator();
@@ -75,7 +74,6 @@ private:
     int read_uint(const char *prop_name, uint32_t& val) const;
 
 private:
-    AAPiConfig      *m_config;
     uint32_t        m_lastFreq;
     volatile void   *m_owner;
 

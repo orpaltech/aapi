@@ -146,7 +146,7 @@ int QAAPiViewBackend::loaded()
 {
     // Allow derived class load resources 
     int ret = load_view();
-    if (AAPI_SUCCESS( ret ))
+    if (AAPI_SUCCEEDED( ret ))
     {
         clearErrorMessage();
     }
@@ -161,7 +161,7 @@ int QAAPiViewBackend::activated()
 
     // Allow derived class activate view
     int ret = activate_view();
-    if (AAPI_SUCCESS( ret ))
+    if (AAPI_SUCCEEDED( ret ))
     {
         clearErrorMessage();
     }

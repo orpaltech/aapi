@@ -17,15 +17,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AAPI_CONFIGURATION_H
-#define AAPI_CONFIGURATION_H
+#ifndef AAPI_CONFIG_H
+#define AAPI_CONFIG_H
 
-#include <QVariant>
 #include <QMutex>
 #include <QMutexLocker>
 #include "aapi_error.h"
 #include "aapi_object.h"
-#include "utils/simple_array.h"
 #include "utils/simple_variant.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -441,4 +439,4 @@ AAPiString get_sysfs_property_path(const char *property_name);
 
 } // namespace aapi
 
-#endif // AAPI_CONFIGURATION_H
+#endif // AAPI_CONFIG_H

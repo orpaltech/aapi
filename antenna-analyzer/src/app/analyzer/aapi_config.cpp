@@ -22,10 +22,11 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include "analyzer/aapi_configuration.h"
+#include "analyzer/aapi_config.h"
 #include "serial/aapi_uart_device.h"
 #include "audio/audio_reader.h"
 namespace fs = std::filesystem;
+#include <QDebug>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Config definitions
@@ -526,6 +527,8 @@ AAPiRadioBand::AAPiRadioBand(uint32_t lo, uint32_t hi, const char *name)
 ///////////////////////////////////////////////////////////////////////////////
 // class AAPiConfig
 ///////////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_AAPI_OBJECT(AAPiConfig)
 
 AAPiConfig::AAPiConfig()
 {

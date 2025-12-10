@@ -30,16 +30,7 @@ namespace aapi
 // AAPIGenerator implementation
 ///////////////////////////////////////////////////////////////////////////////
 
-AAPiGenerator *AAPiGenerator::create(AAPiConfig *config, bool addRef)
-{
-    AAPiGenerator *obj = create(addRef);
-    if( obj ) {
-        obj->m_config = config;
-
-        AAPI_ADDREF(config);
-    }
-    return obj;
-}
+IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(AAPiGenerator)
 
 AAPiGenerator::AAPiGenerator()
     : m_lastFreq(0)
@@ -92,7 +83,7 @@ int AAPiGenerator::suspend()
 int AAPiGenerator::resume()
 {
     int ret = write_uint( AAPI_SYSFS_ENABLE, 1 );
-    if (AAPI_SUCCESS( ret ))
+    if (AAPI_SUCCEEDED( ret ))
     {
         usleep(20 * 1000U);    // wait 20ms
     }

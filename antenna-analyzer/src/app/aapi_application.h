@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QQuickWindow>
-#include "ui/aapi_measurement_view.h"
+#include "ui/aapi_measure_view.h"
 #include "ui/aapi_configuration_view.h"
 #include "ui/aapi_osl_calibration_view.h"
 #include "ui/aapi_hw_calibration_view.h"
@@ -35,6 +35,10 @@
 #include "ui/aapi_messages.h"
 #include "analyzer/antscope/antscope_device.h"
 #include "analyzer/aapi_signal_process.h"
+#include "analyzer/aapi_device.h"
+
+template <class T>
+using QPtr = std::unique_ptr<T>;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Define reboot exit code
@@ -42,8 +46,37 @@
 
 #define EXIT_REBOOT -123456789
 
+class QSocketNotifier;
+
 namespace aapi
 {
+
+class QAAPiShutdownManager : public QObject
+{
+    Q_OBJECT
+
+public:
+    QAAPiShutdownManager(QObject *parent = nullptr);
+    ~QAAPiShutdownManager();
+
+    int openDevice();
+    void setShutdownRequested(bool requested, const QString &reason = QString());
+    void performSystemShutdown();
+
+    AAPiDevice *getDevice() const;
+    bool isShutdownRequested() const;
+    QString shutdownReason() const;
+
+private:
+    void syncFilesystems();
+    bool checkRootPrivileges();
+
+private:
+    bool m_shutdownRequested;
+    QString m_shutdownReason;
+    AAPiDevice *m_device;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 // QAAPiApplication
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,7 +105,9 @@ class QAAPiApplication : public QObject
     Q_PROPERTY(QString                  license_text            READ    getLicenseText CONSTANT)
 
 public:
-    explicit QAAPiApplication(QAAPiBaseStyle *style, QAAPiMessages *mgs, QObject *parent = Q_NULLPTR);
+    explicit QAAPiApplication(QAAPiBaseStyle *style, QAAPiMessages *messages,
+                              QAAPiShutdownManager *shutdownManager,
+                              QObject *parent = Q_NULLPTR);
     ~QAAPiApplication();
 
     int load();
@@ -80,58 +115,67 @@ public:
 
 
     // --------- Property accessors -------
-    QAAPiConfigurationView      *getConfigurationViewBackend() const { return m_configurationView; }
-    QAAPiSignalProcessView      *getSignalProcessViewBackend() const { return m_signalProcessView; }
-    QAAPiMeasurementView        *getMeasurementViewBackend() const { return m_measurementView; }
-    QAAPiPanoramicScanView      *getPanoramicScanViewBackend() const { return m_panoramicScanView; }
-    QAAPiOSLCalibrationView     *getOslCalibrationViewBackend() const { return m_oslCalibrationView; }
-    QAAPiHWCalibrationView      *getHwCalibrationViewBackend() const { return m_hwCalibrationView; }
-    QAAPiAboutAppView           *getAboutAppViewBackend() const { return m_aboutView; }
-    QAAPiStatusBackend          *getStatusBackend() const { return m_appStatus; }
-    QAAPiBaseStyle              *getStyle() const { return m_style; }
-    QAAPiMessages               *getMessages() const { return m_msgs; }
-    QString                     geLastSnapshot() const { return m_lastSnapshot; }
-    bool                        isAudioDeviceOkay() const;
-    bool                        isAudioFormatOkay() const;
-    int                         getWarning() const { return m_warning; }
-    QString                     getLicenseText() const;
-
-    QString                     getGraphicsDeviceInfo() const;
-    void                        setMainWindow(QQuickWindow *mainWnd) { m_mainWindow = mainWnd; }
+    QAAPiConfigurationView  *getConfigurationViewBackend() const { return m_configurationView.get(); }
+    QAAPiSignalProcessView  *getSignalProcessViewBackend() const { return m_signalProcessView.get(); }
+    QAAPiMeasurementView    *getMeasurementViewBackend() const { return m_measurementView.get(); }
+    QAAPiPanoramicScanView  *getPanoramicScanViewBackend() const { return m_panoramicScanView.get(); }
+    QAAPiOSLCalibrationView *getOslCalibrationViewBackend() const { return m_oslCalibrationView.get(); }
+    QAAPiHWCalibrationView  *getHwCalibrationViewBackend() const { return m_hwCalibrationView.get(); }
+    QAAPiAboutAppView       *getAboutAppViewBackend() const { return m_aboutAppView.get(); }
+    QAAPiStatusBackend      *getStatusBackend() const { return m_appStatus.get(); }
+    QAAPiBaseStyle          *getStyle() const { return m_style; }
+    QAAPiMessages           *getMessages() const { return m_messages; }
+    QString                 geLastSnapshot() const { return m_lastSnapshot; }
+    bool                    isAudioDeviceOkay() const;
+    bool                    isAudioFormatOkay() const;
+    int                     getWarning() const { return m_warning; }
+    QString                 getLicenseText() const;
+    QString                 getGraphicsDeviceInfo() const;
+    void                    setMainWindow(QQuickWindow *mainWnd) { m_mainWindow = mainWnd; }
 
     // --------- Static methods ----------
-    static QString              getSnapshotDirectory();
+    static QString  getSnapshotDirectory();
 
 private:
-    AAPiConfig          *m_config;
-    AAPiGenerator       *m_generator;
-    AntScopeDevice      *m_antscope;
-    AAPiSignalProcessor *m_signalProcess;
-    AAPiCalibrator      *m_calibrator;
-    QString             m_lastSnapshot;
+    AAPiPtr<AAPiConfig>             m_config;
+    AAPiPtr<AAPiGenerator>          m_generator;
+    AAPiPtr<AntScopeDevice>         m_antscope;
+    AAPiPtr<AAPiSignalProcessor>    m_signalProcess;
+    AAPiPtr<AAPiCalibrator>         m_calibrator;
+    //AAPiPtr<AAPiDevice>             m_device;
+    QString                         m_lastSnapshot;
+
+    QAAPiBaseStyle                  *m_style;
+    QAAPiMessages                   *m_messages;
+
+    int                             m_warning;
+
+    QQuickWindow                    *m_mainWindow;
+
+    QAAPiShutdownManager            *m_shutdownMgr;
+    QPtr<QSocketNotifier>           m_deviceNotifier;
 
     // ------------- Models --------------
-    QPointer<QAAPiSignalProcessView>    m_signalProcessView;
-    QPointer<QAAPiConfigurationView>    m_configurationView;
-    QPointer<QAAPiMeasurementView>      m_measurementView;
-    QPointer<QAAPiPanoramicScanView>    m_panoramicScanView;
-    QPointer<QAAPiOSLCalibrationView>   m_oslCalibrationView;
-    QPointer<QAAPiHWCalibrationView>    m_hwCalibrationView;
-    QPointer<QAAPiAboutAppView>         m_aboutView;
-    QPointer<QAAPiStatusBackend>        m_appStatus;
+    QPtr<QAAPiConfigurationView>    m_configurationView;
+    QPtr<QAAPiSignalProcessView>    m_signalProcessView;
+    QPtr<QAAPiMeasurementView>      m_measurementView;
+    QPtr<QAAPiPanoramicScanView>    m_panoramicScanView;
+    QPtr<QAAPiOSLCalibrationView>   m_oslCalibrationView;
+    QPtr<QAAPiHWCalibrationView>    m_hwCalibrationView;
+    QPtr<QAAPiAboutAppView>         m_aboutAppView;
+    QPtr<QAAPiStatusBackend>        m_appStatus;
 
+private:
+    void initiateShutdown(const QString &reason);
 
-    QAAPiBaseStyle      *m_style;
-    QAAPiMessages       *m_msgs;
+Q_SIGNALS:
+    void quitApplication();
 
-    int                 m_warning;
-
-    QQuickWindow        *m_mainWindow;
-
-public slots:
-    void save_snapshot(QString file_name, QImage snapshot);
+public Q_SLOTS:
+    void process_snapshot(QString file_name, QImage snapshot);
     void reboot_application();
     void quit_application();
+    void device_status_change();
 };
 
 } // namespace aapi

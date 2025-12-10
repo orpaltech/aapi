@@ -35,6 +35,7 @@ class AlsaDevice;
 class AAPiAlsaReader : public AAPiAudioReader
 {
     DECLARE_AAPI_OBJECT(AAPiAlsaReader)
+
 protected:
     AAPiAlsaReader();
     ~AAPiAlsaReader();

@@ -22,7 +22,7 @@
 
 #include <complex.h>
 #include "audio/audio_reader.h"
-#include "analyzer/aapi_configuration.h"
+#include "analyzer/aapi_config.h"
 #include "utils/simple_array.h"
 #include "utils/aapi_complex.h"
 
@@ -73,9 +73,8 @@ public:
 class AAPiSignalProcessor : public AAPiObject,
                             public AAPiAudioReaderEvents
 {
-    DECLARE_AAPI_OBJECT(AAPiSignalProcessor)
+    DECLARE_AAPI_OBJECT_WITH_CONFIG(AAPiSignalProcessor)
 
-    static AAPiSignalProcessor *create(AAPiConfig *config, bool addRef = true);
 protected:
     AAPiSignalProcessor();
     ~AAPiSignalProcessor();
@@ -104,7 +103,6 @@ private:
     void releaseBuffers();
 
 private:
-    AAPiConfig              *m_config;
     AAPiAudioReader         *m_reader;
     AAPiArray<AAPiSignalProcessEvents*>  m_callbacks;
     double                  *m_fft_mags[NUM_DSP_CHANNELS];

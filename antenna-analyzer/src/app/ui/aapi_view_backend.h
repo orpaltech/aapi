@@ -30,7 +30,7 @@
 //<====
 #include <QtQmlIntegration/qqmlintegration.h>
 using QIntList = QList<int>;
-#include "analyzer/aapi_configuration.h"
+#include "analyzer/aapi_config.h"
 #include "analyzer/aapi_generator.h"
 #include "analyzer/aapi_signal_process.h"
 #include "analyzer/aapi_measure_task.h"

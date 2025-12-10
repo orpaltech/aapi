@@ -178,7 +178,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C1"
-			(at 2.55 0 0)
+			(at 2.58 -0.04 0)
 			(layer "F.SilkS")
 			(uuid "a68aa544-a22c-47f2-abec-4b2bb487e581")
 			(effects
@@ -378,7 +378,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C2"
-			(at 2.6 0 0)
+			(at -2.67 -0.03 0)
 			(layer "F.SilkS")
 			(uuid "de23e45a-6680-4fff-aa83-ea7e6f4812f6")
 			(effects
@@ -798,7 +798,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C6"
-			(at 1.23 -2.02 0)
+			(at 0.3 -2.06 0)
 			(layer "F.SilkS")
 			(uuid "e2bf2352-b8e8-4f37-8406-9e8ac8d6a68b")
 			(effects
@@ -5800,7 +5800,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R6"
-			(at 2.81 0.03 0)
+			(at 2.96 0.02 0)
 			(layer "F.SilkS")
 			(uuid "2885511d-ae0c-4cbd-ae7f-2af75c4fc1db")
 			(effects
@@ -8600,7 +8600,7 @@
 		(descr "UN(MSOP)")
 		(tags "Integrated Circuit")
 		(property "Reference" "U1"
-			(at 3.97 1.46 0)
+			(at 2.75 -2.98 0)
 			(layer "F.SilkS")
 			(uuid "95c7d0ab-beba-4d5d-8db3-8238a0ae9c64")
 			(effects
@@ -9568,7 +9568,7 @@
 		(descr "SMD Crystal SERIES SMD2520/2 http://www.icbase.com/File/PDF/HKC/HKC00061008.pdf, 5.0x3.2mm^2 package")
 		(tags "SMD SMT crystal")
 		(property "Reference" "Y1"
-			(at 1.13 3.02 180)
+			(at -0.37 -2.86 180)
 			(layer "F.SilkS")
 			(uuid "163905f3-298c-4a67-9512-d794a9f9bfc0")
 			(effects
@@ -15097,7 +15097,7 @@
 		(descr "THT pad as test Point, diameter 1.0mm, hole diameter 0.5mm")
 		(tags "test point THT pad")
 		(property "Reference" "TP4"
-			(at -0.21 -1.48 0)
+			(at -0.17 -1.52 0)
 			(layer "F.SilkS")
 			(uuid "e6eff1aa-0e00-46eb-a29a-116edf4e679c")
 			(effects

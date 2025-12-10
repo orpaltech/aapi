@@ -6,10 +6,11 @@ qt_add_executable(aapi_app
     aapi_object.h
     analyzer/antscope/antscope_device.cpp analyzer/antscope/antscope_device.h
     analyzer/aapi_calibrator.cpp analyzer/aapi_calibrator.h
-    analyzer/aapi_configuration.cpp analyzer/aapi_configuration.h
+    analyzer/aapi_config.cpp analyzer/aapi_config.h
     analyzer/aapi_generator.cpp analyzer/aapi_generator.h
     analyzer/aapi_measure_task.cpp analyzer/aapi_measure_task.h
     analyzer/aapi_signal_process.cpp analyzer/aapi_signal_process.h
+    analyzer/aapi_device.cpp analyzer/aapi_device.h
     audio/audio_reader.cpp audio/audio_reader.h
     audio/impl/alsa_reader.cpp audio/impl/alsa_reader.h
     serial/aapi_serial_modem.cpp serial/aapi_serial_modem.h
@@ -53,7 +54,7 @@ qt_add_qml_module(aapi_app
         ui/aapi_about_app_view.cpp ui/aapi_about_app_view.h
         ui/aapi_configuration_view.cpp ui/aapi_configuration_view.h
         ui/aapi_hw_calibration_view.cpp ui/aapi_hw_calibration_view.h
-        ui/aapi_measurement_view.cpp ui/aapi_measurement_view.h
+        ui/aapi_measure_view.cpp ui/aapi_measure_view.h
         ui/aapi_osl_calibration_view.cpp ui/aapi_osl_calibration_view.h
         ui/aapi_panoramic_scan_view.cpp ui/aapi_panoramic_scan_view.h
         ui/aapi_signal_process_view.cpp ui/aapi_signal_process_view.h
@@ -64,6 +65,7 @@ qt_add_qml_module(aapi_app
         ui/aapi_aquish_style.cpp ui/aapi_aquish_style.h
         ui/aapi_style_chart.h ui/aapi_style_chart.cpp
         ui/aapi_messages.h ui/aapi_messages.cpp
+        SOURCES utils/simple_map.h
 )
 
 set_source_files_properties(resources/battery-empty.svg PROPERTIES QT_RESOURCE_ALIAS empty)
@@ -135,6 +137,7 @@ target_compile_definitions(aapi_app PRIVATE
     AAPI_QML_UNCREATABLE_REASON="Create not allowed"
     AAPI_APP_NAME="orpal-aapi"
     AAPI_VERSION="4.2")
+
 
 target_link_libraries(aapi_app PRIVATE
     Qt6::Core

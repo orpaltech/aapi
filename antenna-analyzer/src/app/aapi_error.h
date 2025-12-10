@@ -39,6 +39,8 @@ enum AAPiError {
     AAPI_E_RESOURCE_LOCKED      = -9,
     AAPI_E_CREATE_DIR_FAILED    = -10,
     AAPI_E_OPEN_DIR_FAILED      = -11,
+    AAPI_E_REG_SIGNAL_ACTION    = -12,
+    AAPI_E_CREATE_SOCKET        = -13,
 };
 
 }; //namespace aapi
@@ -54,8 +56,9 @@ enum AAPiError {
 #define AAPI_DSP_ERROR_START            -600
 #define AAPI_GENERATOR_ERROR_START      -700
 #define AAPI_CALIBRATOR_ERROR_START     -800
+#define AAPI_DEVICE_ERROR_START         -900
 
-#define AAPI_SUCCESS(rc)        ((rc) >= AAPI_SUCCESS)
+#define AAPI_SUCCEEDED(rc)        ((rc) >= AAPI_SUCCESS)
 #define AAPI_FAILED(rc)         ((rc) < AAPI_SUCCESS)
 
 #endif // AAPI_ERROR_CODE_H

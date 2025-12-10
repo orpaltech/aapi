@@ -21,7 +21,7 @@
 #define AAPI_CALIBRATOR_H
 
 #include "utils/aapi_complex.h"
-#include "analyzer/aapi_configuration.h"
+#include "analyzer/aapi_config.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Calibrator definitions
@@ -83,9 +83,8 @@ typedef enum {
 
 class AAPiCalibrator : public AAPiObject
 {
-    DECLARE_AAPI_OBJECT(AAPiCalibrator)
+    DECLARE_AAPI_OBJECT_WITH_CONFIG(AAPiCalibrator)
 
-    static AAPiCalibrator *create(AAPiConfig *config, bool addRef = true);
 protected:
     AAPiCalibrator();
     ~AAPiCalibrator();
@@ -131,7 +130,6 @@ public:
     static AAPiComplex z_from_gamma(const AAPiComplex& g, double r0);
 
 private:
-    AAPiConfig          *m_config;
     static AAPiString   m_dir;
     int                 m_osl_file;
     uint8_t             m_osl_status;

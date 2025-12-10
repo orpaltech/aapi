@@ -25,19 +25,10 @@ namespace aapi
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// AAPiSignalProcessor implementation
+// AAPiSignalProcessor
 ///////////////////////////////////////////////////////////////////////////////
 
-AAPiSignalProcessor *AAPiSignalProcessor::create(AAPiConfig *config, bool addRef)
-{
-    AAPiSignalProcessor *processor = create(addRef);
-    if( processor ) {
-        processor->m_config = config;
-
-        AAPI_ADDREF(config);
-    }
-    return processor;
-}
+IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(AAPiSignalProcessor)
 
 AAPiSignalProcessor::AAPiSignalProcessor()
     : m_reader(AAPiAudioReader::create())

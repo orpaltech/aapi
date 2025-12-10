@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "AA-PI Display Board for BananaPi M2-Magic - Battery Pack")
-		(date "2025-05-20")
-		(rev "4.2")
+		(date "2025-10-27")
+		(rev "4.3")
 		(company "ORPALTECH")
 		(comment 4 "Author: Sergey Suloev")
 	)

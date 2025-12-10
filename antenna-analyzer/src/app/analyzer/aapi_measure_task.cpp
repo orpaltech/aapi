@@ -24,8 +24,10 @@ namespace aapi
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// AAPIMeasure
+// AAPiMeasureTask
 ///////////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_AAPI_OBJECT(AAPiMeasureTask)
 
 AAPiMeasureTask *AAPiMeasureTask::create(AAPiConfig *config, AAPiCalibrator *calibrator,
                                         AAPiMeasureEvents *callback, uint32_t measure_freq,

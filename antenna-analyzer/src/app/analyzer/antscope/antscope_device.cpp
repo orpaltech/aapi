@@ -54,6 +54,8 @@ static int make_upper(char* text);
 // class AntScopeDevice
 ///////////////////////////////////////////////////////////////////////////////
 
+IMPLEMENT_AAPI_OBJECT(AntScopeDevice)
+
 AntScopeDevice *AntScopeDevice::create(AAPiConfig *config, AAPiGenerator* gen,
                                        bool addRef)
 {

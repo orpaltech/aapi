@@ -1388,7 +1388,7 @@
   },
   "schematic": {
     "annotate_start_num": 0,
-    "bom_export_filename": "",
+    "bom_export_filename": "AA-PI-V4-Display-Board-BananapiM2M.bom",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",

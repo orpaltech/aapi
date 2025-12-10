@@ -17,7 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QFile>
 #include <QGuiApplication>
+#include <QProcess>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -32,6 +34,40 @@
 #define AAPI_QML_VER_MINOR  0
 #define AAPI_QML_VER    AAPI_QML_VER_MAJOR,AAPI_QML_VER_MINOR
 
+// Define your log file path
+static QString logFilePath = QString("/var/log/aapi_%1.log").arg(QDateTime::currentDateTime().toString("ddMMyyyy-hhmmss"));
+
+void logFileMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QFile file(logFilePath);
+    if (file.open(QIODevice::Append | QIODevice::Text))
+    {
+        QTextStream out(&file);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
+
+        switch (type)
+        {
+        case QtDebugMsg:
+            out << "[DEBUG] ";
+            break;
+        case QtInfoMsg:
+            out << "[INFO] ";
+            break;
+        case QtWarningMsg:
+            out << "[WARNING] ";
+            break;
+        case QtCriticalMsg:
+            out << "[CRITICAL] ";
+            break;
+        case QtFatalMsg:
+            out << "[FATAL] ";
+            break;
+        }
+
+        out << msg << " (" << context.file << ":" << context.line << ", " << context.function << ")\n";
+        file.close();
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -40,6 +76,14 @@ int main(int argc, char *argv[])
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     qputenv("QT_MESSAGE_PATTERN", QByteArray("[%{time process} %{type}] %{appname} %{category} %{function} - %{message}"));
 
+    qInstallMessageHandler(logFileMessageOutput);
+
+    QAAPiShutdownManager shutdownManager;
+    ret = shutdownManager.openDevice();
+    if (AAPI_FAILED( ret ))
+    {
+        return ret;
+    }
 
     do
     {
@@ -49,9 +93,9 @@ int main(int argc, char *argv[])
         app.setApplicationVersion(AAPI_VERSION);
         app.setOrganizationName("ORPAL Technology, Inc.");
 
-        QAAPiBaseStyle *style = new QAAPiAquishStyle( &app );
-        QAAPiMessages *mgs = new QAAPiMessages( &app );
-        QAAPiApplication *aapi = new QAAPiApplication( style, mgs, &app );
+        QAAPiBaseStyle  *style = new QAAPiAquishStyle( &app );
+        QAAPiMessages   *mgs = new QAAPiMessages( &app );
+        QAAPiApplication *aapi = new QAAPiApplication( style, mgs, &shutdownManager, &app );
 
         QScreen *screen = QApplication::primaryScreen();
 
@@ -109,6 +153,28 @@ int main(int argc, char *argv[])
         } while(false);
 
     } while (ret == EXIT_REBOOT); // Check if reboot requested
+
+    // At this point:
+    // - app.exec() has returned
+    // - All Qt objects cleaned up
+
+    // Check if shutdown was requested and perform system shutdown
+    if (shutdownManager.isShutdownRequested())
+    {       
+        qInfo() << "Shutdown was requested, proceeding with system poweroff";
+        shutdownManager.performSystemShutdown();
+
+        // Should not reach here if poweroff succeeded
+        qCritical() << "System poweroff failed or not executed";
+    }
+    else
+    {
+        qInfo() << "No shutdown requested, normal exit";
+    }
+
+    qInfo() << "========================================";
+    qInfo() << "Application exiting normally";
+    qInfo() << "========================================";
 
     return ret;
 }

@@ -90,6 +90,8 @@ AAPiUartPrivate::TMutex AAPiUartPrivate::m_mtx;
 // class AAPiUartDevice
 ///////////////////////////////////////////////////////////////////////////////
 
+IMPLEMENT_AAPI_OBJECT(AAPiUartDevice)
+
 AAPiUartDevice::AAPiUartDevice()
 {
     m_priv = nullptr;
@@ -345,6 +347,12 @@ int AAPiUartDevice::read(uint8_t *buffer, uint32_t length)
 
     return rx_len;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// class AAPiUartPrivate
+///////////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_AAPI_OBJECT(AAPiUartPrivate)
 
 void AAPiUartPrivate::thread_worker()
 {

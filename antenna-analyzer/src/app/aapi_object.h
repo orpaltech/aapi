@@ -40,15 +40,37 @@
 
 #define DECLARE_AAPI_OBJECT(clazz)              \
 public:                                         \
-    static clazz* create(bool addRef = true)    \
-    {                           \
-        clazz *p = new clazz(); \
-        if (!p)                 \
-            return nullptr;     \
-        if (addRef)             \
-            p->addRef();        \
-        return p;               \
-    }
+    static clazz* create(bool addRef = true);
+
+
+#define DECLARE_AAPI_OBJECT_WITH_CONFIG(clazz)                      \
+DECLARE_AAPI_OBJECT(clazz)                                          \
+    static clazz* create(AAPiConfig *config, bool addRef = true);   \
+private:                                                            \
+    AAPiConfig *m_config;
+
+#define IMPLEMENT_AAPI_OBJECT(clazz)    \
+clazz *clazz::create(bool addRef)       \
+{                                       \
+    clazz *p = new clazz();             \
+    if (!p)                             \
+        return nullptr;                 \
+    if (addRef)                         \
+        p->addRef();                    \
+    return p;                           \
+}
+
+#define IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(clazz)        \
+IMPLEMENT_AAPI_OBJECT(clazz)                            \
+clazz* clazz::create(AAPiConfig *config, bool addRef)   \
+{                                                       \
+    clazz *obj = create(addRef);                        \
+    if( obj ) {                                         \
+        obj->m_config = config;                         \
+        AAPI_ADDREF(config);                            \
+    }                                                   \
+    return obj;                                         \
+}
 
 namespace aapi
 {
@@ -101,10 +123,10 @@ private:
 template<class T> class AAPiPtr
 {
 public:
-    AAPiPtr(T *ptr = nullptr)
+    AAPiPtr(T *ptr = nullptr, bool addRef = true)
     {
         m_ptr = ptr;
-        if (m_ptr)
+        if (m_ptr && addRef)
             m_ptr->addRef();
     }
 

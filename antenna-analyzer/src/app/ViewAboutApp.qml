@@ -21,8 +21,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import aapi
 import QtQuick.Studio.DesignEffects
+import aapi
 
 SwipePage {
     id: swpAboutApp

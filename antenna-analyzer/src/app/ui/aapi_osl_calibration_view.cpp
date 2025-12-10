@@ -144,7 +144,7 @@ int QAAPiOSLCalibrationView::onViewMeasureFinished(AAPiMeasureTask *measure)
         {
             // Not fully scanned 
         }
-        else if (AAPI_SUCCESS( ret ))
+        else if (AAPI_SUCCEEDED( ret ))
         {
             // Save results into file
             ret = m_calibrator->flush_osl_correction_file();

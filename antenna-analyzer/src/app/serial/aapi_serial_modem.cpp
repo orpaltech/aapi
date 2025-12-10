@@ -42,6 +42,8 @@ namespace aapi
 // AAPISerialModem
 ///////////////////////////////////////////////////////////////////////////////
 
+IMPLEMENT_AAPI_OBJECT(AAPISerialModem)
+
 AAPISerialModem::AAPISerialModem()
 {
     m_uart      = nullptr;

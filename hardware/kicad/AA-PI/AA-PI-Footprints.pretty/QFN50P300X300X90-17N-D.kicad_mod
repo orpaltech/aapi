@@ -5,8 +5,8 @@
 	(layer "F.Cu")
 	(descr "16 pin QFNxx")
 	(tags "Integrated Circuit")
-	(property "Reference" "IC**"
-		(at 0 0 0)
+	(property "Reference" "U**"
+		(at 0 -3 0)
 		(layer "F.SilkS")
 		(uuid "ba693238-445a-4c5d-861f-72ca1e34feb6")
 		(effects
@@ -155,7 +155,7 @@
 		(uuid "10bfe60d-e09a-4be6-bd70-555bd2d3fa25")
 	)
 	(fp_text user "${REFERENCE}"
-		(at 0 0 0)
+		(at 0 3 0)
 		(layer "F.Fab")
 		(uuid "d7869795-36b1-4e85-9317-ae9ee38ef15a")
 		(effects
