@@ -2,7 +2,8 @@ ORPAL AA-PI
 ==============
 
 
-Antenna analyzer project for portable Linux-based devices
+Antenna analyzer project for portable Linux-based devices. 
+The current hardware implementation is based on BananaPi M2-Magic SBC (Allwinner R16).
 
 Version 4.3
 
