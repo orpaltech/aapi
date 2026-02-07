@@ -178,9 +178,6 @@ QAAPiApplication::QAAPiApplication(QAAPiBaseStyle *style, QAAPiMessages *message
     , m_shutdownMgr(shutdownMgr)
     , m_deviceNotifier(nullptr)
 {
-    // Set up QSocketNotifiers to monitor the read ends
-    //m_deviceNotifier = new QSocketNotifier( m_shutdownMgr->getDevice()->get_pipe_end(), QSocketNotifier::Read, this );
-    //QObject::connect( m_deviceNotifier, &QSocketNotifier::activated, this, &QAAPiApplication::device_status_change );
 }
 
 QAAPiApplication::~QAAPiApplication()

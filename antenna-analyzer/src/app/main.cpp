@@ -71,15 +71,13 @@ void logFileMessageOutput(QtMsgType type, const QMessageLogContext &context, con
 
 int main(int argc, char *argv[])
 {
-    int ret = 0;
-
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     qputenv("QT_MESSAGE_PATTERN", QByteArray("[%{time process} %{type}] %{appname} %{category} %{function} - %{message}"));
 
     qInstallMessageHandler(logFileMessageOutput);
 
     QAAPiShutdownManager shutdownManager;
-    ret = shutdownManager.openDevice();
+    int ret = shutdownManager.openDevice();
     if (AAPI_FAILED( ret ))
     {
         return ret;
@@ -143,10 +141,10 @@ int main(int argc, char *argv[])
             }
 
             // Get the first root object, assuming it's main window
-            QObject *rootObj = engine.rootObjects().first();
+            QObject *root = engine.rootObjects().first();
 
             // Cast to QQuickWindow if it's a window type
-            aapi->setMainWindow(qobject_cast<QQuickWindow*>(rootObj));
+            aapi->setMainWindow(qobject_cast<QQuickWindow*>(root));
 
             // Enter application main loop
             ret = app.exec();

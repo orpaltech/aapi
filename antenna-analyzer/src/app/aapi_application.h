@@ -142,7 +142,6 @@ private:
     AAPiPtr<AntScopeDevice>         m_antscope;
     AAPiPtr<AAPiSignalProcessor>    m_signalProcess;
     AAPiPtr<AAPiCalibrator>         m_calibrator;
-    //AAPiPtr<AAPiDevice>             m_device;
     QString                         m_lastSnapshot;
 
     QAAPiBaseStyle                  *m_style;
