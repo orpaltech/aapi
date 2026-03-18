@@ -1,6 +1,6 @@
 # bq34z100-g1 + SN74HC164 Battery Gauge Setup
 
-Hardware: 1S Li-ion (3800mAh), MCP73833 Charger (500/1000mA), 7-LED Display via Shift Register, Raspberry Pi 3 A+ (via 5V Boost).
+Hardware: 1S Li-ion (3800mAh), MCP73833 Charger (500/1000mA), 7-LED Display via Shift Register.
 
 ## 1. Initial Data Flash Configuration
 Before starting, set these key parameters in **bqStudio**:
@@ -22,7 +22,7 @@ Before starting, set these key parameters in **bqStudio**:
 Do not use generic IDs. Follow this log sequence for the TI matching tool:
 1.  Charge to full (Wait for **FC** bit).
 2.  Rest **2 hours** (Wait for **OCVTAKEN=1**).
-3.  Discharge at **C/10** (approx. 380mA - 500mA) until **Terminate Voltage**.
+3.  Discharge at **C/10** (approx. 380mA - 500mA, I used Raspberry Pi 3 A+ with ESP32 HostedNG) until **Terminate Voltage**.
 4.  Rest **5 hours** (Wait for **OCVTAKEN=1**).
 5.  Zip the log and upload to [TI GPC Tool](https://www.ti.com). Program the resulting ID (e.g., `0x3230`) into the gauge.
 
