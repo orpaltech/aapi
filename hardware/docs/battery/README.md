@@ -45,3 +45,6 @@ Do not use generic IDs. Follow this log sequence for the TI matching tool:
 *   **OCVTAKEN won't set?** Check that **Current** is exactly `0mA`. If it flickers, re-calibrate CC Offset.
 *   **Qmax too high?** Usually caused by starting a cycle on a non-rested battery or poor voltage calibration. Manually reset Qmax to 3800 and Update Status to 04 if it drifts.
 *   **LEDs don't light?** Check wiring to SDA/SCL and ensure **VEN** pin is pulsed to Ground.
+
+## 6. Dynamic Rebound Handling
+To prevent the Learning Cycle from failing due to voltage rebound, use Cell Terminate Voltage (e.g., 3400mV) combined with Cell Term V Delta (e.g., 200mV). This creates a "Resting Empty" window (up to 3600mV) that accounts for the battery's natural spring-back after the SBC load is removed.
