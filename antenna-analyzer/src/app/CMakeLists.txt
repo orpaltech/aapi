@@ -149,10 +149,13 @@ target_link_libraries(aapi_app PRIVATE
     Qt6::Charts
 )
 
+# Define where you want the application to go on the device
+set(INSTALL_DESTDIR "/usr/local/bin") # Change to your preferred path
+
 include(GNUInstallDirs)
 install(TARGETS aapi_app
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE DESTINATION ${INSTALL_DESTDIR}
+    LIBRARY DESTINATION ${INSTALL_DESTDIR}
+    RUNTIME DESTINATION ${INSTALL_DESTDIR}
 )
 

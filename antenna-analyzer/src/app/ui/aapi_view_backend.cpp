@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ using namespace aapi;
 // Definitions
 ///////////////////////////////////////////////////////////////////////////////
 
-#define DSP_PAUSE_MICROSEC  20000U /*20 millisec*/
+#define DSP_PAUSE_MICROSEC  20'000U     /*20 millisec*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPIQmlView
@@ -203,7 +203,8 @@ void QAAPiViewBackend::onMeasureFinished(AAPiMeasureTask *measure)
 
 void QAAPiViewBackend::measureFinishedHandler(AAPiMeasureTask *measure)
 {
-    int ret;
+    uint32_t    measure_freq;
+    int         ret;
 
     // Allow derived class to handle measure 
     if (onViewMeasureFinished( measure ))
@@ -220,14 +221,16 @@ void QAAPiViewBackend::measureFinishedHandler(AAPiMeasureTask *measure)
     // Move to the next measure 
     if (++m_measureIter != m_measures.end())
     {
-        // Setup generator 
-        ret = m_generator->set_measure_freq( (*m_measureIter)->measure_freq, this );
+        measure_freq = (*m_measureIter)->measure_freq;
+
+        // Setup generator
+        ret = m_generator->set_measure_freq( measure_freq, this );
         if (AAPI_FAILED( ret ))
         {
             // handle error 
             onViewMeasureError( ret );
 
-            // need to finish measurement sequence 
+            // finish measurement sequence
             m_generator->unlock( this );
             m_generator->suspend( );
             return;

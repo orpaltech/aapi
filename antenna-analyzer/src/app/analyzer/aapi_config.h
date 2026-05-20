@@ -36,8 +36,16 @@
 #define AAPI_SYSFS_MEASURE_FREQ "measure_freq"
 #define AAPI_SYSFS_INT_FREQ     "intermediate_freq"
 
-/* The selected intermediate frequency */
-#define AAPI_INT_FREQ_HZ    12281U
+
+/**
+     * Synthesizer IC crystal frequency, Hz
+     */
+//AAPI_PARAM_SYNTH_XTAL_FREQ,
+
+    /**
+     * Synthesizer IC crystal correction (signed, int16_t)
+     */
+//AAPI_PARAM_SYNTH_XTAL_CORR,
 
 /*
  * Frequency range of the analyzer
@@ -159,16 +167,6 @@ enum AAPiParameter {
 	 * Measurement window frequency
 	 */
     AAPI_PARAM_MEASURE_FREQ,
-
-	/**
-     * Synthesizer IC Xtal frequency, Hz
-	 */
-    AAPI_PARAM_SYNTH_XTAL_FREQ,
-
-	/**
-     * Synthesizer IC Xtal correction (signed, int16_t)
-	 */
-    AAPI_PARAM_SYNTH_XTAL_CORR,
 
 	/**
      * Base R0 for G measurements
@@ -297,10 +295,10 @@ enum AAPiS1pType {
     AAPI_S1P_S_RI = 1u
 };
 
-enum AAPiXtalRate {
+/*enum AAPiXtalRate {
     AAPI_XTAL_25MHZ	= 25000000u,
     AAPI_XTAL_27MHZ	= 27000000u
-};
+};*/
 
 enum AAPiConfigError {
     AAPI_CONF_E_UNSPECIFIED         = (AAPI_CONF_ERROR_START - 0),
@@ -366,8 +364,8 @@ public:
     AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_PAN_FREQ1, pan_freq1)
     AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_PAN_SPAN, pan_span)
     AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_MEASURE_FREQ, measure_freq)
-    AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_SYNTH_XTAL_FREQ, synth_xtal_freq)
-    AAPI_PARAM_INT32_ACCESSOR(AAPI_PARAM_SYNTH_XTAL_CORR, synth_xtal_corr)
+    //AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_SYNTH_XTAL_FREQ, synth_xtal_freq)
+    //AAPI_PARAM_INT32_ACCESSOR(AAPI_PARAM_SYNTH_XTAL_CORR, synth_xtal_corr)
     AAPI_PARAM_INT32_ACCESSOR(AAPI_PARAM_OSL_SELECTED, osl_selected)
     AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_BASE_R0, base_r0)
     AAPI_PARAM_UINT32_ACCESSOR(AAPI_PARAM_OSL_R_LOAD, osl_r_load)
@@ -399,6 +397,7 @@ public:
 	int flush();
 
     // DSP-related helper properties
+    uint32_t get_intermediate_freq() const;
     uint32_t get_dsp_fft_if_bin() const;    // The bin corresponding to the intermediate frequency
     uint32_t get_dsp_fft_num_pts() const;   // The number of useful FFT points
     double get_dsp_fft_bin_width() const;   // The frequency range between two FFT bins

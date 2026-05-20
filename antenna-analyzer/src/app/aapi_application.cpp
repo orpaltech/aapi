@@ -236,7 +236,7 @@ int QAAPiApplication::load()
             return AAPI_E_CREATE_DIR_FAILED;
     }
 
-    //AAPiPtr<AAPiDevice>               device          = AAPiDevice::create( false );
+    AAPiPtr<AAPiDevice>             device          = AAPiDevice::create( false );
     AAPiPtr<AAPiConfig>             config          = AAPiConfig::create( false );
     AAPiPtr<AAPiGenerator>          generator       = AAPiGenerator::create( config, false );
     AAPiPtr<AAPiCalibrator>         calibrator      = AAPiCalibrator::create( config, false );
@@ -264,8 +264,6 @@ int QAAPiApplication::load()
     {
         return ret;
     }
-
-    generator->set_intermediate_freq( AAPI_INT_FREQ_HZ );
 
     ret = signalProcess->start();
     if (AAPI_FAILED( ret ))

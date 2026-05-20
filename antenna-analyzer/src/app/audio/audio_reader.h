@@ -55,7 +55,7 @@ enum AAPiAudioError {
 class AAPiAudioReaderEvents
 {
 public:
-    virtual ~AAPiAudioReaderEvents() {}
+    virtual ~AAPiAudioReaderEvents() = default;
 
     virtual void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size) = 0;
 };

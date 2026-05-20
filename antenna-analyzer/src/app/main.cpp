@@ -69,6 +69,23 @@ void logFileMessageOutput(QtMsgType type, const QMessageLogContext &context, con
     }
 }
 
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QObject>
+#include <QTouchEvent>
+#include <QEvent>
+#include <QList>
+
+
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QObject>
+#include <QTouchEvent>
+#include <QEvent>
+#include <QList>
+#include <QSet>
+
+
 int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));

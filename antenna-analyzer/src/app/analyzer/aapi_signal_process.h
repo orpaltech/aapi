@@ -51,14 +51,14 @@ enum AAPiSignalProcessError {
 ///
 class AAPiSignalProcessEvents
 {
-    volatile bool m_enabled;
+    volatile bool m_processing;
 public:
-    AAPiSignalProcessEvents() : m_enabled(false) {}
-    virtual ~AAPiSignalProcessEvents() {}
+    AAPiSignalProcessEvents() : m_processing(false) {}
+    virtual ~AAPiSignalProcessEvents() = default;
 
-    void enableSignalProcessing(bool enable = true) { m_enabled = enable; }
+    void enableSignalProcessing(bool enable = true) { m_processing = enable; }
 
-    bool isProcessingSignal() const { return m_enabled; }
+    bool isProcessingSignal() const { return m_processing; }
 
     virtual void onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buf_size) { }
     virtual void onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buf_size) { }
@@ -70,8 +70,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The AAPiSignalProcessor class
 ///
-class AAPiSignalProcessor : public AAPiObject,
-                            public AAPiAudioReaderEvents
+class AAPiSignalProcessor : public AAPiObject, public AAPiAudioReaderEvents
 {
     DECLARE_AAPI_OBJECT_WITH_CONFIG(AAPiSignalProcessor)
 
@@ -90,9 +89,7 @@ public:
 
 private:
 // AAPiAudioReaderEvents
-    virtual void onAudioReaderData(char **buffers,
-                                   uint32_t num_buffers,
-                                   uint32_t buf_size);
+    virtual void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size);
 
     /* Caclulates magnitude for a bin considering +/- 2 bins from maximum */
     AAPiComplex calcMagnitude(int channel);
@@ -103,15 +100,15 @@ private:
     void releaseBuffers();
 
 private:
-    AAPiAudioReader         *m_reader;
     AAPiArray<AAPiSignalProcessEvents*>  m_callbacks;
-    double                  *m_fft_mags[NUM_DSP_CHANNELS];
-    AAPiComplex             m_fft_xmag[NUM_DSP_CHANNELS];
-    double                  *m_raw_inp[NUM_DSP_CHANNELS];
-    double                  *m_fft_inp[NUM_DSP_CHANNELS];
-    AAPiComplex             *m_fft_out;
-    double                  *m_fft_wnd;
-    void                    *m_plan;
+    AAPiAudioReader *m_reader;
+    double          *m_fft_mags[NUM_DSP_CHANNELS];
+    AAPiComplex     m_fft_xmag[NUM_DSP_CHANNELS];
+    double          *m_raw_inp[NUM_DSP_CHANNELS];
+    double          *m_fft_inp[NUM_DSP_CHANNELS];
+    AAPiComplex     *m_fft_out;
+    double          *m_fft_wnd;
+    void            *m_plan;
 };
 
 } //namespace aapi

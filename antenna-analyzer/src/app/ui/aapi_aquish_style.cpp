@@ -32,4 +32,9 @@ QAAPiAquishStyle::QAAPiAquishStyle(QObject *parent)
     m_smith->m_circleColor = m_smith->m_fillColor.darker(3);
     m_smith->m_axisColor = "#333333";
     m_smith->m_gammaColor = "#dc0e0e";
+    m_smith->m_swrColor = QColor(51, 51, 51, 128); // Semi-transparent version of axisColor (#333333)
+    m_smith->m_swrFont = "5pt sans-serif";         // Slightly smaller than main ticks
+
+    m_smith->m_helperColor = "#666666";
+    m_smith->m_helperFont = "italic 8pt sans-serif";
 }

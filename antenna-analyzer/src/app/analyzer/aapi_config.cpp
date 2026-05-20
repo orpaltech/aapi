@@ -176,14 +176,14 @@ const static AAPIParam g_param_table[] =
                     .add_option(300U)
                     .set_description("Base impedance (R0) for Smith and VSWR, Ohm"),
 
-    AAPIParam(AAPI_PARAM_SYNTH_XTAL_FREQ,   "synth_xtal_freq", AAPI_VT_UINT)
+    /*AAPIParam(AAPI_PARAM_SYNTH_XTAL_FREQ,   "synth_xtal_freq", AAPI_VT_UINT)
                     .add_option((uint32_t) AAPI_XTAL_25MHZ, "25")
                     .add_option((uint32_t) AAPI_XTAL_27MHZ, "27")
-                    .set_description("Synthesizer IC crystal frequency, MHz"),
+                    .set_description("Synthesizer IC crystal frequency, MHz"),*/
 
-    AAPIParam(AAPI_PARAM_SYNTH_XTAL_CORR,   "synth_xtal_corr", AAPI_VT_INT)
+    /*AAPIParam(AAPI_PARAM_SYNTH_XTAL_CORR,   "synth_xtal_corr", AAPI_VT_INT)
                     .set_description("Synthesizer IC crystal correction, Hz")
-                    .set_repeat_delay(20),
+                    .set_repeat_delay(20),*/
 
     AAPIParam(AAPI_PARAM_OSL_R_OPEN,    "osl_r_open", AAPI_VT_UINT)
                     .add_option(300U, "300 Ohm")
@@ -611,8 +611,8 @@ void AAPiConfig::set_defaults()
     set_dsp_sample_size(AUDIO_SSIZE_24);
     set_dsp_num_samples(1024);
 
-    set_synth_xtal_freq(AAPI_XTAL_25MHZ);
-    set_synth_xtal_corr(0);
+    //set_synth_xtal_freq(AAPI_XTAL_25MHZ);
+    //set_synth_xtal_corr(0);
 
     set_osl_selected(-1); /*TODO: set back to -1*/
 
@@ -624,10 +624,10 @@ void AAPiConfig::set_defaults()
     set_measure_n_scans(1);
     set_pan_n_scans(1);
     set_lo_freq_div_by_2(0);
-    set_generator_freq(12288000);
+    set_generator_freq(14'000'000);
     set_pan_freq1(7000000);
     set_pan_span(8000/*000*/);
-    set_measure_freq(14000000);
+    set_measure_freq(14'000'000);
     set_pan_is_center_freq(0);
     set_bridge_r_measure(5.1f);
     set_bridge_r_measure_add(200.f);
@@ -939,8 +939,13 @@ double AAPiConfig::get_dsp_fft_bin_freq(uint32_t bin) const
 uint32_t AAPiConfig::get_dsp_fft_if_bin() const
 {
     // with number of samples 1024 it must be 131 at 96KHz; 262 at 48KHz
-    uint32_t bin = (uint32_t)( AAPI_INT_FREQ_HZ / get_dsp_fft_bin_width() + 0.5 );
+    uint32_t bin = (uint32_t)( get_intermediate_freq() / get_dsp_fft_bin_width() + 0.5 );
     return bin;
+}
+
+uint32_t AAPiConfig::get_intermediate_freq() const
+{
+    return 10031;
 }
 
 /////////////////////////////////////////////////////////////////////////////

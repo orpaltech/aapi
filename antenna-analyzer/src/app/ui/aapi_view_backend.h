@@ -70,7 +70,7 @@ public:
                      AAPiGenerator *gen, QObject *parent);
     ~QAAPiViewBackend();
 
-    typedef QList<AAPiPtr<AAPiMeasureTask>> AAPiMeasureTaskList;
+    using AAPiMeasureTaskList = QList<AAPiPtr<AAPiMeasureTask>>;
 
     enum ViewStatus {
         VS_IDLE = 0,

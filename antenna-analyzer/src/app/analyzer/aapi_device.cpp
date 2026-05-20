@@ -119,14 +119,11 @@ struct AAPiDevice::Private
 /// \brief AAPiDevice::AAPiDevice
 ///
 AAPiDevice::AAPiDevice()
+    : m_priv(std::make_unique<Private>())
 {
-    m_priv = new Private();
 }
 
-AAPiDevice::~AAPiDevice()
-{
-    delete m_priv;
-}
+AAPiDevice::~AAPiDevice() = default;
 
 void *AAPiDevice::Private::signal_thread(void *arg)
 {
@@ -221,7 +218,7 @@ int AAPiDevice::open(const char *dev_path)
     m_priv->keep_running = true;
 
     /* Create signal thread */
-    ret = pthread_create (&m_priv->thread_id, NULL, Private::signal_thread, m_priv);
+    ret = pthread_create (&m_priv->thread_id, NULL, Private::signal_thread, m_priv.get());
     if (ret != 0)
     {
         qCritical() << "pthread_create() failed: " << strerror(ret);

@@ -69,15 +69,15 @@ private:
     uint32_t            m_frequency;
     volatile int        m_tabIndex;
 
-    QVector<double>     m_vSpectrumPoints;
-    QVector<double>     m_iSpectrumPoints;
-    QVector<double>     m_vOscilloscPoints;
-    QVector<double>     m_iOscilloscPoints;
+    QVector<double>     m_spectrumPointsV;
+    QVector<double>     m_spectrumPointsI;
+    QVector<double>     m_oscilloscPointsV;
+    QVector<double>     m_oscilloscPointsI;
 
-    QLineSeries         *m_vOscilloscSeries;
-    QLineSeries         *m_iOscilloscSeries;
-    QLineSeries         *m_vSpectrumSeries;
-    QLineSeries         *m_iSpectrumSeries;
+    QLineSeries         *m_oscilloscSeriesV;
+    QLineSeries         *m_oscilloscSeriesI;
+    QLineSeries         *m_spectrumSeriesV;
+    QLineSeries         *m_spectrumSeriesI;
 
 signals:
 

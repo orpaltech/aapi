@@ -32,10 +32,8 @@ QAAPiSignalProcessView::QAAPiSignalProcessView(AAPiConfig *config, AAPiSignalPro
     : QAAPiViewBackend(config, dsp, gen, parent)
     , m_frequency(config->get_generator_freq( ))
     , m_tabIndex(0)
-    , m_vOscilloscSeries(nullptr)
-    , m_iOscilloscSeries(nullptr)
-    , m_vSpectrumSeries(nullptr)
-    , m_iSpectrumSeries(nullptr)
+    , m_oscilloscSeriesV(nullptr), m_oscilloscSeriesI(nullptr)
+    , m_spectrumSeriesV(nullptr), m_spectrumSeriesI(nullptr)
 {
     // Subscribe for DSP events 
     dsp->addCallback(this);
@@ -93,8 +91,7 @@ void QAAPiSignalProcessView::update_oscilloscope()
         return;
     }
 
-    if (m_vOscilloscSeries == nullptr ||
-        m_iOscilloscSeries == nullptr)
+    if (m_oscilloscSeriesV == nullptr || m_oscilloscSeriesI == nullptr)
     {
         return;
     }
@@ -103,38 +100,40 @@ void QAAPiSignalProcessView::update_oscilloscope()
     QList<QPointF> points;
     unsigned i;
 
-    if (m_vOscilloscPoints.size() > 0)
+    if (m_oscilloscPointsV.size() > 0)
     {
-        double max = getSignalMax(m_vOscilloscPoints);
+        double max = getSignalMax(m_oscilloscPointsV);
 
-        for (i = 0; i < m_vOscilloscPoints.size(); i++)
+        points.reserve(m_oscilloscPointsV.size());
+
+        for (i = 0; i < m_oscilloscPointsV.size(); i++)
         {
             points.append( QPointF(
                                 i,
-                                1000. * m_vOscilloscPoints.at(i) / max
+                                1000. * m_oscilloscPointsV.at(i) / max
                             ));
         }
-        m_vOscilloscSeries->replace( points );
+        m_oscilloscSeriesV->replace( points );
         points.clear();
     }
 
-    if (m_iOscilloscPoints.size() > 0)
+    if (m_oscilloscPointsI.size() > 0)
     {
-        double max = getSignalMax(m_iOscilloscPoints);
+        double max = getSignalMax(m_oscilloscPointsI);
 
-        for (i = 0; i < m_iOscilloscPoints.size(); i++)
+        points.reserve(m_oscilloscPointsI.size());
+
+        for (i = 0; i < m_oscilloscPointsI.size(); i++)
         {
             points.append( QPointF(
                                 i,
-                                1000. * m_iOscilloscPoints.at(i) / max
+                                1000. * m_oscilloscPointsI.at(i) / max
                             ));
         }
-        m_iOscilloscSeries->replace( points );
+        m_oscilloscSeriesI->replace( points );
     }
 }
 
-// ignore a few bins because they are in the low frequency range
-#define SKIP_LOW_FREQ_BINS   0
 
 void QAAPiSignalProcessView::update_spectrum()
 {
@@ -143,8 +142,7 @@ void QAAPiSignalProcessView::update_spectrum()
         return;
     }
 
-    if (m_vSpectrumSeries == nullptr ||
-        m_iSpectrumSeries == nullptr)
+    if (m_spectrumSeriesV == nullptr || m_spectrumSeriesI == nullptr)
     {
         return;
     }
@@ -154,67 +152,75 @@ void QAAPiSignalProcessView::update_spectrum()
     qsizetype i;
 
 
-    if( m_vSpectrumPoints.size() > 0 )
+    if( m_spectrumPointsV.size() > 0 )
     {
-        for ( i = 0; i < m_vSpectrumPoints.size(); i++)
+        points.reserve(m_spectrumPointsV.size());
+
+        for ( i = 0; i < m_spectrumPointsV.size(); i++)
         {
             points.append( QPointF(
                             m_config->get_dsp_fft_bin_freq( i ) * 2,
-                            AAPiSignalProcessor::mag2db( m_vSpectrumPoints.at(i) )
+                            AAPiSignalProcessor::mag2db( m_spectrumPointsV.at(i) )
                         ));
         }
-        m_vSpectrumSeries->replace( points );
+        m_spectrumSeriesV->replace( points );
         points.clear();
     }
 
-    if( m_iSpectrumPoints.size() > 0 )
+    if( m_spectrumPointsI.size() > 0 )
     {
-        for ( i = 0; i < m_iSpectrumPoints.size(); i++ )
+        points.reserve(m_spectrumPointsI.size());
+
+        for ( i = 0; i < m_spectrumPointsI.size(); i++ )
         {
             points.append( QPointF(
                             m_config->get_dsp_fft_bin_freq( i ) * 2,
-                            AAPiSignalProcessor::mag2db( m_iSpectrumPoints.at(i) )
+                            AAPiSignalProcessor::mag2db( m_spectrumPointsI.at(i) )
                         ));
         }
-        m_iSpectrumSeries->replace( points );
+        m_spectrumSeriesI->replace( points );
     }
 }
 
+// ignore a few bins because they are in the low frequency range
+#define SKIP_LOW_FREQ_BINS   0
+
 void QAAPiSignalProcessView::setup_spectrum(QLineSeries *v_series, QLineSeries *i_series)
 {
-    m_vSpectrumSeries = v_series;
-    m_iSpectrumSeries = i_series;
+    m_spectrumSeriesV = v_series;
+    m_spectrumSeriesI = i_series;
 
-    m_vSpectrumSeries->clear();
-    m_iSpectrumSeries->clear();
+    m_spectrumSeriesV->clear();
+    m_spectrumSeriesI->clear();
 
-    QChart *v_chart = m_vSpectrumSeries->chart();
-    QChart *i_chart = m_iSpectrumSeries->chart();
+    QChart *chartV = m_spectrumSeriesV->chart();
+    QChart *chartI = m_spectrumSeriesI->chart();
 
-    QValueAxis *v_axisX = qobject_cast<QValueAxis*>(v_chart->axes(Qt::Horizontal).first());
-    QValueAxis *v_axisY = qobject_cast<QValueAxis*>(v_chart->axes(Qt::Vertical).first());
+    QValueAxis *axisVX = qobject_cast<QValueAxis*>(chartV->axes(Qt::Horizontal).first());
+    QValueAxis *axisVY = qobject_cast<QValueAxis*>(chartV->axes(Qt::Vertical).first());
 
-    qreal min_freq = 0;//m_config->get_fft_bin_width() * 2 * SKIP_LOW_FREQ_BINS;
+    qreal minFreq = 0;//m_config->get_fft_bin_width() * 2 * SKIP_LOW_FREQ_BINS;
+
     // No need to display points higher than the Nyquist Rate
     // See https://en.wikipedia.org/wiki/Nyquist_frequency
-    qreal max_freq = m_config->get_dsp_sample_rate() / 2;
+    qreal maxFreq = m_config->get_dsp_sample_rate() / 2;
 
-    v_axisX->setRange(min_freq, max_freq);
+    axisVX->setRange(minFreq, maxFreq);
     //v_axisX->applyNiceNumbers();
 
-    v_axisY->setRange(0, 100);
-    v_axisY->setTickCount(10);
-    v_axisY->setMinorTickCount(5);
+    axisVY->setRange(0, 100);
+    axisVY->setTickCount(10);
+    axisVY->setMinorTickCount(5);
 
-    QValueAxis *i_axisX = qobject_cast<QValueAxis*>(i_chart->axes(Qt::Horizontal).first());
-    QValueAxis *i_axisY = qobject_cast<QValueAxis*>(i_chart->axes(Qt::Vertical).first());
+    QValueAxis *axisIX = qobject_cast<QValueAxis*>(chartI->axes(Qt::Horizontal).first());
+    QValueAxis *axisIY = qobject_cast<QValueAxis*>(chartI->axes(Qt::Vertical).first());
 
-    i_axisX->setRange(min_freq, max_freq);
+    axisIX->setRange(minFreq, maxFreq);
     //i_axisX->applyNiceNumbers();
 
-    i_axisY->setRange(0, 100);
-    i_axisY->setTickCount(10);
-    i_axisY->setMinorTickCount(5);
+    axisIY->setRange(0, 100);
+    axisIY->setTickCount(10);
+    axisIY->setMinorTickCount(5);
 }
 
 void QAAPiSignalProcessView::setupChart(QChart *chart)
@@ -223,30 +229,29 @@ void QAAPiSignalProcessView::setupChart(QChart *chart)
 
 void QAAPiSignalProcessView::setup_oscilloscope(QLineSeries *v_series, QLineSeries *i_series)
 {
-    m_vOscilloscSeries = v_series;
-    m_iOscilloscSeries = i_series;
+    m_oscilloscSeriesV = v_series;
+    m_oscilloscSeriesI = i_series;
 
-    m_vOscilloscSeries->clear();
-    m_iOscilloscSeries->clear();
+    m_oscilloscSeriesV->clear();
+    m_oscilloscSeriesI->clear();
 
-    QChart *v_chart = m_vOscilloscSeries->chart();
-    QChart *i_chart = m_iOscilloscSeries->chart();
+    QChart *chartV = m_oscilloscSeriesV->chart();
+    QValueAxis *axisVX = qobject_cast<QValueAxis*>(chartV->axes(Qt::Horizontal).first());
+    QValueAxis *axisVY = qobject_cast<QValueAxis*>(chartV->axes(Qt::Vertical).first());
 
-    QValueAxis *v_axisX = qobject_cast<QValueAxis*>(v_chart->axes(Qt::Horizontal).first());
-    QValueAxis *v_axisY = qobject_cast<QValueAxis*>(v_chart->axes(Qt::Vertical).first());
+    axisVX->setRange(0, m_config->get_dsp_num_samples());
 
-    v_axisX->setRange(0, m_config->get_dsp_num_samples());
+    axisVY->setRange(-1000, 1000);
+    axisVY->applyNiceNumbers();
 
-    v_axisY->setRange(-1000, 1000);
-    v_axisY->applyNiceNumbers();
+    QChart *chartI = m_oscilloscSeriesI->chart();
+    QValueAxis *axisIX = qobject_cast<QValueAxis*>(chartI->axes(Qt::Horizontal).first());
+    QValueAxis *axisIY = qobject_cast<QValueAxis*>(chartI->axes(Qt::Vertical).first());
 
-    QValueAxis *i_axisX = qobject_cast<QValueAxis*>(i_chart->axes(Qt::Horizontal).first());
-    QValueAxis *i_axisY = qobject_cast<QValueAxis*>(i_chart->axes(Qt::Vertical).first());
+    axisIX->setRange(0, m_config->get_dsp_num_samples());
 
-    i_axisX->setRange(0, m_config->get_dsp_num_samples());
-
-    i_axisY->setRange(-1000, 1000);
-    i_axisY->applyNiceNumbers();
+    axisIY->setRange(-1000, 1000);
+    axisIY->applyNiceNumbers();
 }
 
 bool QAAPiSignalProcessView::isSpectrumTab() const
@@ -271,11 +276,11 @@ void QAAPiSignalProcessView::onSignalProcessRaw(double **buffers, uint32_t num_b
     {
         QT_TRY
         {
-            m_vOscilloscPoints.resize( buff_size );
-            m_iOscilloscPoints.resize( buff_size );
+            m_oscilloscPointsV.resize( buff_size );
+            m_oscilloscPointsI.resize( buff_size );
 
-            memcpy( m_vOscilloscPoints.data(), buffers[DSP_V_CHANNEL], buff_size * sizeof(double) );
-            memcpy( m_iOscilloscPoints.data(), buffers[DSP_I_CHANNEL], buff_size * sizeof(double) );
+            memcpy( m_oscilloscPointsV.data(), buffers[DSP_V_CHANNEL], buff_size * sizeof(double) );
+            memcpy( m_oscilloscPointsI.data(), buffers[DSP_I_CHANNEL], buff_size * sizeof(double) );
         }
         QT_CATCH(...)
         {
@@ -297,11 +302,11 @@ void QAAPiSignalProcessView::onSignalProcessFFT(double **buffers, uint32_t num_b
     {
         QT_TRY
         {
-            m_vSpectrumPoints.resize( buff_size );
-            m_iSpectrumPoints.resize( buff_size );
+            m_spectrumPointsV.resize( buff_size );
+            m_spectrumPointsI.resize( buff_size );
 
-            memcpy( m_vSpectrumPoints.data(), buffers[DSP_V_CHANNEL], buff_size * sizeof(double) );
-            memcpy( m_iSpectrumPoints.data(), buffers[DSP_I_CHANNEL], buff_size * sizeof(double) );
+            memcpy( m_spectrumPointsV.data(), buffers[DSP_V_CHANNEL], buff_size * sizeof(double) );
+            memcpy( m_spectrumPointsI.data(), buffers[DSP_I_CHANNEL], buff_size * sizeof(double) );
         }
         QT_CATCH(...)
         {

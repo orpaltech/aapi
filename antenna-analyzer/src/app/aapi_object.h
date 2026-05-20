@@ -20,7 +20,6 @@
 #ifndef AAPI_OBJECT_H
 #define AAPI_OBJECT_H
 
-#include <cassert>
 #include <atomic>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,44 +32,42 @@
     }
 
 #define AAPI_DISPOSE(ptr)   \
-    if (ptr) {              \
-        (ptr)->release();   \
-        (ptr) = nullptr;    \
-    }
+    do { \
+        if (ptr) { \
+            (ptr)->release(); \
+            (ptr) = nullptr; \
+        } \
+    } while (0)
 
 #define DECLARE_AAPI_OBJECT(clazz)              \
 public:                                         \
-    static clazz* create(bool addRef = true);
+    static clazz *create(bool addRef = true);
 
 
 #define DECLARE_AAPI_OBJECT_WITH_CONFIG(clazz)                      \
 DECLARE_AAPI_OBJECT(clazz)                                          \
-    static clazz* create(AAPiConfig *config, bool addRef = true);   \
+    static clazz *create(AAPiConfig *config, bool addRef = true);   \
 private:                                                            \
     AAPiConfig *m_config;
 
-#define IMPLEMENT_AAPI_OBJECT(clazz)    \
-clazz *clazz::create(bool addRef)       \
-{                                       \
-    clazz *p = new clazz();             \
-    if (!p)                             \
-        return nullptr;                 \
-    if (addRef)                         \
-        p->addRef();                    \
-    return p;                           \
-}
+#define IMPLEMENT_AAPI_OBJECT(clazz)            \
+    clazz* clazz::create(bool addRef) {         \
+        clazz* p = new(std::nothrow) clazz();   \
+        if (p && addRef)                        \
+            p->addRef();                        \
+        return p;                               \
+    }
 
-#define IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(clazz)        \
-IMPLEMENT_AAPI_OBJECT(clazz)                            \
-clazz* clazz::create(AAPiConfig *config, bool addRef)   \
-{                                                       \
-    clazz *obj = create(addRef);                        \
-    if( obj ) {                                         \
-        obj->m_config = config;                         \
-        AAPI_ADDREF(config);                            \
-    }                                                   \
-    return obj;                                         \
-}
+#define IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(clazz)            \
+    IMPLEMENT_AAPI_OBJECT(clazz)                            \
+    clazz* clazz::create(AAPiConfig *config, bool addRef) { \
+        clazz *obj = create(addRef);                        \
+        if( obj ) {                                         \
+            obj->m_config = config;                         \
+            AAPI_ADDREF(config);                            \
+        }                                                   \
+        return obj;                                         \
+    }
 
 namespace aapi
 {
@@ -82,36 +79,31 @@ namespace aapi
 class AAPiObject
 {
 public:
-    long addRef()
-    {
-        return ++m_ref;
+    long addRef() {
+        // fetch_add returns the OLD value; add 1 to return the current count.
+        return m_ref.fetch_add(1, std::memory_order_relaxed) + 1;
     }
 
-    long release()
-    {
-        assert(m_ref > 0);
-
-        if (--m_ref == 0)
-        {
+    long release() {
+        // Use release memory order so prior writes are visible to the final thread
+        long old_ref = m_ref.fetch_sub(1, std::memory_order_release);
+        if (old_ref == 1) {
+            // Synchronize with all previous release operations
+            std::atomic_thread_fence(std::memory_order_acquire);
             delete this;
             return 0;
         }
-        return m_ref;
+        return old_ref - 1;
     }
 
-    AAPiObject()
-    {
-        m_ref = 0;
-    }
+    AAPiObject() : m_ref(0) {}
 
 protected:
-    virtual ~AAPiObject()
-    {
-    }
-
-    std::atomic_long m_ref;
+    virtual ~AAPiObject() = default;
 
 private:
+    std::atomic_long m_ref;
+
     AAPiObject(const AAPiObject &) {}
     AAPiObject& operator=(const AAPiObject &) { return *this; }
 };
@@ -123,18 +115,20 @@ private:
 template<class T> class AAPiPtr
 {
 public:
-    AAPiPtr(T *ptr = nullptr, bool addRef = true)
-    {
-        m_ptr = ptr;
+    AAPiPtr(T* ptr = nullptr, bool addRef = true) : m_ptr(ptr) {
         if (m_ptr && addRef)
             m_ptr->addRef();
     }
 
-    AAPiPtr(const AAPiPtr<T>& other)
-    {
-        m_ptr = other.m_ptr;
+    // Copy Constructor
+    AAPiPtr(const AAPiPtr<T>& other) : m_ptr(other.m_ptr) {
         if (m_ptr)
             m_ptr->addRef();
+    }
+
+    // Move Constructor (Zero overhead)
+    AAPiPtr(AAPiPtr<T>&& other) noexcept : m_ptr(other.m_ptr) {
+        other.m_ptr = nullptr;
     }
 
     ~AAPiPtr()
@@ -143,64 +137,58 @@ public:
             m_ptr->release();
     }
 
-    AAPiPtr<T>& operator=(T* ptr)
-    {
-        set(ptr);
-        return *this;
-    }
-
-    AAPiPtr<T>& operator=(const AAPiPtr<T>& other)
-    {
-        if (this != &other)
-        {
+    // Copy Assignment
+    AAPiPtr<T>& operator=(const AAPiPtr<T>& other) {
+        if (this != &other) {
             set(other.m_ptr);
         }
         return *this;
     }
 
-    operator T* () const
-    {
-        return m_ptr;
+    // Move Assignment
+    AAPiPtr<T>& operator=(AAPiPtr<T>&& other) noexcept {
+        if (this != &other) {
+            if (m_ptr)
+                m_ptr->release();
+            m_ptr = other.m_ptr;
+            other.m_ptr = nullptr;
+        }
+        return *this;
     }
 
-    T* operator->() const
-    {
-        return m_ptr;
+    AAPiPtr<T>& operator=(T* ptr) {
+        set(ptr);
+        return *this;
     }
 
-    const T& operator*() const
-    {
-        return *m_ptr;
-    }
+    // Accessors
+    T* get() const { return m_ptr; }
+    explicit operator bool() const { return m_ptr != nullptr; }
+    operator T* () const { return m_ptr; }
+    T* operator->() const { return m_ptr; }
+    T& operator*() { return *m_ptr; }
+    const T& operator*() const { return *m_ptr; }
 
-    T& operator*()
-    {
-        return *m_ptr;
-    }
-
-    void attach(T *ptr)
-    {
+    void attach(T* ptr) {
         if (m_ptr)
             m_ptr->release();
         m_ptr = ptr;
     }
 
-    T *detach()
-    {
-        T *tmp = m_ptr;
+    T* detach() {
+        T* tmp = m_ptr;
         m_ptr = nullptr;
         return tmp;
     }
 
     T *m_ptr;
 protected:
-    void set(T *ptr)
-    {
+    void set(T* ptr) {
+        if (ptr)
+            ptr->addRef();      // AddRef new first (Safety!)
         if (m_ptr)
-            m_ptr->release();
+            m_ptr->release();   // Release old second
         m_ptr = ptr;
-        if (m_ptr)
-            m_ptr->addRef();
     }
 };
 

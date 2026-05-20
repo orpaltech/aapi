@@ -22,6 +22,7 @@
 
 #include "aapi_object.h"
 #include "aapi_error.h"
+#include <memory>
 
 
 namespace aapi
@@ -57,9 +58,10 @@ class AAPiDevice : public AAPiObject
 
 protected:
     AAPiDevice();
-    ~AAPiDevice();
 
 public:
+    ~AAPiDevice();  // Must be explicitly declared for unique_ptr to work with forward declaration
+
     int open(const char *dev_path);
     void close();
 
@@ -68,8 +70,7 @@ public:
 
 private:
     struct Private;
-
-    Private *m_priv;
+    std::unique_ptr<Private> m_priv;
 };
 
 };

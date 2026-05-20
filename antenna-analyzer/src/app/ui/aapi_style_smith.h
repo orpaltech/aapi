@@ -27,6 +27,11 @@ class QAAPiStyleSmith : public QObject
     Q_PROPERTY(QColor axisColor READ getAxisColor CONSTANT)
     Q_PROPERTY(QColor gammaColor READ getGammaColor CONSTANT)
 
+    Q_PROPERTY(QColor swrColor READ getSwrColor CONSTANT)
+    Q_PROPERTY(QString swrFont READ getSwrFont CONSTANT)
+
+    Q_PROPERTY(QColor helperColor READ getHelperColor CONSTANT)
+
 public:
     explicit QAAPiStyleSmith(QObject *parent = nullptr);
 
@@ -38,6 +43,12 @@ public:
     QColor getAxisColor() const { return m_axisColor; }
     QColor getGammaColor() const { return m_gammaColor; }
 
+    QColor getSwrColor() const { return m_swrColor; }
+    QString getSwrFont() const { return m_swrFont; }
+
+    QColor getHelperColor() const { return m_helperColor; }
+    QString getHelperFont() const { return m_helperFont; }
+
 public:
     QColor m_tickColor;
     QString m_tickFont;
@@ -46,6 +57,12 @@ public:
     QColor m_circleColor;
     QColor m_axisColor;
     QColor m_gammaColor;
+
+    QColor m_swrColor;
+    QString m_swrFont;
+
+    QColor m_helperColor;
+    QString m_helperFont;
 };
 
 #endif // UI_AAPI_STYLE_SMITH_H

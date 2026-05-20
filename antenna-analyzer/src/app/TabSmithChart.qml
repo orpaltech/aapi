@@ -33,57 +33,6 @@ Item {
     height: 620
     transformOrigin: Item.TopLeft
 
-    /*
-    PolarChartView {
-        id: chartSmith
-        anchors {
-            left: colButtons.right
-            top: parent.top
-            right: parent.right
-            bottom: parent.bottom
-            margins: 0
-        }
-        theme: PolarChartView.ChartThemeQt
-        antialiasing: true
-        legend {
-            visible: false
-            font.pointSize: 7
-        }
-        margins {
-            top: 5
-            left: 0
-            right: 0
-            bottom: 5
-        }
-        plotAreaColor: "#567869"
-
-        ValueAxis {
-            id: axisAngular
-            labelsFont.pointSize: 6
-            gridVisible: false
-            minorGridVisible: false
-            labelsVisible: true
-            min: 0
-            max: 360
-        }
-
-        ValueAxis {
-            id: axisRadial
-            labelsFont.pointSize: 6
-            gridVisible: false
-            minorGridVisible: false
-            labelsVisible: false
-            lineVisible: false
-        }
-
-        SplineSeries {
-            id: seriesSmith
-            axisAngular: axisAngular
-            axisRadial: axisRadial
-            pointsVisible: true
-        }
-    }*/
-
     Row {
         id: row1
         width: 1280
