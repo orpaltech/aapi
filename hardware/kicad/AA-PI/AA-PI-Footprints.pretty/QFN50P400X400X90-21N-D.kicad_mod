@@ -285,10 +285,12 @@
 		(layers "F.Cu" "F.Mask" "F.Paste")
 		(uuid "4607b7cd-34ef-4e16-917a-86ea167297dd")
 	)
-	(pad "21" smd rect
+	(pad "21" thru_hole rect
 		(at 0 0)
 		(size 2.75 2.75)
-		(layers "F.Cu" "F.Mask" "F.Paste")
+		(drill 1.27)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
 		(uuid "6c40e002-6c88-40e1-bf5e-7522129e8a82")
 	)
 	(embedded_fonts no)
