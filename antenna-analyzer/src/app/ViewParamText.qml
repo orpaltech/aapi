@@ -20,8 +20,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.VirtualKeyboard
-import QtQuick.VirtualKeyboard.Styles
+//import QtQuick.VirtualKeyboard
+//import QtQuick.VirtualKeyboard.Styles
 import QtQuick.Studio.DesignEffects
 import aapi
 import ru.orpaltech.aapi
@@ -89,17 +89,72 @@ Item {
                 Layout.fillWidth: true
 
                 DesignEffect {
-                    effects: [
-                        DesignInnerShadow {
-                        },
-                        DesignDropShadow {
-                        }
-                    ]
+                    effects: [ DesignInnerShadow { }, DesignDropShadow { } ]
                 }
             }
         }
     }
 
+    /*
+    InputPanel {
+        id: inputPanel
+        z: 99
+
+        // Explicitly anchor to the side boundaries
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        // Initialize standard state values
+        state: "hidden"
+
+        // Use height adjustments or system settings to resize rather than 'scale: 0.84'
+        // if scaling is mandatory for your layout size, uncomment the next line:
+        // scale: 0.84
+        scale: 1.0
+
+        states: [
+            State {
+                name: "hidden"
+                when: !Qt.inputMethod.visible
+                PropertyChanges {
+                    target: inputPanel
+                    // Instead of a hardcoded 554, push it safely below the visible screen floor
+                    y: parent.height
+                    opacity: 0
+                }
+            },
+            State {
+                name: "visible"
+                when: Qt.inputMethod.visible
+                PropertyChanges {
+                    target: inputPanel
+                    // If using 'scale: 0.84', keep your arithmetic. If not, use: parent.height - height
+                    y: parent.height - (inputPanel.height * inputPanel.scale)
+                    opacity: 1
+                }
+            }
+        ]
+
+        transitions: Transition {
+            id: inputPanelTransition
+            from: "hidden"; to: "visible"
+            reversible: true
+
+            ParallelAnimation {
+                NumberAnimation {
+                    properties: "y"
+                    duration: 250
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    property: "opacity"
+                    duration: 200
+                }
+            }
+        }
+    }*/
+
+/*
     InputPanel {
         id: inputPanel
         y: 554
@@ -152,12 +207,13 @@ Item {
             value: inputPanelTransition.running
         }
     }
+*/
 
     IntValidator {
-        id: validatorInteger
+        id: validatorInt
     }
     DoubleValidator {
-        id: validatorDouble
+        id: validatorDbl
         notation: DoubleValidator.StandardNotation
         decimals: 6
     }
@@ -166,7 +222,7 @@ Item {
         target: txtParamValue
         function onEditingFinished() {
             console.log("editing finished")
-            backend.set_param_value(txtParamValue.text)
+            backend.handleSetParamValue(txtParamValue.text)
         }
     }
 
@@ -176,20 +232,49 @@ Item {
         txtParamValue.text = backend.param_value
 
         var paramType = backend.param_type
+
+        // Assign validators exactly like you did before
+        if (paramType < ConfigurationViewBackend.PT_FLOAT) {
+            txtParamValue.validator = validatorInt
+
+        } else if (paramType === ConfigurationViewBackend.PT_FLOAT) {
+            txtParamValue.validator = validatorDbl
+        }
+
+        // Safe Qt6 Input Layout Switching via InputMethodHints
+        // Remove 'InputContext.inputEngine' references entirely.
+        if (paramType !== ConfigurationViewBackend.PT_TEXT) {
+            // Tells Qt to automatically spawn the full numeric keypad
+            txtParamValue.inputMethodHints = Qt.ImhFormattedNumbersOnly;
+
+        } else {
+            // Tells Qt to spawn the standard Latin/QWERTY text layout
+            txtParamValue.inputMethodHints = Qt.ImhNone;
+        }
+    }
+
+    /*Component.onCompleted: {
+        console.log("param text loaded")
+        labelParamTitle.text = backend.param_description
+        txtParamValue.text = backend.param_value
+
+        var paramType = backend.param_type
         if (paramType < ConfigurationViewBackend.PT_FLOAT) {
             txtParamValue.validator = validatorInteger
-        } else if (paramType == ConfigurationViewBackend.PT_FLOAT) {
+
+        } else if (paramType === ConfigurationViewBackend.PT_FLOAT) {
             txtParamValue.validator = validatorDouble
         }
 
-        if (paramType != ConfigurationViewBackend.PT_TEXT) {
+        if (paramType !== ConfigurationViewBackend.PT_TEXT) {
             InputContext.inputEngine.inputMode = InputEngine.Numeric;
             txtParamValue.inputMethodHints = Qt.ImhFormattedNumbersOnly;
+
         } else {
             InputContext.inputEngine.inputMode = InputEngine.Latin;
             txtParamValue.inputMethodHints = Qt.ImhNone;
         }
 
         //inputPanel.
-    }
+    }*/
 }

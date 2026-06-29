@@ -33,13 +33,13 @@
 namespace aapi
 {
 
-enum AAPiVariantType {
-    AAPI_VT_UNKNOWN,
-    AAPI_VT_BYTE,   //8-bit unsigned
-    AAPI_VT_UINT,   //32-bit unsigned
-    AAPI_VT_INT,    //32-bit signed
-    AAPI_VT_FLOAT,  //32-bit float
-    AAPI_VT_TEXT,   //char*
+enum class AAPiVariantType {
+    UNKNOWN,
+    BYTE,   //8-bit unsigned
+    UINT,   //32-bit unsigned
+    INT,    //32-bit signed
+    FLOAT,  //32-bit float
+    TEXT,   //char*
 };
 
 #ifdef AAPI_VARIANT_BASE_QT

@@ -23,30 +23,29 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
-#include <qapplication.h>
+#include <QApplication>
 #include "aapi_application.h"
 #include "ui/aapi_aquish_style.h"
 #include "ui/aapi_messages.h"
 
 
 #define AAPI_QML_NAMESPACE  "ru.orpaltech.aapi"
-#define AAPI_QML_VER_MAJOR  1
-#define AAPI_QML_VER_MINOR  0
+#define AAPI_QML_VER_MAJOR  AAPI_VERSION_MAJOR
+#define AAPI_QML_VER_MINOR  AAPI_VERSION_MINOR
 #define AAPI_QML_VER    AAPI_QML_VER_MAJOR,AAPI_QML_VER_MINOR
 
 // Define your log file path
 static QString logFilePath = QString("/var/log/aapi_%1.log").arg(QDateTime::currentDateTime().toString("ddMMyyyy-hhmmss"));
 
-void logFileMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void logFileMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QFile file(logFilePath);
-    if (file.open(QIODevice::Append | QIODevice::Text))
-    {
+    if (file.open(QIODevice::Append | QIODevice::Text)) {
+
         QTextStream out(&file);
         out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
 
-        switch (type)
-        {
+        switch (type) {
         case QtDebugMsg:
             out << "[DEBUG] ";
             break;
@@ -69,7 +68,7 @@ void logFileMessageOutput(QtMsgType type, const QMessageLogContext &context, con
     }
 }
 
-#include <QGuiApplication>
+/*#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QObject>
 #include <QTouchEvent>
@@ -84,19 +83,22 @@ void logFileMessageOutput(QtMsgType type, const QMessageLogContext &context, con
 #include <QEvent>
 #include <QList>
 #include <QSet>
-
+*/
 
 int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     qputenv("QT_MESSAGE_PATTERN", QByteArray("[%{time process} %{type}] %{appname} %{category} %{function} - %{message}"));
 
-    qInstallMessageHandler(logFileMessageOutput);
+    qInstallMessageHandler(logFileMessage);
+
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+    format.setSamples(4);
+    QSurfaceFormat::setDefaultFormat(format);
 
     QAAPiShutdownManager shutdownManager;
     int ret = shutdownManager.openDevice();
-    if (AAPI_FAILED( ret ))
-    {
+    if (AAPI_FAILED( ret )) {
         return ret;
     }
 
@@ -105,8 +107,8 @@ int main(int argc, char *argv[])
         QApplication app( argc, argv );
         app.setApplicationName("AA-Pi");
         app.setApplicationDisplayName("Antenna Analyzer Pi");
-        app.setApplicationVersion(AAPI_VERSION);
-        app.setOrganizationName("ORPAL Technology, Inc.");
+        app.setApplicationVersion(STRINGIFY(AAPI_VERSION));
+        app.setOrganizationName("ORPAL Technology, Inc");
 
         QAAPiBaseStyle  *style = new QAAPiAquishStyle( &app );
         QAAPiMessages   *mgs = new QAAPiMessages( &app );
@@ -125,8 +127,7 @@ int main(int argc, char *argv[])
         qmlRegisterUncreatableType<QAAPiSignalProcessView>  (AAPI_QML_NAMESPACE, AAPI_QML_VER, "SignalProcessViewBackend",  AAPI_QML_UNCREATABLE_REASON);
 
 
-        do
-        {
+        do {
             // Set analyzer object as a context property
             QQmlApplicationEngine engine;
             engine.rootContext()->setContextProperty( "aapi", aapi );
@@ -144,15 +145,13 @@ int main(int argc, char *argv[])
 #endif
 
             ret = aapi->load( );
-            if (AAPI_FAILED( ret ))
-            {
+            if (AAPI_FAILED( ret )) {
                 ret = EXIT_FAILURE;
                 break;
             }
 
             engine.loadFromModule("aapi", "Main");
-            if (engine.rootObjects().isEmpty())
-            {
+            if (engine.rootObjects().isEmpty()) {
                 ret = EXIT_FAILURE;
                 break;
             }
@@ -165,6 +164,7 @@ int main(int argc, char *argv[])
 
             // Enter application main loop
             ret = app.exec();
+
         } while(false);
 
     } while (ret == EXIT_REBOOT); // Check if reboot requested
@@ -174,16 +174,15 @@ int main(int argc, char *argv[])
     // - All Qt objects cleaned up
 
     // Check if shutdown was requested and perform system shutdown
-    if (shutdownManager.isShutdownRequested())
-    {       
+    if (shutdownManager.isShutdownRequested()) {
+
         qInfo() << "Shutdown was requested, proceeding with system poweroff";
         shutdownManager.performSystemShutdown();
 
         // Should not reach here if poweroff succeeded
         qCritical() << "System poweroff failed or not executed";
-    }
-    else
-    {
+
+    } else {
         qInfo() << "No shutdown requested, normal exit";
     }
 

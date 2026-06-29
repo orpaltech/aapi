@@ -56,33 +56,24 @@ static int make_upper(char* text);
 
 IMPLEMENT_AAPI_OBJECT(AntScopeDevice)
 
-AntScopeDevice *AntScopeDevice::create(AAPiConfig *config, AAPiGenerator* gen,
+AntScopeDevice *AntScopeDevice::create(AAPiConfig *config, AAPiGenerator *generator,
                                        bool addRef)
 {
     AntScopeDevice *obj = create(addRef);
     if( obj ) {
         obj->m_config = config;
-        obj->m_gen = gen;
-
-		AAPI_ADDREF(config);
-		AAPI_ADDREF(gen);
+        obj->m_generator = generator;
     }
     return obj;
 }
 
 AntScopeDevice::AntScopeDevice()
-	: m_modem(nullptr)
-	, m_config(nullptr)
-	, m_gen(nullptr)
 {
 }
 
 AntScopeDevice::~AntScopeDevice()
 {
 	stop();
-
-	AAPI_DISPOSE(m_config);
-	AAPI_DISPOSE(m_gen);
 }
 
 int AntScopeDevice::start()
@@ -92,15 +83,13 @@ int AntScopeDevice::start()
     AAPiString                  name	= m_config->get_uart_device();
     int                         ret;
 
-   	if( m_modem != nullptr )
-    {
+    if( m_modem != nullptr ) {
         return AAPI_E_INVALID_STATE;
     }
 
     /* Serial port is not specified */
     /* We DO NOT throw an error, just return */
-    if( name.length() == 0 )
-	{
+    if( name.length() == 0 ) {
         return 0;
 	}
 
@@ -121,20 +110,18 @@ int AntScopeDevice::start()
 
     m_sweepFreq = 0;
     m_centerFreq = 0;
-    m_modem = modem.detach();
+    m_modem = std::move(modem);
 
 	return AAPI_SUCCESS;
 }
 
 void AntScopeDevice::stop()
 {
-    if( !m_modem )
-	{
+    if( m_modem == nullptr ) {
 		return;
 	}
 
 	m_modem->stop();
-	AAPI_DISPOSE(m_modem);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,16 +146,15 @@ void AntScopeDevice::onSerialModemCommand(const char *command)
 	}
     else if( strcmp( CMD_RF_ON, cmd_text ) == 0)
 	{
-        m_gen->resume( );
-
-        m_gen->set_measure_freq( m_gen->get_last_freq() );
+        m_generator->resume( );
+        m_generator->set_measure_freq( m_generator->get_last_freq() );
 
 		/* Success */
         res = m_modem->send( OK );
 	}
     else if( strcmp( CMD_RF_OFF, cmd_text ) == 0)
 	{
-        m_gen->suspend( );
+        m_generator->suspend( );
 
 		/* Success */
         res = m_modem->send( OK );
@@ -184,21 +170,18 @@ void AntScopeDevice::onSerialModemCommand(const char *command)
 	{
 		/* Check parameter */
 		char *param = &cmd_text[2];
-		if (!is_numeric(param))
-		{
+        if (!is_numeric(param)) {
 			/* Error */
 			res = m_modem->send(ERROR);
 		}
 		else
 		{
 			uint32_t fhz = (uint32_t)atoi(param);
-            if (fhz < AAPI_BAND_FMIN)
-	        {
+            if (fhz < AAPI_BAND_FREQ_MIN) {
 	        	/* Error */
 	        	res = m_modem->send(ERROR);
-	        }
-	        else
-	        {
+
+            } else {
                 m_centerFreq = fhz;
 	            /* Success */
 	        	res = m_modem->send(OK);
@@ -282,25 +265,23 @@ void AntScopeDevice::onSerialModemError(int error)
 // Local utilities
 ///////////////////////////////////////////////////////////////////////////////
 
-int is_numeric(const char* text)
+int is_numeric(const char *text)
 {
     size_t len = strlen(text);
 
-    for (size_t i = 0; i < len; i++)
-	{
+    for (size_t i = 0; i < len; i++) {
 		if (!isdigit(text[i]))
 			return 0;
 	}
 	return 1;
 }
 
-int make_upper(char* text)
+int make_upper(char *text)
 {
     size_t len = strlen(text);
 
 	/* Copy in-place & uppercase */
-    for (size_t i = 0; i < len; i++)
-	{
+    for (size_t i = 0; i < len; i++) {
         text[i] = static_cast<char> (toupper(text[i]));
 	}
 	return len;

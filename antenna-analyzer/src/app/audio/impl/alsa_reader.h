@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,30 +41,31 @@ protected:
     ~AAPiAlsaReader();
 
 public:
-    virtual uint32_t get_num_devices();
-    virtual const char *get_device_id(int dev_index);
-    virtual const char *get_device_name(int dev_index);
+    uint32_t get_num_devices() override;
+    AAPiString get_device_id(int dev_index) override;
+    AAPiString get_device_name(int dev_index) override;
 
-    virtual bool is_format_supported(int dev_index, AAPiAudioChannels channels,
-                                     AAPiAudioSampleRate sample_rate,
-                                     AAPiAudioSampleSize sample_size);
+    bool is_format_supported(int dev_index, Channels channels,
+                             SampleRate sample_rate,
+                             SampleSize sample_size) override;
 
-    virtual int open(const char *dev_id, AAPiAudioChannels channels,
-                     AAPiAudioSampleRate sample_rate,
-                     AAPiAudioSampleSize sample_size,
-                     uint32_t num_samples);
-    virtual void close();
+    AAPiError open(const AAPiString& dev_id, Channels channels,
+                   SampleRate sample_rate, SampleSize sample_size,
+                   uint32_t period_samples) override;
+    void close() override;
 
-    virtual int start(AAPiAudioReaderEvents *callback);
-    virtual void stop();
+    uint32_t get_buffer_size_chan() const override;
+
+    AAPiError start(AAPiAudioReaderEvents *callback) override;
+    void stop() override;
 
 private:
     static void load_devices(AlsaDevice **devices, uint32_t *num_devices);
-
+    static void free_devices(AlsaDevice *&devices, uint32_t &num_devices);
 private:
-    AlsaSource  *m_source;
-    AlsaDevice  *m_devices;
-    uint32_t    m_numDevices;
+    AAPiPtr<AlsaSource> m_source;
+    AlsaDevice          *m_devices;
+    uint32_t            m_numDevices;
 };
 
 } //namespace aapi

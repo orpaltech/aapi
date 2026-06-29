@@ -20,10 +20,10 @@
 #ifndef UI_AAPI_DSP_VIEW_H
 #define UI_AAPI_DSP_VIEW_H
 
-#include <QtCharts/QChart>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QValueAxis>
+#include <QtGraphs/QLineSeries>
+#include <QtGraphs/QValueAxis>
 #include "aapi_view_backend.h"
+#include <atomic>
 
 using namespace aapi;
 
@@ -38,55 +38,57 @@ class QAAPiSignalProcessView : public QAAPiViewBackend
     QML_UNCREATABLE(AAPI_QML_UNCREATABLE_REASON)
     QML_NAMED_ELEMENT(SignalProcessViewBackend)
 
-    /* Properties */
-    Q_PROPERTY(uint frequency READ getFrequency CONSTANT)
-
 public:
     explicit QAAPiSignalProcessView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                     AAPiGenerator *gen, QObject *parent = Q_NULLPTR);
     ~QAAPiSignalProcessView();
 
-    /* Property accessors */
-    uint32_t getFrequency() const { return m_frequency; }
-
 private:
-    virtual int load_view();
-    virtual void destroy_view();
+// QAAPiViewBackend
+    AAPiError loadView() override;
+    AAPiError activateView() override;
+    void deactivateView() override;
+    void destroyView() override;
+
+// AAPiSignalProcessEvents
+    void onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buf_size) override;
+    void onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buf_size) override;
 
     bool isSpectrumTab() const;
-    bool isOscilloscopeTab() const;
-
-    // AAPiSignalProcessEvents
-    virtual void onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buf_size);
-    virtual void onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buf_size);
+    bool isWaveformTab() const;
 
 private:
-    static void setupChart(QChart *chart);
+    QRecursiveMutex m_mutex;
 
-private:
-    QRecursiveMutex     m_mutex;
+    volatile int    m_tabIndex;
+    volatile bool   m_dataRequested;
 
-    uint32_t            m_frequency;
-    volatile int        m_tabIndex;
+    QVector<double> m_spectrumPointsV;
+    QVector<double> m_spectrumPointsI;
+    QVector<double> m_waveformPointsV;
+    QVector<double> m_waveformPointsI;
 
-    QVector<double>     m_spectrumPointsV;
-    QVector<double>     m_spectrumPointsI;
-    QVector<double>     m_oscilloscPointsV;
-    QVector<double>     m_oscilloscPointsI;
+    QLineSeries *m_waveformSeriesV;
+    QLineSeries *m_waveformSeriesI;
+    QLineSeries *m_spectrumSeriesV;
+    QLineSeries *m_spectrumSeriesI;
 
-    QLineSeries         *m_oscilloscSeriesV;
-    QLineSeries         *m_oscilloscSeriesI;
-    QLineSeries         *m_spectrumSeriesV;
-    QLineSeries         *m_spectrumSeriesI;
+Q_SIGNALS:
+    void spectrumDataReady();
+    void waveformDataReady();
 
-signals:
-
-public slots:
-    void tab_changed(int index);
-    void setup_spectrum(QLineSeries *v_series, QLineSeries *i_series);
-    void setup_oscilloscope(QLineSeries *v_series, QLineSeries *i_series);
-    void update_spectrum();
-    void update_oscilloscope();
+public Q_SLOTS:
+    void handleTabChange(int index);
+    void handleSpectrumSetup(QLineSeries *v_series, QLineSeries *i_series,
+                             QValueAxis *axisVX, QValueAxis *axisVY,
+                             QValueAxis *axisIX, QValueAxis *axisIY);
+    void handleWaveformSetup(QLineSeries *v_series, QLineSeries *i_series,
+                             QValueAxis *axisVX, QValueAxis *axisVY,
+                             QValueAxis *axisIX, QValueAxis *axisIY);
+    void handleSpectrumUpdate();
+    void handleWaveformUpdate();
+    void handleSpectrumDataReady();
+    void handleWaveformDataReady();
 
 };
 

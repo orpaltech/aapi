@@ -24,15 +24,15 @@
 #include <QMutex>
 #include <QList>
 #include <QMap>
+#include <QPoint>
 #include <QPointer>
 #include <QtQuick/QQuickItemGrabResult>
-#include <QtCharts/QChart>
-#include <QtCharts/QSplineSeries>
-#include <QtCharts/QValueAxis>
-#include <QtCharts/QChartView>
+#include <QtGraphs/QLineSeries>
+#include <QtGraphs/QValueAxis>
 #include "analyzer/aapi_calibrator.h"
 #include "aapi_view_backend.h"
 #include "aapi_base_style.h"
+#include "aapi_messages.h"
 
 using namespace aapi;
 
@@ -47,92 +47,179 @@ class QAAPiPanoramicScanView : public QAAPiViewBackend
     QML_UNCREATABLE(AAPI_QML_UNCREATABLE_REASON)
     QML_NAMED_ELEMENT(PanoramicScanViewBackend)
 
+    /* Properties */
+    Q_PROPERTY(quint32 last_measure_freq READ getLastMeasureFreq NOTIFY legendChanged)
+    Q_PROPERTY(QString last_rx_string READ getLastRxString NOTIFY legendChanged)
+    Q_PROPERTY(double last_vswr_val READ getLastVswrVal NOTIFY legendChanged)
+
+    Q_PROPERTY(QVariantList ham_radio_bands READ getHamRadioBands NOTIFY hamRadioBandsChanged)
+
+    Q_PROPERTY(bool is_min_freq_center READ getIsMinFreqCenter WRITE setIsMinFreqCenter NOTIFY isMinFreqCenterChanged)
+    Q_PROPERTY(quint64 min_freq READ getMinFreq WRITE setMinFreq NOTIFY minFreqChanged)
+
+    Q_PROPERTY(quint32 start_freq READ getStartFreqKHz NOTIFY startFreqChanged)
+    Q_PROPERTY(quint32 band_span READ getBandSpanKHz WRITE setBandSpanKHz NOTIFY bandSpanChanged)
+
 public:
     explicit QAAPiPanoramicScanView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                     AAPiGenerator *gen, AAPiCalibrator *cal,
                                     QAAPiBaseStyle *style,
+                                    QAAPiMessages *msgs,
                                     QObject *parent = Q_NULLPTR);
     ~QAAPiPanoramicScanView();
 
-    enum ChartType {
-        CHART_VSWR,
-        CHART_RX,
-        CHART_SMITH,
-        CHART_S11
+    enum class ChartType {
+        VSWR = 0,
+        RX,
+        SMITH,
+        S11
     };
 
-    enum BandSpan {
-        SPAN_200 = 200,
-        SPAN_400 = 400,
-        SPAN_800 = 800,
-        SPAN_1600 = 1600,
-        SPAN_2M = 2000,
-        SPAN_4M = 4000,
-        SPAN_8M = 8000,
-        SPAN_16M = 16000,
-        SPAN_20M = 20000,
-        SPAN_40M = 40000
+    enum class SweepPoints {
+        Fast      = 100,  // Lightning fast tuning/alignment updates
+        Standard  = 200,  // The sweet spot for quick band scans
+        HighRes   = 400,  // High resolution for sharp filter notches
+        MaxVisual = 800   // Absolute ceiling matching a standard tablet screen width
     };
 
+    enum class BandSpan : uint32_t {
+        _200K = 200U,
+        _400K = 400U,
+        _800K = 800U,
+        _1600K = 1'600U,
+        _2M = 2'000U,
+        _4M = 4'000U,
+        _8M = 8'000U,
+        _16M = 16'000U,
+        _20M = 20'000U,
+        _40M = 40'000U,
+        _80M = 80'000U
+    };
+
+    Q_ENUM(BandSpan)
+
+    enum TuneDirection {
+        TUNE_DOWN_LARGE  = -3, // <<< (e.g., -100 kHz)
+        TUNE_DOWN_MEDIUM = -2, // <<  (e.g., -10 kHz)
+        TUNE_DOWN_SMALL  = -1, // <   (e.g., -1 kHz)
+        TUNE_UP_SMALL    = 1,  // >   (e.g., +1 kHz)
+        TUNE_UP_MEDIUM   = 2,  // >>  (e.g., +10 kHz)
+        TUNE_UP_LARGE    = 3   // >>> (e.g., +100 kHz)
+    };
+    Q_ENUM(TuneDirection)
+
+    // A simple structure to pass coordinate blocks to QML
+    struct BandOverlay {
+        uint32_t lo;
+        uint32_t hi;
+    };
+
+    uint32_t getLastMeasureFreq() const { return m_lastFreq; }
+    QString getLastRxString() const { return m_lastRxStr; }
+    double getLastVswrVal() const { return m_lastVswr; }
+    quint32 getBandSpanKHz() const { return m_bandSpanKHz; }
+    void setBandSpanKHz(quint32 band_span);
+    quint32 getStartFreqKHz() const;
+    quint32 getMinFreq() const { return m_minFreq; }
+    void setMinFreq(quint32 min_freq);
+    QVariantList getHamRadioBands() const { return m_hamRadioBands; }
+    bool getIsMinFreqCenter() const { return m_config->get_pan_is_center_freq(); }
+    void setIsMinFreqCenter(bool is_center);
+
+protected:
+// QAAPiViewBackend
+    AAPiError loadView() override;
+    void destroyView() override;
+    AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
+    void onViewMeasureError(AAPiError error) override;
+
 private:
-    int getConfigParams();
-    uint32_t getFreqStart() const;
-    int startScan(bool fast);
-    void updatePlotArea(ChartType chart_type, QRectF rect);
-    void setPlotBkgnd(QChart *chart);
-    void updateAxisRange();
+    int validateConfig();
+    int startSweep(SweepPoints numPoints);
+    void updatePlotArea(ChartType chart_type, const QRectF& rect);
+    void updateAxisXRange();
+    void updateAxisYRange();
+    void setDefaultYRange(ChartType chart_type);
 
-    virtual int load_view();
-    virtual void destroy_view();
-
-// Measurement callback
-    virtual int onViewMeasureFinished(AAPiMeasureTask *measure);
+    constexpr bool isBandSpanValid(uint32_t band_span) const {
+        return (band_span >= static_cast<uint32_t>(BandSpan::_200K) && band_span <= static_cast<uint32_t>(BandSpan::_80M));
+    }
 
 private:
-    QMap<ChartType, QSize>  m_plotArea;
-
-    QPointer<QObject>       m_smithChart;
+    //QMap<ChartType, uint>   m_plotSize;
     ChartType               m_chartType;
 
-    QPointer<QLineSeries>   m_rxSeries[2];
-    QPointer<QLineSeries>   m_vswrSeries;
+    QPointer<QObject>       m_smithChart;
+    QList<QPointF>          m_smithTracePoints;
 
-    AAPiCalibrator          *m_calibrator;
-    uint32_t                m_freq1, m_span;
-    uint32_t                m_width;
+    QPointer<QXYSeries>     m_rxSeries[2];
+    QValueAxis              *m_rxAxisX, *m_rxAxisY;
+
+    QPointer<QXYSeries>     m_vswrSeries;
+    QValueAxis              *m_vswrAxisX, *m_vswrAxisY;
+
+    QPointer<QXYSeries>     m_s11Series;
+    QValueAxis              *m_s11AxisX, *m_s11AxisY;
+
+    QVariantList            m_hamRadioBands;
+
+    AAPiPtr<AAPiCalibrator> m_calibrator;
+
+    uint32_t                m_minFreq;
+    uint32_t                m_bandSpanKHz; /* expressed in KHz*/
 
     QAAPiBaseStyle          *m_style;
+    QAAPiMessages           *m_msgs;
 
-signals:
-    void pointGamma(QPointF pt);
+    // Variables to cache the latest scanned point data
+    uint32_t                m_lastFreq;
+    QString                 m_lastRxStr;
+    double                  m_lastVswr;
+
+Q_SIGNALS:
+    void legendChanged(); // Trigger this to tell QML to update the legend values
     void scanStarted(int numSteps);
     void scanComplete();
     void scanError(QString message);
     void scanNoSignal();
+    void hamRadioBandsChanged();
+    void minFreqChanged();
+    void isMinFreqCenterChanged();
+    void startFreqChanged();
+    void bandSpanChanged();
 
-public slots:
-    void rx_setup(QLineSeries *RSeries, QLineSeries *XSeries);
-    void vswr_setup(QLineSeries *series);
-    void smith_setup(QObject *chart);
+public Q_SLOTS:
+    void handleRXChartSetup(QXYSeries *r_series, QXYSeries *x_series,
+                            QValueAxis *axisX, QValueAxis *axisY);
+    void handleVSWRChartSetup(QXYSeries *series, QValueAxis *axisX, QValueAxis *axisY);
+    void handleS11ChartSetup(QXYSeries *series, QValueAxis *axisX, QValueAxis *axisY);
+    void handleSmithChartSetup(QObject *chart);
+    void handleTabChange(int index);
 
-    void tab_changed(int index);
+    void handleRXScanFast();
+    void handleRXScanSlow();
 
-    void rx_fast_scan();
-    void rx_slow_scan();
+    void handleVSWRScanFast();
+    void handleVSWRScanSlow();
 
-    void vswr_fast_scan();
-    void vswr_slow_scan();
+    void handleS11ScanFast();
+    void handleS11ScanSlow();
 
-    void smith_fast_scan();
-    void smith_slow_scan();
+    void handleSmithScanFast();
+    void handleSmithScanSlow();
 
-    void rx_snapshot(QQuickItemGrabResult *result);
-    void vswr_snapshot(QQuickItemGrabResult *result);
-    void smith_snapshot(QQuickItemGrabResult *result);
+    void handleRXSnapshot(QQuickItemGrabResult *result);
+    void handleVSWRSnapshot(QQuickItemGrabResult *result);
+    void handleS11Snapshot(QQuickItemGrabResult *result);
+    void handleSmithSnapshot(QQuickItemGrabResult *result);
 
-    void rx_plot_area(QRectF rect);
-    void vswr_plot_area(QRectF rect);
-    void smith_plot_area(QRectF rect);
+    void handleRXPlotArea(QRectF rect);
+    void handleVSWRPlotArea(QRectF rect);
+    void handleS11PlotArea(QRectF rect);
+    void handleSmithPlotArea(QRectF rect);
+
+    void handleTuneFrequency(TuneDirection direction);
+    void handleDirectFreqInput(quint32 freq);
 
 };
 

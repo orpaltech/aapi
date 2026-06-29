@@ -21,8 +21,8 @@
 #define AAPI_SIGNAL_PROCESS_H
 
 #include <complex.h>
+#include "aapi_object_with_config.h"
 #include "audio/audio_reader.h"
-#include "analyzer/aapi_config.h"
 #include "utils/simple_array.h"
 #include "utils/aapi_complex.h"
 
@@ -35,7 +35,7 @@ namespace aapi
 enum AAPiSignalChannel {
     DSP_V_CHANNEL,
     DSP_I_CHANNEL,
-    NUM_DSP_CHANNELS
+    N_DSP_CHANNELS
 };
 
 enum AAPiSignalProcessError {
@@ -51,14 +51,22 @@ enum AAPiSignalProcessError {
 ///
 class AAPiSignalProcessEvents
 {
-    volatile bool m_processing;
+    // This provides true, thread-safe memory sequencing across your audio loops.
+    std::atomic<bool> m_processing;
+
 public:
     AAPiSignalProcessEvents() : m_processing(false) {}
     virtual ~AAPiSignalProcessEvents() = default;
 
-    void enableSignalProcessing(bool enable = true) { m_processing = enable; }
+    // Changes the active flag state atomically using safe memory barriers
+    void signal_process_enable(bool enable = true) {
+        m_processing.store(enable, std::memory_order_release);
+    }
 
-    bool isProcessingSignal() const { return m_processing; }
+    // Evaluates the current state safely across your real-time processing threads
+    bool is_signal_processing() const {
+        return m_processing.load(std::memory_order_acquire);
+    }
 
     virtual void onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buf_size) { }
     virtual void onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buf_size) { }
@@ -79,36 +87,41 @@ protected:
     ~AAPiSignalProcessor();
 
 public:
-    int start();
+    AAPiError start();
     void stop();
+
+    uint32_t getBufferSize() const;
 
     void addCallback(AAPiSignalProcessEvents *cb);
 
-    static void setBlackman(double *wnd, uint32_t nsamples);
+    static double setBlackman(double *wnd, uint32_t nsamples);
     static double mag2db(double magnitude);
 
 private:
 // AAPiAudioReaderEvents
     virtual void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size);
 
-    /* Caclulates magnitude for a bin considering +/- 2 bins from maximum */
+    // Caclulates magnitude for a bin considering +/- 2 bins from maximum
     AAPiComplex calcMagnitude(int channel);
 
-    /* Process audio buffer for a channel */
+    // Process audio buffer for a channel
     void processAudioBuffer(int channel, char *buffer, uint32_t buf_size);
+    double readSample(int index, char *buffer);
 
     void releaseBuffers();
 
 private:
-    AAPiArray<AAPiSignalProcessEvents*>  m_callbacks;
-    AAPiAudioReader *m_reader;
-    double          *m_fft_mags[NUM_DSP_CHANNELS];
-    AAPiComplex     m_fft_xmag[NUM_DSP_CHANNELS];
-    double          *m_raw_inp[NUM_DSP_CHANNELS];
-    double          *m_fft_inp[NUM_DSP_CHANNELS];
+    AAPiArray<AAPiSignalProcessEvents*> m_callbacks;
+    AAPiPtr<AAPiAudioReader>            m_reader;
+
+    double          *m_fft_mags[N_DSP_CHANNELS];
+    AAPiComplex     m_fft_xmag[N_DSP_CHANNELS];
+    double          *m_raw_inp[N_DSP_CHANNELS];
+    double          *m_fft_inp[N_DSP_CHANNELS];
     AAPiComplex     *m_fft_out;
     double          *m_fft_wnd;
-    void            *m_plan;
+    double          m_fft_wnd_gain;
+    void*           m_plan;
 };
 
 } //namespace aapi

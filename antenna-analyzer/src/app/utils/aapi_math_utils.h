@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@
 #define MAKE16(lo, hi)  ((uint16_t)((lo) & 0xFF) | (((uint16_t)(hi)) << 8))
 #define MAKE32(lo, hi)  ((uint32_t)((lo) & 0xFFFF) | (((uint32_t)(hi)) << 16))
 
-#define AAPI_SMALL_REAL  1e-30
 
 namespace aapi
 {
@@ -43,14 +42,29 @@ namespace aapi
 
 class MathUtils
 {
+    static constexpr double SMALL_REAL = 1e-30;
 public:
     /* Ensure val to be non-zero (safe to use as denominator)*/
     template<typename T>
-    static AAPiComplexT<T> _cnonz(const AAPiComplexT<T>& val);
+    static constexpr AAPiComplexT<T> _cnonz(const AAPiComplexT<T>& val) noexcept {
+        if (0. == std::abs( val ))
+            return AAPiComplexT<T>( SMALL_REAL, 0.); // small real value
+        return val;
+    }
 
     /* Ensure val to be non-zero (safe to use as denominator)*/
     template<typename T>
-    static T _nonz(T val);
+    static constexpr T _nonz(T val) noexcept {
+        if (0. == val || -0. == val)
+            return SMALL_REAL; // small value, but much larger than min
+        return val;
+    }
+
+    // Fast, single-cycle hardware squaring function
+    template <typename T>
+    static constexpr T sqr(T val) noexcept {
+        return val * val;
+    }
 
     /* x1, x2, x3 - frequencies
      * x - frequency between x2 and x3 where we want to interpolate
@@ -66,7 +80,7 @@ public:
     {
         AAPiComplexT<T> a = ( (y3 - y2)/(x3 - x2) - (y2 - y1)/(x2 - x1) )/( x3 - x1 );
         AAPiComplexT<T> b = ( (y3 - y2)/(x3 - x2)*(x2 - x1) + (y2 - y1)/(x2 - x1)*(x3 - x2) )/( x3 - x1 );
-        AAPiComplexT<T> res = a * std::pow(x - x2, 2.f) + b * (x - x2) + y2;
+        AAPiComplexT<T> res = a * MathUtils::sqr(x - x2) + b * (x - x2) + y2;
         return res;
     }
 
@@ -111,22 +125,6 @@ public:
     }
 
 };
-
-template<typename T>
-AAPiComplexT<T> MathUtils::_cnonz(const AAPiComplexT<T>& val)
-{
-    if (0. == std::abs( val ))
-        return AAPiComplexT<T>( AAPI_SMALL_REAL, 0.); /* small real value */
-    return val;
-}
-
-template<typename T>
-T MathUtils::_nonz(T val)
-{
-    if (0. == val || -0. == val)
-        return AAPI_SMALL_REAL; /* small value, but much larger than min */
-    return val;
-}
 
 } //namespace aapi
 

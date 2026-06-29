@@ -43,24 +43,25 @@ public:
     ~QAAPiHWCalibrationView();
 
 private:
-    virtual int load_view();
-    virtual void destroy_view();
-
-// Measurement callback
-    virtual int onViewMeasureFinished(AAPiMeasureTask *measure);
+// QAAPiViewBackend
+    AAPiError loadView() override;
+    void destroyView() override;
+    void deactivateView() override;
+    AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
 
 private:
-    AAPiCalibrator  *m_calibrator;
-    uint32_t        m_scanIndex;
-    volatile bool   m_scanCancel;
+    AAPiPtr<AAPiCalibrator> m_calibrator;
+    unsigned int    m_scanIndex;
+    volatile bool   m_scanCancelled;
 
 signals:
-    void scanProgress(int step, int total, double mag_ratio, double phase_diff);
+    void scanProgress(int step, int total, quint32 freq, double mag_ratio, double phase_diff);
+    void scanError(QString message);
     void scanNoSignal();
 
 public slots:
-    int start_hwcal();
-    void cancel_hwcal();
+    AAPiError handleStartScan();
+    void handleCancelScan();
 };
 
 #endif // UI_AAPI_HW_CALIBRATION_VIEW_H

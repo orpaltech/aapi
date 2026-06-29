@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,17 @@ import QtQuick.Layouts
 import QtQuick.Studio.DesignEffects
 
 Item {
-    id: messageBox
+    id: messageBoxItem
 
     property string iconType: "error"
     property string messageText: qsTr("An error has occurred while initializing audio device")
-    property string detailedText: qsTr("Do you want to OK or Cancel ? Please, select.")
+    property string detailedText: qsTr("Do you want to OK or Cancel? Please, select.")
+
+    property int messageTextSize: 16
+    property int detailedTextSize: 16
+
+    readonly property color textLabelColor: AapiTheme.style.textLabelColor
+
     width: 440
     height: 218
 
@@ -52,8 +58,8 @@ Item {
 
                 Image {
                     id: icon1
-                    width: 64
-                    height: 64
+                    Layout.preferredWidth: 64
+                    Layout.preferredHeight: 64
                     Layout.rightMargin: 20
                     source: "/images/" + iconType
                     sourceSize {
@@ -66,15 +72,16 @@ Item {
                     id: labelText1
                     text: messageText
                     wrapMode: Text.WordWrap
+                    color: textLabelColor
                     Layout.fillWidth: true
-                    font.pointSize: 16
+                    font.pointSize: messageTextSize
                 }
             }
 
             RowLayout {
                 id: row112
-                height: 80
                 Layout.fillWidth: true
+                Layout.preferredHeight: 80
                 spacing: 0
 
                 Label {
@@ -83,11 +90,11 @@ Item {
                     horizontalAlignment: Text.AlignLeft
                     verticalAlignment: Text.AlignTop
                     wrapMode: Text.WordWrap
+                    color: textLabelColor
                     Layout.fillWidth: true
-                    font.pointSize: 16
+                    font.pointSize: detailedTextSize
                 }
             }
         }
     }
-
 }

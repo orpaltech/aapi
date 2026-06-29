@@ -22,24 +22,10 @@
 
 #include "aapi_object.h"
 #include "aapi_error.h"
+#include "utils/simple_string.h"
 
 namespace aapi
 {
-
-enum AAPiAudioChannels {
-    AUDIO_CHANNELS_1    = 1,
-    AUDIO_CHANNELS_2    = 2
-};
-
-enum AAPiAudioSampleSize {
-    AUDIO_SSIZE_16  = 16,
-    AUDIO_SSIZE_24  = 24,
-};
-
-enum AAPiAudioSampleRate {
-    AUDIO_SRATE_48K     = 48000,
-    AUDIO_SRATE_96K     = 96000,
-};
 
 enum AAPiAudioError {
     AAPI_AUDIO_E_UNSPECIFIED        = (AAPI_AUDIO_ERROR_START - 0),
@@ -70,28 +56,49 @@ class AAPiAudioReader : public AAPiObject
 public:
     static AAPiAudioReader *create(bool addRef = true);
 
+    enum class Channels : unsigned char {
+        Mono    = 1U,
+        Stereo  = 2U,
+    };
+
+    enum class SampleSize : unsigned char {
+        _16 = 16U,
+        _24 = 24U,
+        _32 = 32U
+    };
+
+    enum class SampleRate : unsigned int {
+        _48K    = 48000U,
+        _96K    = 96000U,
+    };
+
 protected:
     AAPiAudioReader();
     ~AAPiAudioReader();
 
 public:
     virtual unsigned int get_num_devices() = 0;
-    virtual const char *get_device_id(int index) = 0;
-    virtual const char *get_device_name(int index) = 0;
+    virtual AAPiString get_device_id(int index) = 0;
+    virtual AAPiString get_device_name(int index) = 0;
 
-    virtual bool is_format_supported(int index, enum AAPiAudioChannels channels,
-                                     enum AAPiAudioSampleRate sample_rate,
-                                     enum AAPiAudioSampleSize sample_size) = 0;
+    virtual bool is_format_supported(int index, Channels channels,
+                                     SampleRate sample_rate,
+                                     SampleSize sample_size) = 0;
 
-    virtual int open(const char *device_id, AAPiAudioChannels channels,
-                     AAPiAudioSampleRate sample_rate,
-                     AAPiAudioSampleSize sample_size,
-                     uint32_t nsamples) = 0;
+    virtual AAPiError open(const AAPiString& dev_id, Channels channels,
+                           SampleRate sample_rate, SampleSize sample_size,
+                           uint32_t period_samples) = 0;
     virtual void close() { }
 
-    virtual int start(AAPiAudioReaderEvents *callback) = 0;
+    virtual uint32_t get_buffer_size_chan() const = 0;
+
+    virtual AAPiError start(AAPiAudioReaderEvents *callback) = 0;
     virtual void stop() = 0;
 };
+
+using AAPiAudioChannels = AAPiAudioReader::Channels;
+using AAPiAudioSampleRate = AAPiAudioReader::SampleRate;
+using AAPiAudioSampleSize = AAPiAudioReader::SampleSize;
 
 } //namespace aapi
 

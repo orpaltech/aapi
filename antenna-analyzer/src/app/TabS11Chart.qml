@@ -21,26 +21,26 @@ import QtQuick
 import QtQml
 import QtGraphs
 import QtQuick.Window
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
 import QtQuick.Studio.DesignEffects
 import QtQuick.Effects
 import aapi
 import ru.orpaltech.aapi
 
 Item {
-    id: tabRXChartRoot
+    id: tabS11ChartRoot
     property PanoramicScanViewBackend backend: aapi.view_panoramic_scan
-    readonly property string seriesRColor: "#1ec81e"
-    readonly property string seriesXColor: "#dc0e0e"
+    readonly property string seriesColor: "#1ea8dc" // A clean, bright cyan/ice blue line
     width: 1280
     height: 620
     transformOrigin: Item.TopLeft
 
     ColumnLayout {
-        id: column1
+        id: col1
         anchors.fill: parent
 
+        // Toolstrip Row Container
         Item {
             id: row1
             Layout.fillWidth: true
@@ -55,58 +55,40 @@ Item {
                 anchors.topMargin: 2
 
                 Button {
-                    id: btnFastRX
-                    text: qsTr("Fast RX")
-                    rightPadding: 10
-                    leftPadding: 10
+                    id: btnFastS11
+                    text: qsTr("Fast S11")
                     font.bold: true
+                    rightPadding: 8
+                    leftPadding: 8
                     font.pointSize: 14
-
-                    DesignEffect {
-                        effects: [
-                            DesignDropShadow {}
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignDropShadow {} ] }
                 }
 
                 Button {
-                    id: btnSlowRX
-                    text: qsTr("Slow RX")
-                    rightPadding: 10
-                    leftPadding: 10
+                    id: btnSlowS11
+                    text: qsTr("Slow S11")
                     font.bold: true
+                    rightPadding: 8
+                    leftPadding: 8
                     font.pointSize: 14
-
-                    DesignEffect {
-                        effects: [
-                            DesignDropShadow {}
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignDropShadow {} ] }
                 }
 
                 Button {
-                    id: btnSnapshotRX
+                    id: btnSnapshot
                     text: qsTr("Snapshot")
-                    rightPadding: 10
-                    leftPadding: 10
-                    highlighted: false
                     font.bold: true
+                    rightPadding: 8
+                    leftPadding: 8
                     font.pointSize: 14
-
-                    DesignEffect {
-                        effects: [
-                            DesignDropShadow {}
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignDropShadow {} ] }
                 }
 
-                // Absorbs the remaining row space to prevent button stretching
-                Item {
-                    Layout.fillWidth: true
-                }
+                Item { Layout.fillWidth: true } // Trailing Spacer
             }
         }
 
+        // Main Graph Screen Content Window
         Item {
             id: row2
             Layout.fillWidth: true
@@ -123,13 +105,9 @@ Item {
                     z: 2
 
                     GraphsView {
-                        id: chartRX
+                        id: chartS11
                         anchors.fill: parent
-                        z: 3
                         antialiasing: true
-                        layer.enabled: true
-                        layer.samples: 4
-
                         visible: plotArea.width > 0
 
                         theme: GraphsTheme {
@@ -152,33 +130,28 @@ Item {
                         }
 
                         axisX: ValueAxis {
-                            id: chartRXaxisX
+                            id: axisS11_X
                         }
 
                         axisY: ValueAxis {
-                            id: chartRXaxisY
+                            id: axisS11_Y
                         }
 
                         LineSeries {
-                            id: chartRXseriesR
+                            id: chartS11series
                             width: 2.2
-                            color: seriesRColor
-                        }
-
-                        LineSeries {
-                            id: chartRXseriesX
-                            width: 2.2
-                            color: seriesXColor
+                            color: seriesColor
                         }
                     }
                 }
 
+                // Hardware-Accelerated Ham Bands Overlay
                 Item {
                     id: backgroundBandsLayer
-                    x: chartRX.plotArea.x
-                    y: chartRX.plotArea.y
-                    width: chartRX.plotArea.width
-                    height: chartRX.plotArea.height
+                    x: chartS11.plotArea.x
+                    y: chartS11.plotArea.y
+                    width: chartS11.plotArea.width
+                    height: chartS11.plotArea.height
                     z: 4
                     visible: width > 0 && height > 0
 
@@ -208,46 +181,27 @@ Item {
                     }
                 }
 
+                // Synced Descriptive Trace Legend Overlay
                 RowLayout {
-                    id: customLegend
+                    id: customLegendS11
                     anchors.top: chartContainer.top
                     anchors.right: chartContainer.right
-
-                    // Maps offsets dynamically using the active chart plot boundaries
-                    anchors.topMargin: chartRX.plotArea.y + 8
-                    anchors.rightMargin: (chartContainer.width - (chartRX.plotArea.x + chartRX.plotArea.width)) + 16
+                    anchors.topMargin: chartS11.plotArea.y + 8
+                    anchors.rightMargin: (chartContainer.width - (chartS11.plotArea.x + chartS11.plotArea.width)) + 16
                     spacing: 16
                     z: 5
-                    visible: chartRX.plotArea.width > 0
+                    visible: chartS11.plotArea.width > 0
 
-                    // R-Series Label Indicator Block
                     RowLayout {
                         spacing: 6
                         Rectangle {
                             width: 14
                             height: 14
                             radius: 3
-                            color: seriesRColor
+                            color: seriesColor
                         }
                         Text {
-                            text: qsTr("R (Resistance)")
-                            font.pointSize: 10
-                            font.bold: true
-                            color: AapiTheme.style.chart.axisLineColor
-                        }
-                    }
-
-                    // X-Series Label Indicator Block
-                    RowLayout {
-                        spacing: 6
-                        Rectangle {
-                            width: 14
-                            height: 14
-                            radius: 3
-                            color: seriesXColor
-                        }
-                        Text {
-                            text: qsTr("X (Reactance)")
+                            text: qsTr("S11 Log Mag (Return Loss)")
                             font.pointSize: 10
                             font.bold: true
                             color: AapiTheme.style.chart.axisLineColor
@@ -273,43 +227,39 @@ Item {
     }
 
     Connections {
-        target: chartRX
-
+        target: chartS11
         function onPlotAreaChanged() {
-            console.log("new RX-chart plot area: " + chartRX.plotArea.width + ":" + chartRX.plotArea.height)
-            backend.handleRXPlotArea(chartRX.plotArea)
+            backend.handleS11PlotArea(chartS11.plotArea)
+        }
+    }
+
+    // Map your scan actions directly into your existing fast/slow handlers
+    Connections {
+        target: btnFastS11
+        function onClicked() {
+            backend.handleS11ScanFast()
         }
     }
 
     Connections {
-        target: btnFastRX
-
+        target: btnSlowS11
         function onClicked() {
-            backend.handleRXScanFast()
+            backend.handleS11ScanSlow()
         }
     }
 
     Connections {
-        target: btnSlowRX
-
+        target: btnSnapshot
         function onClicked() {
-            backend.handleRXScanSlow()
-        }
-    }
-
-    Connections {
-        target: btnSnapshotRX
-
-        function onClicked() {
-            chartRX.grabToImage(function(result) {
-                backend.handleRXSnapshot(result)
+            chartS11.grabToImage(function(result) {
+                backend.handleS11Snapshot(result)
                 snapshotDialog.show()
             });
         }
     }
 
     Component.onCompleted: {
-        backend.handleRXChartSetup(chartRXseriesR, chartRXseriesX, chartRXaxisX, chartRXaxisY)
+        backend.handleS11ChartSetup(chartS11series, axisS11_X, axisS11_Y)
     }
 
     AapiMessageBox {
@@ -321,14 +271,14 @@ Item {
         scale: 1
 
         function show() {
-            messageText = qsTr("RX snapshot taken into:\n") + aapi.last_snapshot
+            messageText = qsTr("S11 snapshot taken into:\n") + aapi.last_snapshot
             open()
         }
     }
 
     function enableControls(enable) {
-        btnFastRX.enabled = enable
-        btnSlowRX.enabled = enable
-        btnSnapshotRX.enabled = enable
+        btnFastS11.enabled = enable
+        btnSlowS11.enabled = enable
+        btnSnapshot.enabled = enable
     }
 }

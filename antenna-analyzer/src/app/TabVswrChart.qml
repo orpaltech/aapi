@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,50 +19,39 @@
 
 import QtQuick
 import QtQml
-import QtCharts
+import QtGraphs
 import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Studio.DesignEffects
+import QtQuick.Effects
 import aapi
 import ru.orpaltech.aapi
 
-
 Item {
+    id: tabVSWRChart
     property PanoramicScanViewBackend backend: aapi.view_panoramic_scan
+    readonly property string seriesColor: "#dc1e1e"
     width: 1280
     height: 620
     transformOrigin: Item.TopLeft
 
-
-    Column {
+    ColumnLayout {
         id: col1
         anchors.fill: parent
-        transformOrigin: Item.TopLeft
 
-        Row {
+        Item {
             id: row1
-            height: 36
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 0
-            anchors.rightMargin: 0
-            transformOrigin: Item.TopLeft
+            Layout.fillWidth: true
+            Layout.preferredHeight: 36
 
-            Row {
+            RowLayout {
                 id: rowButtons
                 spacing: 8
-                anchors {
-                    margins: 5
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-                width: parent.width
+                anchors.fill: parent
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
                 anchors.topMargin: 2
-                transformOrigin: Item.TopLeft
 
                 Button {
                     id: btnFastVSWR
@@ -70,13 +59,11 @@ Item {
                     font.bold: true
                     rightPadding: 8
                     leftPadding: 8
-                    transformOrigin: Item.TopLeft
                     font.pointSize: 14
 
                     DesignEffect {
                         effects: [
-                            DesignDropShadow {
-                            }
+                            DesignDropShadow {}
                         ]
                     }
                 }
@@ -87,13 +74,11 @@ Item {
                     font.bold: true
                     rightPadding: 8
                     leftPadding: 8
-                    transformOrigin: Item.TopLeft
                     font.pointSize: 14
 
                     DesignEffect {
                         effects: [
-                            DesignDropShadow {
-                            }
+                            DesignDropShadow {}
                         ]
                     }
                 }
@@ -104,68 +89,157 @@ Item {
                     font.bold: true
                     rightPadding: 8
                     leftPadding: 8
-                    transformOrigin: Item.TopLeft
                     font.pointSize: 14
 
                     DesignEffect {
                         effects: [
-                            DesignDropShadow {
-                            }
+                            DesignDropShadow {}
                         ]
                     }
+                }
+
+                // This invisible spacer absorbs all trailing space,
+                // pushing the buttons together on the left side.
+                Item {
+                    Layout.fillWidth: true
                 }
             }
         }
 
-        Row {
+        Item {
             id: row2
-            height: 584
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 0
-            anchors.rightMargin: 0
-            transformOrigin: Item.TopLeft
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            ChartView {
-                id: chartVSWR
+            Item {
+                id: chartContainer
                 anchors.fill: parent
-                transformOrigin: Item.TopLeft
-                anchors {
-                    top: rowButtons.bottom
-                }
-                theme: ChartView.ChartThemeQt
-                backgroundColor: "#bdc3f5"
-                backgroundRoundness: 0
-                antialiasing: true
-                legend {
-                    visible: false
-                    alignment: Qt.AlignTop
-                    font.pointSize: 7
-                }
-                margins {
-                    top: 2
-                    left: 0
-                    right: 0
-                    bottom: 2
-                }
 
-                axes: [
-                    ValueAxis {
-                        id: axisVSWR_X
-                        labelsFont.pointSize: 6
-                    },
-                    ValueAxis {
-                        id: axisVSWR_Y
-                        labelsFont.pointSize: 6
+                Rectangle {
+                    id: chartVisualBox
+                    anchors.fill: parent
+                    color: "transparent"
+                    z: 2
+
+                    GraphsView {
+                        id: chartVSWR
+                        anchors.fill: parent
+                        antialiasing: true
+                        layer.enabled: true
+                        layer.samples: 4
+
+                        visible: plotArea.width > 0
+
+                        theme: GraphsTheme {
+                            theme: GraphsTheme.Theme.UserDefined
+                            plotAreaBackgroundColor: AapiTheme.style.chart.plotAreaColor
+                            backgroundColor: "transparent"
+                            axisXLabelFont.pointSize: 6
+                            axisYLabelFont.pointSize: 6
+
+                            axisX.mainColor: AapiTheme.style.chart.axisLineColor
+                            axisX.subColor: AapiTheme.style.chart.gridLineColor
+
+                            axisY.mainColor: AapiTheme.style.chart.axisLineColor
+                            axisY.subColor: AapiTheme.style.chart.gridLineColor
+
+                            grid {
+                                mainColor: AapiTheme.style.chart.gridLineColor
+                                subColor: AapiTheme.style.chart.minorGridLineColor
+                            }
+                        }
+
+                        axisX: ValueAxis {
+                            id: axisVSWR_X
+                        }
+                        axisY: ValueAxis {
+                            id: axisVSWR_Y
+                        }
+
+                        LineSeries {
+                            id: chartVSWRseries
+                            width: 2.2
+                            color: seriesColor
+                        }
                     }
-                ]
+                }
 
-                SplineSeries {
-                    id: chartVSWRseries
-                    name: "VSWR"
-                    axisX: axisVSWR_X
-                    axisY: axisVSWR_Y
-                    color: "#dc1e1e"
+                Item {
+                    id: backgroundBandsLayer
+                    x: chartVSWR.plotArea.x
+                    y: chartVSWR.plotArea.y
+                    width: chartVSWR.plotArea.width
+                    height: chartVSWR.plotArea.height
+                    z: 4
+                    visible: width > 0 && height > 0
+
+                    Repeater {
+                        model: backend.ham_radio_bands
+
+                        delegate: Rectangle {
+                            property real parentW: backgroundBandsLayer.width
+                            property real start_freq: backend.start_freq
+                            property real band_span: backend.band_span
+
+                            x: ((modelData.lo - start_freq) / band_span) * parentW
+                            width: ((modelData.hi - modelData.lo) / band_span) * parentW
+                            height: backgroundBandsLayer.height
+
+                            color: Qt.rgba(0, 0, 0, 0.15)
+                            visible: width > 3
+
+                            Component.onCompleted: {
+                                console.log("BAND DEBUG -> lo:", modelData.lo,
+                                            "hi:", modelData.hi,
+                                            "backend.start:", start_freq,
+                                            "backend.span:", band_span,
+                                            "Computed Width:", width)
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    id: customLegendVSWR
+                    anchors.top: chartContainer.top
+                    anchors.right: chartContainer.right
+
+                    // Aligns dynamically relative to the active plot area boundaries
+                    anchors.topMargin: chartVSWR.plotArea.y + 8
+                    anchors.rightMargin: (chartContainer.width - (chartVSWR.plotArea.x + chartVSWR.plotArea.width)) + 16
+                    spacing: 16
+                    z: 5
+                    visible: chartVSWR.plotArea.width > 0
+
+                    RowLayout {
+                        spacing: 6
+                        Rectangle {
+                            width: 14
+                            height: 14
+                            radius: 3
+                            color: seriesColor
+                        }
+                        Text {
+                            text: qsTr("VSWR")
+                            font.pointSize: 10
+                            font.bold: true
+                            color: AapiTheme.style.chart.axisLineColor
+                        }
+                    }
+                }
+
+                MultiEffect {
+                    anchors.fill: chartVisualBox
+                    source: chartVisualBox
+                    shadowEnabled: AapiTheme.style.chart.dropShadowEnabled
+                    shadowColor: Qt.rgba(0, 0, 0, 0.4)
+                    shadowHorizontalOffset: 5
+                    shadowVerticalOffset: 5
+                    shadowBlur: 0.65
+                    blurMultiplier: 1.0
+                    autoPaddingEnabled: true
+                    shadowScale: 1.01
+                    z: 1
                 }
             }
         }
@@ -173,61 +247,53 @@ Item {
 
     Connections {
         target: chartVSWR
-        onPlotAreaChanged: {
+        function onPlotAreaChanged() {
             console.log("new VSWR-chart plot area: " + chartVSWR.plotArea.width + ":" + chartVSWR.plotArea.height)
-            backend.vswr_plot_area(chartVSWR.plotArea)
+            backend.handleVSWRPlotArea(chartVSWR.plotArea)
         }
     }
 
     Connections {
         target: btnFastVSWR
-        onClicked: {
-            backend.vswr_fast_scan()
+        function onClicked() {
+            backend.handleVSWRScanFast()
         }
     }
 
     Connections {
         target: btnSlowVSWR
-        onClicked: {
-            backend.vswr_slow_scan()
+        function onClicked() {
+            backend.handleVSWRScanSlow()
         }
     }
 
     Connections {
         target: btnSnapshot
-        onClicked: {
+        function onClicked() {
             chartVSWR.grabToImage(function(result) {
-                backend.vswr_snapshot(result)
+                backend.handleVSWRSnapshot(result)
                 snapshotDialog.show()
             });
         }
     }
 
     Component.onCompleted: {
-        backend.vswr_setup(chartVSWRseries)
+        backend.handleVSWRChartSetup(chartVSWRseries, axisVSWR_X, axisVSWR_Y)
     }
 
-    Dialog {
+    AapiMessageBox {
         id: snapshotDialog
-        title: qsTr("New Snapshot")
-        modal: true
-        x: (Screen.width - snapshotDialog.width)/2
-        y: (Screen.height - snapshotDialog.height)/2
+        caption: qsTr("New Snapshot")
+        iconType: "exclamation"
+        detailedText: ""
         standardButtons: Dialog.Ok
-
-        Label {
-            id: labelMessage
-            wrapMode: Text.WordWrap
-        }
+        scale: 1
 
         function show() {
-            labelMessage.text = qsTr("VSWR snapshot taken into: ") + analyzer.lastSnapshot
+            messageText = qsTr("VSWR snapshot taken into:\n") + aapi.last_snapshot
             open()
         }
     }
-
-
-
 
     function enableControls(enable) {
         btnFastVSWR.enabled = enable

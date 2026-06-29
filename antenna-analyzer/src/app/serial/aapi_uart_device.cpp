@@ -105,10 +105,9 @@ AAPiUartDevice::~AAPiUartDevice()
 int AAPiUartDevice::enumerate(AAPiArray<AAPiString>& device_names)
 {
     const char* dev_path = "/dev/";
-    DIR* dir = opendir(dev_path);
 
-    if (dir == nullptr)
-    {
+    auto dir = opendir(dev_path);
+    if (dir == nullptr) {
         return AAPI_E_OPEN_DIR_FAILED;
     }
 
@@ -117,11 +116,11 @@ int AAPiUartDevice::enumerate(AAPiArray<AAPiString>& device_names)
     int fd;
     while ((entry = readdir(dir)) != nullptr)
     {
-        AAPiString filename = entry->d_name;
+        AAPiString filename{ entry->d_name };
 
-        if (filename.rfind("ttyUSB", 0) == 0)   // USB-to-serial adapters
+        if (filename.rfind(AAPiString{"ttyUSB"}, 0) == 0)   // USB-to-serial adapters
         {
-            AAPiString full_path = AAPiString(dev_path) + filename;
+            auto full_path = AAPiString(dev_path) + filename;
             fd = ::open(full_path, O_RDWR | O_NOCTTY | O_NDELAY);
             if (fd != -1)
             {
@@ -130,10 +129,10 @@ int AAPiUartDevice::enumerate(AAPiArray<AAPiString>& device_names)
             }
         }
 
-        if (filename.rfind("ttyACM", 0) == 0 || // USB CDC-ACM devices (e.g., Arduino)
-            filename.rfind("ttyAMA", 0) == 0)   // RaspberryPi serial port
+        if (filename.rfind(AAPiString{"ttyACM"}, 0) == 0 || // USB CDC-ACM devices (e.g., Arduino)
+            filename.rfind(AAPiString{"ttyAMA"}, 0) == 0)   // RaspberryPi serial port
         {
-            AAPiString full_path = AAPiString(dev_path) + filename;
+            auto full_path = AAPiString(dev_path) + filename;
             fd = ::open(full_path, O_RDWR | O_NOCTTY | O_NDELAY);
             if (fd != -1)
             {
@@ -143,11 +142,11 @@ int AAPiUartDevice::enumerate(AAPiArray<AAPiString>& device_names)
         }
 
         // all the rest
-        if (filename.rfind("ttyS", 0) == 0 ||   // Standard serial ports
-            filename.rfind("ttyACM", 0) == 0 || // USB CDC-ACM devices (e.g., Arduino)
-            filename.rfind("ttyAMA", 0) == 0)   // RaspberryPi serial port
+        if (filename.rfind(AAPiString{"ttyS"}, 0) == 0 ||   // Standard serial ports
+            filename.rfind(AAPiString{"ttyACM"}, 0) == 0 || // USB CDC-ACM devices (e.g., Arduino)
+            filename.rfind(AAPiString{"ttyAMA"}, 0) == 0)   // RaspberryPi serial port
         {
-            AAPiString full_path = AAPiString(dev_path) + filename;
+            auto full_path = AAPiString(dev_path) + filename;
             fd = ::open(full_path, O_RDWR | O_NOCTTY | O_NDELAY);
             if (fd != -1)
             {

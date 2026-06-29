@@ -26,12 +26,19 @@ import aapi
 
 
 SwipePage {
-    property alias layoutOslCal: layoutOslCal
-    readonly property int optionHeight: 42
-
     id: viewOslCal
     title: "OSL Calibration"
     backend: aapi.view_osl_calibration
+
+    property alias layoutOslCal: layoutOslCal
+    readonly property int optionHeight: 42
+
+    readonly property color textLabelColor: AapiTheme.style.textLabelColor
+    readonly property color resistanceLabelColor: AapiTheme.style.highContrastRedColor
+    // Color logic: Red if dead signal (~0), Orange if saturated (>90), Teal if safe
+    readonly property color telemetryDeadColor: AapiTheme.style.telemetryDeadColor
+    readonly property color telemetryHighColor: AapiTheme.style.telemetryAlertColor
+    readonly property color telemetryLabelColor: AapiTheme.style.accentMutedColor
 
     ColumnLayout {
         id: layoutOslCal
@@ -47,11 +54,12 @@ SwipePage {
 
             Label {
                 id: labelOSLFile
-                width: 105
-                text: qsTr("Calibration File:")
+                width: 120
+                text: qsTr("Select Calibration File:")
                 font.pointSize: 20
                 horizontalAlignment: Text.AlignRight
             }
+
             ComboBox {
                 id: cbOslFile
                 implicitHeight: optionHeight
@@ -61,9 +69,10 @@ SwipePage {
                 model: ListModel {
                     id: cbOslFileModel
                 }
+
                 contentItem: Text {
                     id: cbOslFileText
-                    leftPadding: 0
+                    /*leftPadding: 0*/
                     rightPadding: cbOslFile.indicator.width + cbOslFile.spacing
 
                     text: cbOslFile.displayText
@@ -73,6 +82,7 @@ SwipePage {
                     horizontalAlignment: Text.AlignHCenter
                     elide: Text.ElideRight
                 }
+
                 delegate: ItemDelegate {
                     id: cbOslFileDelegate
 
@@ -99,26 +109,18 @@ SwipePage {
                         return;
 
                     backend.osl_file = cbOslFile.model.get(cbOslFile.currentIndex).value;
-
-                    statShort.state = "disabled";
-                    statLoad.state = "disabled";
-                    statOpen.state = "disabled";
-
-                    updateOslFileExists();
                 }
 
                 DesignEffect {
-                    effects: [
-                        DesignDropShadow {
-                        }
-                    ]
+                    effects: [ DesignDropShadow { } ]
                 }
             }
+
             Label {
                 id: labelOslFileExist
                 width: 145
                 text: qsTr("File exists")
-                font.pointSize: 16
+                font.pointSize: 18
             }
         }
 
@@ -133,183 +135,316 @@ SwipePage {
                 contentWidth: 980
                 contentHeight: 420
 
-                ColumnLayout {
-                    id: col21
+                // Split the frame horizontally: Left for Button controls, Right for telemetry readouts
+                RowLayout {
                     anchors.fill: parent
+                    spacing: 30
 
-                    RowLayout {
-                        id: row21
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        spacing: 24
+                    // Left Block: The 3 calibration options pulled closer together
+                    ColumnLayout {
+                        id: colControls
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                        spacing: 30
 
-                        Label {
-                            id: labelShort
-                            text: qsTr("Scan Short:")
-                            font.pointSize: 24
-                            horizontalAlignment: Text.AlignRight
-                            textFormat: Text.PlainText
-                            font.bold: true
-                        }
-                        Label {
-                            id: labelShortR
-                            color: "#af0404"
-                            text: qsTr("10 Ohm")
-                            font.bold: true
-                            font.pointSize: 24
-                        }
-                        StatusIndicatorCtrl {
-                            id: statShort
-                            width: 40
-                            height: 40
+                        // --- OPEN ROW --->>
+                        RowLayout {
+                            id: row23
+                            spacing: 16
 
-                            DesignEffect {
-                                effects: [
-                                    DesignDropShadow {
-                                    }
-                                ]
-                            }
-                        }
-                        TwoStateButtonCtrl {
-                            id: btnShortScan
-                            implicitWidth: 160
-                            font.italic: false
-                            font.bold: false
-                            onText: qsTr("Scan")
-                            on: false
-                            offText: qsTr("Scan")
-                            font.pointSize: 26
+                            TwoStateButtonCtrl {
+                                id: btnOpenScan
+                                implicitWidth: 160
+                                offText: qsTr("Start")
+                                onText: qsTr("Cancel")
+                                font.pointSize: 20
 
-                            function onStart() {
-                                scanDialog.show(OSLCalibrationViewBackend.SCAN_SHORT);
-                                return false;
-                            }
-                            function onStop() {
-                                backend.cancel_scan();
-                                statShort.state = "disabled";
+                                function onStart() {
+                                    console.log("OSL Cal: onStart Initiated")
+                                    scanDialog.show(OSLCalibrationViewBackend.SCAN_OPEN);
+                                    return false;
+                                }
+                                function onStop() {
+                                    console.log("OSL Cal: onStop Interrupted")
+                                    backend.handleCancelScan();
+                                    statOpen.state = "disabled";
+                                }
+
+                                DesignEffect {
+                                    effects: [ DesignDropShadow { } ]
+                                }
                             }
 
-                            DesignEffect {
-                                effects: [
-                                    DesignDropShadow {
-                                    }
-                                ]
+                            Label {
+                                id: labelOpen
+                                color: textLabelColor
+                                text: qsTr("[O]PEN")
+                                font {
+                                    pointSize: 22;
+                                    bold: true;
+                                }
+                                Layout.fillWidth: false
+                                Layout.preferredWidth: 140
+                            }
+
+                            Label {
+                                id: labelOpenR
+                                color: resistanceLabelColor
+                                text: qsTr("10 Ohm")
+                                font {
+                                    pointSize: 22;
+                                    bold: true;
+                                }
+                                horizontalAlignment: Text.AlignRight
+                                Layout.fillWidth: false
+                                Layout.preferredWidth: 140
+                            }
+
+                            StatusIndicatorCtrl {
+                                id: statOpen
+                                width: 36;
+                                height: 36
+
+                                DesignEffect {
+                                    effects: [ DesignDropShadow { } ]
+                                }
                             }
                         }
+                        // <<--- OPEN ROW ---
+
+                        // --- SHORT ROW --->>
+                        RowLayout {
+                            id: row21
+                            spacing: 16
+
+                            TwoStateButtonCtrl {
+                                id: btnShortScan
+                                implicitWidth: 160
+                                offText: qsTr("Start")
+                                onText: qsTr("Cancel")
+                                font.pointSize: 20
+
+                                function onStart() {
+                                    console.log("OSL Cal: onStart Initiated")
+                                    scanDialog.show(OSLCalibrationViewBackend.SCAN_SHORT);
+                                    return false;
+                                }
+                                function onStop() {
+                                    console.log("OSL Cal: onStop Interrupted")
+                                    backend.handleCancelScan();
+                                    statShort.state = "disabled";
+                                }
+
+                                DesignEffect {
+                                    effects: [ DesignDropShadow { } ]
+                                }
+                            }
+
+                            Label {
+                                id: labelShort
+                                color: textLabelColor
+                                text: qsTr("[S]HORT")
+                                font {
+                                    pointSize: 22;
+                                    bold: true;
+                                }
+                                Layout.fillWidth: false
+                                Layout.preferredWidth: 140
+                            }
+
+                            Label {
+                                id: labelShortR
+                                color: resistanceLabelColor
+                                text: qsTr("10 Ohm")
+                                font {
+                                    pointSize: 22;
+                                    bold: true;
+                                }
+                                horizontalAlignment: Text.AlignRight
+                                Layout.fillWidth: false
+                                Layout.preferredWidth: 140
+                            }
+
+                            StatusIndicatorCtrl {
+                                id: statShort
+                                width: 36;
+                                height: 36
+
+                                DesignEffect {
+                                    effects: [ DesignDropShadow { } ]
+                                }
+                            }
+                        }
+                        // <<--- SHORT ROW ---
+
+                        // --- LOAD ROW --->>
+                        RowLayout {
+                            id: row22
+                            spacing: 16
+
+                            TwoStateButtonCtrl {
+                                id: btnLoadScan
+                                implicitWidth: 160
+                                offText: qsTr("Start")
+                                onText: qsTr("Cancel")
+                                font.pointSize: 20
+
+                                function onStart() {
+                                    console.log("OSL Cal: onStart Initiated")
+                                    scanDialog.show(OSLCalibrationViewBackend.SCAN_LOAD);
+                                    return false;
+                                }
+                                function onStop() {
+                                    console.log("OSL Cal: onStop Interrupted")
+                                    backend.handleCancelScan();
+                                    statLoad.state = "disabled";
+                                }
+
+                                DesignEffect {
+                                    effects: [ DesignDropShadow { } ]
+                                }
+                            }
+
+                            Label {
+                                id: labelLoad
+                                text: qsTr("[L]OAD")
+                                color: textLabelColor
+                                font {
+                                    pointSize: 22;
+                                    bold: true;
+                                }
+                                Layout.fillWidth: false
+                                Layout.preferredWidth: 140
+                            }
+
+                            Label {
+                                id: labelLoadR
+                                color: resistanceLabelColor
+                                text: qsTr("10 Ohm")
+                                font {
+                                    pointSize: 22;
+                                    bold: true;
+                                }
+                                horizontalAlignment: Text.AlignRight
+                                Layout.fillWidth: false
+                                Layout.preferredWidth: 140
+                            }
+
+                            StatusIndicatorCtrl {
+                                id: statLoad
+                                width: 36;
+                                height: 36
+
+                                DesignEffect {
+                                    effects: [ DesignDropShadow { } ]
+                                }
+                            }
+                        }
+                        // <<--- LOAD ROW ---
                     }
 
-                    RowLayout {
-                        id: row22
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        spacing: 24
-
-                        Label {
-                            id: labelLoad
-                            text: qsTr("Scan Load:")
-                            font.pointSize: 24
-                            horizontalAlignment: Text.AlignRight
-                            textFormat: Text.PlainText
-                            font.bold: true
-                        }
-                        Label {
-                            id: labelLoadR
-                            color: "#af0404"
-                            text: qsTr("10 Ohm")
-                            font.pointSize: 24
-                            font.bold: true
-                        }
-                        StatusIndicatorCtrl {
-                            id: statLoad
-                            width: 40
-                            height: 40
-
-                            DesignEffect {
-                                effects: [
-                                    DesignDropShadow {
-                                    }
-                                ]
-                            }
-                        }
-                        TwoStateButtonCtrl {
-                            id: btnLoadScan
-                            implicitWidth: 160
-                            offText: qsTr("Scan")
-                            onText: qsTr("Cancel")
-                            font.pointSize: 26
-
-                            function onStart() {
-                                scanDialog.show(OSLCalibrationViewBackend.SCAN_LOAD);
-                                return false;
-                            }
-                            function onStop() {
-                                backend.cancel_scan();
-                                statLoad.state = "disabled";
-                            }
-
-                            DesignEffect {
-                                effects: [
-                                    DesignDropShadow {
-                                    }
-                                ]
-                            }
-                        }
+                    // Vertical Separator Bar
+                    Rectangle {
+                        Layout.fillHeight: true
+                        width: 2
+                        color: "#dddddd"
+                        Layout.topMargin: 20
+                        Layout.bottomMargin: 20
                     }
 
-                    RowLayout {
-                        id: row23
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        spacing: 24
+                    // Right Block: Real-time Telemetry parameters
+                    ColumnLayout {
+                        id: colTelemetry
+                        Layout.preferredWidth: 360
+                        Layout.alignment: Qt.AlignVCenter
+                        spacing: 20
 
                         Label {
-                            id: labelOpen
-                            text: qsTr("Scan Open:")
-                            font.pointSize: 24
-                            horizontalAlignment: Text.AlignRight
-                            textFormat: Text.PlainText
-                            font.bold: true
-                            transformOrigin: Item.TopLeft
+                            text: qsTr("Live Scan Parameters")
+                            font {
+                                pointSize: 22;
+                            }
+                            color: textLabelColor
+                            Layout.bottomMargin: 10
                         }
-                        Label {
-                            id: labelOpenR
-                            color: "#af0404"
-                            text: qsTr("10 Ohm")
-                            font.pointSize: 24
-                            font.bold: true
-                        }
-                        StatusIndicatorCtrl {
-                            id: statOpen
-                            width: 40
-                            height: 40
 
-                            DesignEffect {
-                                effects: [
-                                    DesignDropShadow {
-                                    }
-                                ]
+                        // Frequency Readout Block
+                        RowLayout {
+                            spacing: 10
+                            Label {
+                                text: qsTr("Frequency:")
+                                font {
+                                    pointSize: 18;
+                                    bold: true
+                                }
+                                Layout.preferredWidth: 130
+                            }
+                            Label {
+                                id: lblTelemetryFreq
+                                text: qsTr("0.000 MHz")
+                                font {
+                                    pointSize: 18;
+                                    bold: true
+                                    family: "Monospace"
+                                }
+                                color: telemetryLabelColor
                             }
                         }
-                        TwoStateButtonCtrl {
-                            id: btnOpenScan
-                            implicitWidth: 160
-                            offText: qsTr("Scan")
-                            onText: qsTr("Cancel")
-                            font.pointSize: 26
 
-                            function onStart() {
-                                scanDialog.show(OSLCalibrationViewBackend.SCAN_OPEN);
-                                return false;
+                        // RX Real Part Readout Block
+                        RowLayout {
+                            spacing: 10
+                            Label {
+                                text: qsTr("RX Real:")
+                                font {
+                                    pointSize: 18;
+                                    bold: true
+                                }
+                                Layout.preferredWidth: 130
                             }
-                            function onStop() {
-                                backend.cancel_scan();
-                                statOpen.state = "disabled";
-                            }
+                            Label {
+                                id: lblTelemetryRxRe
+                                property real val: 0.0
+                                text: val.toFixed(5)
+                                font {
+                                    pointSize: 18;
+                                    bold: true
+                                    family: "Monospace"
+                                }
 
-                            DesignEffect {
-                                effects: [
-                                    DesignDropShadow {
-                                    }
-                                ]
+                                // Color logic: Red if dead signal (~0), Orange if saturated (>90), Teal if safe
+                                color: Math.abs(val) < 0.005 ? telemetryDeadColor :
+                                        ((Math.abs(val) > 90.0 ? telemetryHighColor : telemetryLabelColor))
                             }
                         }
+
+                        // RX Imaginary Part Readout Block
+                        RowLayout {
+                            spacing: 10
+                            Label {
+                                text: qsTr("RX Imag:")
+                                font {
+                                    pointSize: 18;
+                                    bold: true
+                                }
+                                Layout.preferredWidth: 130
+                            }
+                            Label {
+                                id: lblTelemetryRxIm
+                                property real val: 0.0
+                                text: val.toFixed(5)
+                                font {
+                                    pointSize: 18;
+                                    bold: true
+                                    family: "Monospace"
+                                }
+
+                                // Color logic: Red if dead signal (~0), Orange if saturated (>90), Teal if safe
+                                color: Math.abs(val) < 0.005 ? telemetryDeadColor :
+                                        ((Math.abs(val) > 90.0 ? telemetryHighColor : telemetryLabelColor))
+                            }
+                        }
+
                     }
                 }
             }
@@ -322,28 +457,30 @@ SwipePage {
 
             ProgressCtrl {
                 id: scanProgress
-                height: 38
-                color: "#006866"
-                secondColor: "#25fffc"
-                value: 100
-                Layout.rightMargin: 141
-                Layout.leftMargin: 141
+                height: 36
                 Layout.fillWidth: true
+                Layout.rightMargin: 140
+                Layout.leftMargin: 140
+                // Binds dynamically to your theme architecture variables
+                color: AapiTheme.style.progressGradientColor1
+                secondColor: AapiTheme.style.progressGradientColor2
+                value: 0
             }
         }
     }
 
     AapiMessageBox {
         id: scanDialog
-        caption: qsTr("Scan")
+        caption: qsTr("")
         iconType: "exclamation"
-        detailedText: ""
+        detailedText: qsTr("")
+        messageTextSize: 18
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         property int scanType
 
         onAccepted: {
-            if (backend.start_scan(scanType)) {
+            if (backend.handleStartScan(scanType) !== 0) {
                 // TODO: display error
                 return;
             }
@@ -362,7 +499,7 @@ SwipePage {
                 break;
             }
 
-            enableControls(scanType, false);
+            enableControls(scanType);
         }
 
         function show(type) {
@@ -389,68 +526,6 @@ SwipePage {
         }
     }
 
-/*
-    Dialog {
-        property int scanType
-
-        id: scanDialog2
-        title: qsTr("OSL Calibration")
-        modal: true
-        font.pointSize: 10
-        standardButtons: Dialog.Ok | Dialog.Cancel
-        anchors.centerIn: parent
-        scale: 1.2
-
-        Label {
-            id: labelMsg
-            wrapMode: Text.WordWrap
-        }
-
-        onAccepted: {
-            if (backend.start_scan(scanType)) {
-                // TODO: display error
-                return;
-            }
-            switch (scanType) {
-            case OSLCalibrationViewBackend.SCAN_SHORT:
-                statShort.state = "busy";
-                btnShortScan.setOn();
-                break;
-            case OSLCalibrationViewBackend.SCAN_LOAD:
-                statLoad.state = "busy";
-                btnLoadScan.setOn()
-                break;
-            case OSLCalibrationViewBackend.SCAN_OPEN:
-                statOpen.state = "busy";
-                btnOpenScan.setOn();
-                break;
-            }
-
-            enableControls(scanType, false);
-        }
-
-
-        function show(type) {
-            scanType = type;
-            switch (scanType) {
-            case OSLCalibrationViewBackend.SCAN_SHORT:
-                title = qsTr("Scan Short");
-                labelMsg.text = labelMsgText(backend.r_short);
-                break;
-            case OSLCalibrationViewBackend.SCAN_LOAD:
-                title = qsTr("Scan Load");
-                labelMsg.text = labelMsgText(backend.r_load);
-                break;
-            case OSLCalibrationViewBackend.SCAN_OPEN:
-                title = qsTr("Scan Open");
-                labelMsg.text = labelMsgText(backend.r_open);
-                break;
-            }
-            open();
-        }
-    }
-*/
-
     AapiMessageBox {
         id: scanError
         caption: qsTr("Error")
@@ -463,111 +538,170 @@ SwipePage {
         }
     }
 
+    // This event runs automatically when swiped into focus
+    onActivated: {
+        console.log("is now ACTIVE")
+    }
+
+    // This event runs automatically when swiped out of focus or destroyed
+    onDeactivated: {
+        console.log("is now INACTIVE")
+    }
+
     onLoaded: {
-        // populate combobox options
+        if (!backend) return;
+
+        // Clear old values safely
         cbOslFile.model.clear();
+
+        // Populate combobox options
         var curSel = 0;
+
+        // Safely unpack all options
         for (var i = 0; i < backend.num_osl_files; i++) {
             var el = {
                 text: backend.file_opt_labels[i],
                 value: backend.file_opt_values[i]
             };
             cbOslFile.model.append(el);
+
+            // If the value matches the active backend file selection, lock it down
             if (backend.osl_file === backend.file_opt_values[i]) {
                 curSel = i;
             }
         }
+        // Update selection marker
         cbOslFile.currentIndex = curSel;
-        cbOslFile.update();
 
+        // Static resistance texts
         labelShortR.text = backend.r_short + " Ohm";
-        labelLoadR.text = backend.r_load + " Ohm";
-        labelOpenR.text = backend.r_open + " Ohm";
+        labelLoadR.text  = backend.r_load  + " Ohm";
+        labelOpenR.text  = backend.r_open  + " Ohm";
+
+        // Force a manual evaluation cycle immediately upon boot completion
+        updateOslFileExists();
     }
 
     Connections {
         target: backend
-        function onScanProgress() {
-            updateScanProgress(type, step, total);
+        ignoreUnknownSignals: true
+
+        onScanProgress: (scan_type, step, total, freq, rx_re, rx_im) => {
+            console.log("OSL calibration scan progress");
+
+            scanProgress.minimum = 0;
+            scanProgress.maximum = total;
+            scanProgress.value = step;
+
+            // Format frequency from C++ raw Hz directly up to readable MHz
+            var currentMHz = freq / 1000000.0
+            lblTelemetryFreq.text = currentMHz.toFixed(3) + " MHz"
+            // Push raw numeric variables into telemetry components to update labels and trigger colors
+            lblTelemetryRxRe.val = rx_re;
+            lblTelemetryRxIm.val = rx_im;
+
+            if (step === total) { // scan finished
+                enableControls();
+
+                switch (scan_type) {
+                case OSLCalibrationViewBackend.SCAN_OPEN:
+                    statOpen.state = "success";
+                    btnOpenScan.setOff();
+                    break;
+                case OSLCalibrationViewBackend.SCAN_SHORT:
+                    statShort.state = "success";
+                    btnShortScan.setOff();
+                    break;
+                case OSLCalibrationViewBackend.SCAN_LOAD:
+                    statLoad.state = "success";
+                    btnLoadScan.setOff();
+                    break;
+                }
+            }
         }
-        function onScanNoSignal() {
-            updateScanNoSignal(type);
-        }
-        function onOslFileExistsChanged() {
-            updateOslFileExists();
-        }
-    }
 
-    function updateScanNoSignal(type) {
-        scanError.show(qsTr("Low signal. Please, check hardware."));
+        onScanNoSignal: (scan_type) => {
+            scanError.show(qsTr("Low signal. Please, check hardware."));
 
-        enableControls(type, true);
+            enableControls();
 
-        switch (type) {
-        case OSLCalibrationViewBackend.SCAN_SHORT:
-            statShort.state = "disabled";
-            btnShortScan.setOff();
-            break;
-        case OSLCalibrationViewBackend.SCAN_LOAD:
-            statLoad.state = "disabled";
-            btnLoadScan.setOff();
-            break;
-        case OSLCalibrationViewBackend.SCAN_OPEN:
-            statOpen.state = "disabled";
-            btnOpenScan.setOff();
-            break;
-        }
-    }
-
-    function updateScanProgress(type, step, total) {
-        console.log("OSL calibration scan progress");
-        scanProgress.minimum = 0;
-        scanProgress.maximum = total;
-        scanProgress.value = step;
-
-        if (step === total) { /* scan finished */
-            enableControls(type, true);
-
-            switch (type) {
+            switch (scan_type) {
             case OSLCalibrationViewBackend.SCAN_SHORT:
-                statShort.state = "success";
+                statShort.state = "disabled";
                 btnShortScan.setOff();
                 break;
             case OSLCalibrationViewBackend.SCAN_LOAD:
-                statLoad.state = "success";
+                statLoad.state = "disabled";
                 btnLoadScan.setOff();
                 break;
             case OSLCalibrationViewBackend.SCAN_OPEN:
-                statOpen.state = "success";
+                statOpen.state = "disabled";
                 btnOpenScan.setOff();
                 break;
             }
         }
+
+        onOslFileChanged: {
+            updateOslFileExists();
+
+            // invalidate previous OSL calibration attempts made
+            statShort.state = "disabled";
+            statLoad.state = "disabled";
+            statOpen.state = "disabled";
+        }
+
+        onOslFileExistsChanged: {
+            updateOslFileExists();
+        }
     }
+
 
     function updateOslFileExists() {
+        if (!backend || typeof labelOslFileExist === "undefined") return;
+
+        // Guard Check: If "None" (-1) is selected
+        if (backend.osl_file === -1) {
+            labelOslFileExist.text = qsTr("Calibration Inactive");
+            return;
+        }
+
+        // Dynamic file system existence checks
         if (backend.osl_file_exists)
-            labelOslFileExist.text = qsTr("File exists")
+            labelOslFileExist.text = qsTr("File exists");
         else
-            labelOslFileExist.text = qsTr("File not found")
+            labelOslFileExist.text = qsTr("File not found");
     }
 
-    function enableControls(scanType, enable) {
-        cbOslFile.enabled = enable;
+    function enableControls(currentScanType) {
 
-        switch (scanType) {
-        case OSLCalibrationViewBackend.SCAN_SHORT:
-            btnLoadScan.enabled = enable;
-            btnOpenScan.enabled = enable;
-            break;
-        case OSLCalibrationViewBackend.SCAN_LOAD:
-            btnShortScan.enabled = enable;
-            btnOpenScan.enabled = enable;
-            break;
-        case OSLCalibrationViewBackend.SCAN_OPEN:
-            btnShortScan.enabled = enable;
-            btnLoadScan.enabled = enable;
-            break;
+        if (typeof currentScanType === "undefined"
+                || currentScanType === null) {
+
+            btnOpenScan.enabled = true;
+            btnShortScan.enabled = true;
+            btnLoadScan.enabled = true;
+            cbOslFile.enabled = true;
+
+        } else {
+            cbOslFile.enabled = false;
+
+            switch (currentScanType) {
+            case OSLCalibrationViewBackend.SCAN_SHORT:
+                btnOpenScan.enabled = false;
+                btnShortScan.enabled = true;
+                btnLoadScan.enabled = false;
+                break;
+            case OSLCalibrationViewBackend.SCAN_LOAD:
+                btnOpenScan.enabled = false;
+                btnShortScan.enabled = false;
+                btnLoadScan.enabled = true;
+                break;
+            case OSLCalibrationViewBackend.SCAN_OPEN:
+                btnOpenScan.enabled = true;
+                btnShortScan.enabled = false;
+                btnLoadScan.enabled = false;
+                break;
+            }
         }
     }
 }

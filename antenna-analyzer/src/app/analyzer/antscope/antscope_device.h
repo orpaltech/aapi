@@ -31,8 +31,7 @@ class AntScopeDevice : public AAPiObject,
 {
     DECLARE_AAPI_OBJECT(AntScopeDevice)
 
-    static AntScopeDevice *create(AAPiConfig *config, AAPiGenerator *gen,
-                                  bool addRef = true);
+    static AntScopeDevice *create(AAPiConfig *config, AAPiGenerator *gen, bool addRef = true);
 protected:
     AntScopeDevice();
     ~AntScopeDevice();
@@ -50,9 +49,9 @@ private:
     uint32_t    m_centerFreq;
     uint32_t    m_sweepFreq;
 
-    AAPiConfig      *m_config;
-    AAPiGenerator   *m_gen;
-    AAPISerialModem *m_modem;
+    AAPiPtr<AAPiConfig>         m_config;
+    AAPiPtr<AAPiGenerator>      m_generator;
+    AAPiPtr<AAPISerialModem>    m_modem;
 };
 
 } // namespace aapi

@@ -43,13 +43,6 @@
 public:                                         \
     static clazz *create(bool addRef = true);
 
-
-#define DECLARE_AAPI_OBJECT_WITH_CONFIG(clazz)                      \
-DECLARE_AAPI_OBJECT(clazz)                                          \
-    static clazz *create(AAPiConfig *config, bool addRef = true);   \
-private:                                                            \
-    AAPiConfig *m_config;
-
 #define IMPLEMENT_AAPI_OBJECT(clazz)            \
     clazz* clazz::create(bool addRef) {         \
         clazz* p = new(std::nothrow) clazz();   \
@@ -58,16 +51,6 @@ private:                                                            \
         return p;                               \
     }
 
-#define IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(clazz)            \
-    IMPLEMENT_AAPI_OBJECT(clazz)                            \
-    clazz* clazz::create(AAPiConfig *config, bool addRef) { \
-        clazz *obj = create(addRef);                        \
-        if( obj ) {                                         \
-            obj->m_config = config;                         \
-            AAPI_ADDREF(config);                            \
-        }                                                   \
-        return obj;                                         \
-    }
 
 namespace aapi
 {
@@ -104,8 +87,11 @@ protected:
 private:
     std::atomic_long m_ref;
 
-    AAPiObject(const AAPiObject &) {}
-    AAPiObject& operator=(const AAPiObject &) { return *this; }
+    // Explicitly disable copy and move semantics using modern C++ deleting
+    AAPiObject(const AAPiObject &) = delete;
+    AAPiObject(AAPiObject &&) = delete;
+    AAPiObject& operator=(const AAPiObject &) = delete;
+    AAPiObject& operator=(AAPiObject &&) = delete;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,15 +101,14 @@ private:
 template<class T> class AAPiPtr
 {
 public:
-    AAPiPtr(T* ptr = nullptr, bool addRef = true) : m_ptr(ptr) {
-        if (m_ptr && addRef)
-            m_ptr->addRef();
+    explicit AAPiPtr(T* ptr = nullptr, bool addRef = true) : m_ptr(ptr) {
+        if (addRef)
+            AAPI_ADDREF(m_ptr);
     }
 
     // Copy Constructor
     AAPiPtr(const AAPiPtr<T>& other) : m_ptr(other.m_ptr) {
-        if (m_ptr)
-            m_ptr->addRef();
+        AAPI_ADDREF (m_ptr);
     }
 
     // Move Constructor (Zero overhead)
@@ -131,10 +116,8 @@ public:
         other.m_ptr = nullptr;
     }
 
-    ~AAPiPtr()
-    {
-        if (m_ptr)
-            m_ptr->release();
+    ~AAPiPtr() {
+        AAPI_DISPOSE (m_ptr);
     }
 
     // Copy Assignment
@@ -148,15 +131,14 @@ public:
     // Move Assignment
     AAPiPtr<T>& operator=(AAPiPtr<T>&& other) noexcept {
         if (this != &other) {
-            if (m_ptr)
-                m_ptr->release();
+            AAPI_DISPOSE (m_ptr);
             m_ptr = other.m_ptr;
             other.m_ptr = nullptr;
         }
         return *this;
     }
 
-    AAPiPtr<T>& operator=(T* ptr) {
+    AAPiPtr<T>& operator=(T* ptr) noexcept {
         set(ptr);
         return *this;
     }
@@ -169,9 +151,8 @@ public:
     T& operator*() { return *m_ptr; }
     const T& operator*() const { return *m_ptr; }
 
-    void attach(T* ptr) {
-        if (m_ptr)
-            m_ptr->release();
+    void attach(T* ptr) noexcept {
+        AAPI_DISPOSE (m_ptr);
         m_ptr = ptr;
     }
 
@@ -183,11 +164,9 @@ public:
 
     T *m_ptr;
 protected:
-    void set(T* ptr) {
-        if (ptr)
-            ptr->addRef();      // AddRef new first (Safety!)
-        if (m_ptr)
-            m_ptr->release();   // Release old second
+    void set(T* ptr) noexcept {
+        AAPI_ADDREF (ptr);      // AddRef new first (Safety!)
+        AAPI_DISPOSE (m_ptr);   // Release old second
         m_ptr = ptr;
     }
 };

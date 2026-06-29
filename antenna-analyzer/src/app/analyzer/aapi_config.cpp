@@ -26,13 +26,15 @@
 #include "serial/aapi_uart_device.h"
 #include "audio/audio_reader.h"
 namespace fs = std::filesystem;
+
 #include <QDebug>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Config definitions
 ///////////////////////////////////////////////////////////////////////////////
 #define AA_CONFIG_FILE_MAGIC        0xE0B0A010
-#define AA_CONFIG_FILE_VERSION      0x00040002
+#define AA_CONFIG_FILE_VERSION      0x0001000a
+
 
 namespace aapi
 {
@@ -50,9 +52,12 @@ typedef bool (*pfn_is_valid)(const AAPiConfig *config);
 static AAPiVariantArray strings_to_variants(const AAPiStringArray& strs)
 {
     AAPiVariantArray vars;
-    for (int i=0; i < strs.size(); i++)
-    {
-        vars.append(strs[i]);
+
+    // Allocate all memory once upfront. Loop becomes a pure initialization chain.
+    if (vars.reserve(strs.size())) {
+        for (uint i = 0; i < strs.size(); i++) {
+            vars.append(strs[i]);
+        }
     }
     return vars;
 }
@@ -65,10 +70,12 @@ static AAPiVariantArray strings_to_variants(const AAPiStringArray& strs)
 class AAPIParam
 {
 public:
-    AAPIParam(enum AAPiParameter id, const char *name, enum AAPiVariantType type);
+    explicit AAPIParam(enum AAPiParameter id, const char *name, enum AAPiVariantType type);
     AAPIParam(const AAPIParam& param);
+    AAPIParam(AAPIParam&& param) noexcept;
 
     AAPIParam& operator=(const AAPIParam& param);
+    AAPIParam& operator=(AAPIParam&& param) noexcept;
 
     AAPIParam& set_description(const char *description);
     AAPIParam& add_option(AAPiVariant value, const char *label = nullptr);
@@ -137,7 +144,8 @@ public:
     bool reboot_required;
 
 private:
-    void copy(const AAPIParam& param);
+    void copyFrom(const AAPIParam& param);
+    void moveFrom(AAPIParam&& param) noexcept;
 };
 
 
@@ -147,27 +155,27 @@ private:
 
 const static AAPIParam g_param_table[] =
 {
-    AAPIParam(AAPI_PARAM_OSL_SELECTED,  "osl_selected", AAPI_VT_INT)
-                    .add_option((int)0, "A")
-                    .add_option((int)1, "B")
-                    .add_option((int)2, "C")
-                    .add_option((int)3, "D")
-                    .add_option((int)4, "E")
-                    .add_option((int)5, "F")
-                    .add_option((int)6, "G")
-                    .add_option((int)7, "H")
-                    .add_option((int)8, "I")
-                    .add_option((int)9, "J")
-                    .add_option((int)10, "K")
-                    .add_option((int)11, "L")
-                    .add_option((int)12, "M")
-                    .add_option((int)13, "N")
-                    .add_option((int)14, "O")
-                    .add_option((int)15, "P")
-                    .add_option((int)-1, "None")
+    AAPIParam(AAPiParameter::OSL_FILE_SELECTED, "osl_file_selected", AAPiVariantType::INT)
+                    .add_option(0, "A")
+                    .add_option(1, "B")
+                    .add_option(2, "C")
+                    .add_option(3, "D")
+                    .add_option(4, "E")
+                    .add_option(5, "F")
+                    .add_option(6, "G")
+                    .add_option(7, "H")
+                    .add_option(8, "I")
+                    .add_option(9, "J")
+                    .add_option(10, "K")
+                    .add_option(11, "L")
+                    .add_option(12, "M")
+                    .add_option(13, "N")
+                    .add_option(14, "O")
+                    .add_option(15, "P")
+                    .add_option(-1, "None")
                     .set_description("Selected OSL file"),
 
-    AAPIParam(AAPI_PARAM_BASE_R0,   "base_r0", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::BASE_R0,   "base_r0", AAPiVariantType::UINT)
                     .add_option(28U)
                     .add_option(50U)
                     .add_option(75U)
@@ -185,29 +193,29 @@ const static AAPIParam g_param_table[] =
                     .set_description("Synthesizer IC crystal correction, Hz")
                     .set_repeat_delay(20),*/
 
-    AAPIParam(AAPI_PARAM_OSL_R_OPEN,    "osl_r_open", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::OSL_R_OPEN,    "osl_r_open", AAPiVariantType::UINT)
                     .add_option(300U, "300 Ohm")
                     .add_option(333U, "333 Ohm")
                     .add_option(500U, "500 Ohm")
                     .add_option(750U, "750 Ohm")
                     .add_option(1000U, "1000 Ohm")
-                    .add_option(999999U, "INFINITE")
+                    .add_option(999999U, "Infinite")
                     .set_description("Open impedance for OSL calibration, Ohm"),
 
-    AAPIParam(AAPI_PARAM_OSL_R_SHORT,   "osl_r_short", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::OSL_R_SHORT,   "osl_r_short", AAPiVariantType::UINT)
                     .add_option(0U, "Short circuit")
                     .add_option(5U, "5 Ohm")
                     .add_option(10U, "10 Ohm")
                     .set_description("Short impedance for OSL calibration, Ohm"),
 
-    AAPIParam(AAPI_PARAM_OSL_R_LOAD,    "osl_r_load", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::OSL_R_LOAD,    "osl_r_load",   AAPiVariantType::UINT)
                     .add_option(50U, "50 Ohm")
                     .add_option(75U, "75 Ohm")
                     .add_option(100U, "100 Ohm")
                     .add_option(150U, "150 Ohm")
                     .set_description("Load impedance for OSL calibration, Ohm"),
 
-    AAPIParam(AAPI_PARAM_OSL_N_SCANS,   "osl_num_scans", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::CALIBR_NUM_SCANS,  "calibr_num_scans",  AAPiVariantType::UINT)
                     .add_option(1U)
                     .add_option(3U)
                     .add_option(5U)
@@ -215,9 +223,9 @@ const static AAPIParam g_param_table[] =
                     .add_option(9U)
                     .add_option(11U)
                     .add_option(15U)
-                    .set_description("Number of scans to average during OSL calibration at each frequency"),
+                    .set_description("Number of scans to average during calibration at each frequency"),
 
-    AAPIParam(AAPI_PARAM_MEASURE_N_SCANS,   "measure_num_scans", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::MEASURE_NUM_SCANS, "measure_num_scans",    AAPiVariantType::UINT)
                     .add_option(1U)
                     .add_option(3U)
                     .add_option(5U)
@@ -227,7 +235,7 @@ const static AAPIParam g_param_table[] =
                     .add_option(15U)
                     .set_description("Number of scans to average in measurement window at each frequency"),
 
-    AAPIParam(AAPI_PARAM_PAN_N_SCANS,	"pan_num_scans", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::PAN_NUM_SCANS, "pan_num_scans",    AAPiVariantType::UINT)
                     .add_option(1U)
                     .add_option(3U)
                     .add_option(5U)
@@ -237,7 +245,7 @@ const static AAPIParam g_param_table[] =
                     .add_option(15U)
                     .set_description("Number of scans to average in panoramic window at each frequency"),
 
-    AAPIParam(AAPI_PARAM_AUDIO_INPUT_GAIN, "audio_input_gain", AAPI_VT_BYTE)
+    AAPIParam(AAPiParameter::AUDIO_INPUT_GAIN,  "audio_input_gain", AAPiVariantType::BYTE)
                     .add_option(0U)
                     .add_option(3U)
                     .add_option(6U)
@@ -253,7 +261,7 @@ const static AAPIParam g_param_table[] =
                     .set_description("Audio line input attenuation, dB. Requires reboot.")
                     .set_reboot_required(true),
 
-    AAPIParam(AAPI_PARAM_BRIDGE_R_MEASURE, "bridge_r_measure", AAPI_VT_FLOAT)
+    AAPIParam(AAPiParameter::BRIDGE_R_MEASURE,  "bridge_r_measure", AAPiVariantType::FLOAT)
                     .add_option(1.f)
                     .add_option(5.1f)
                     .add_option(10.f)
@@ -261,7 +269,7 @@ const static AAPIParam g_param_table[] =
                     .set_is_valid(show_advanced)
                     .set_description("Bridge R-measure value, Ohm"),
 
-    AAPIParam(AAPI_PARAM_BRIDGE_R_MEASURE_ADD, "bridge_r_measure_add", AAPI_VT_FLOAT)
+    AAPIParam(AAPiParameter::BRIDGE_R_MEASURE_ADD,  "bridge_r_measure_add", AAPiVariantType::FLOAT)
                     .add_option(33.f)
                     .add_option(51.f)
                     .add_option(75.f)
@@ -273,31 +281,39 @@ const static AAPIParam g_param_table[] =
                     .set_is_valid(show_advanced)
                     .set_description("Bridge R-add value, Ohm"),
 
-    AAPIParam(AAPI_PARAM_PAN_IS_CENTER_FREQ, "pan_is_center_freq", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::PAN_IS_CENTER_FREQ,    "pan_is_center_freq",   AAPiVariantType::UINT)
                     .add_option(0U, "Start Frequency")
                     .add_option(1U, "Center Frequency")
                     .set_description("Use either start or center frequency in panoramic view."),
 
-    AAPIParam(AAPI_PARAM_AUDIO_INPUT_DEVICE, "audio_input_device", AAPI_VT_TEXT)
+    AAPIParam(AAPiParameter::AUDIO_INPUT_DEVICE,    "audio_input_device",   AAPiVariantType::TEXT)
                     .add_audio_devices()
                     .set_is_valid(show_advanced)
                     .set_description("Audio input device for DSP. Requires reboot.")
                     .set_reboot_required(true),
 
-    AAPIParam(AAPI_PARAM_DSP_SAMPLE_RATE, "dsp_sample_rate", AAPI_VT_UINT)
-                    .add_option((uint) AUDIO_SRATE_48K)
-                    .add_option((uint) AUDIO_SRATE_96K)
+    AAPIParam(AAPiParameter::DSP_SAMPLE_RATE,   "dsp_sample_rate",  AAPiVariantType::UINT)
+                    .add_option(static_cast<uint>(AAPiAudioSampleRate::_48K))
+                    .add_option(static_cast<uint>(AAPiAudioSampleRate::_96K))
                     .set_is_valid(show_advanced)
                     .set_description("Select the sample rate to use in DSP. Requires reboot.")
                     .set_reboot_required(true),
 
-    AAPIParam(AAPI_PARAM_UART_DEVICE, "uart_device", AAPI_VT_TEXT)
+    AAPIParam(AAPiParameter::DSP_NUM_SAMPLES,   "dsp_num_samples",  AAPiVariantType::UINT)
+                    .add_option(512U)
+                    .add_option(1024U)
+                    .add_option(2048U)
+                    .set_is_valid(show_advanced)
+                    .set_description("Select the number of samples to use in DSP. Requires reboot.")
+                    .set_reboot_required(true),
+
+    AAPIParam(AAPiParameter::UART_DEVICE,   "uart_device",  AAPiVariantType::TEXT)
                     .add_uart_devices()
                     .set_is_valid(show_advanced)
                     .set_description("Select UART for remote control. Requires reboot.")
                     .set_reboot_required(true),
 
-    AAPIParam(AAPI_PARAM_UART_BAUDRATE, "uart_baudrate", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::UART_BAUDRATE, "uart_baudrate",    AAPiVariantType::UINT)
                     .add_option((uint) UART_BR_9600)
                     .add_option((uint) UART_BR_19200)
                     .add_option((uint) UART_BR_38400)
@@ -307,7 +323,7 @@ const static AAPIParam g_param_table[] =
                     .set_description("Select UART baudrate. Requires reboot.")
                     .set_reboot_required(true),
 
-    AAPIParam(AAPI_PARAM_PWRSAVE_TIMEOUT, "pwr_save_timeout", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::PWRSAVE_TIMEOUT,   "pwr_save_timeout", AAPiVariantType::UINT)
                     .add_option(0U, "Off")
                     .add_option(30000U, "30s")
                     .add_option(60000U, "1 min")
@@ -317,29 +333,30 @@ const static AAPIParam g_param_table[] =
                     .set_description("Power saving mode after period of inactivity. Tap to wake up."),
 
     // unused yet
-    /*AAPIParam(AA_PARAM_3RD_HARMONIC, "3rd_harmonic", AA_PT_UINT32)
-                    .addOpt(0u, "Off").addOpt(1u, "On")
-                    .setDescription("Allow measurements on 3rd harmonic (above maximum frequency)"),*/
+    AAPIParam(AAPiParameter::USE_3D_HARMONIC,   "use_3rd_harmonic", AAPiVariantType::BYTE)
+                    .add_option(0u, "Off")
+                    .add_option(1u, "On")
+                    .set_description("Allow measurements at 3-rd harmonic (above maximum frequency)."),
 
     // more details here: http://www.antenna-theory.com/definitions/sparameters.php
-    AAPIParam(AAPI_PARAM_S11_GRAPH_SHOW, "s11_graph_show", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::S11_GRAPH_SHOW,    "s11_graph_show",   AAPiVariantType::BYTE)
                     .add_option(0U, "No")
                     .add_option(1U, "Yes")
                     .set_description("Display S11 graph in panoramic view."),
 
-    AAPIParam(AAPI_PARAM_S1P_FILE_TYPE, "s1p_file_type", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::S1P_FILE_TYPE, "s1p_file_type",    AAPiVariantType::UINT)
                     .add_option((uint32_t) AAPI_S1P_S_MA, "S MA R50")
                     .add_option((uint32_t) AAPI_S1P_S_RI, "S RI R50")
                     .set_description("Touchstone S1P file type saved with screenshot. Default is S MA R 50."),
 
-    AAPIParam(AAPI_PARAM_SNAPSHOT_FORMAT, "snapshot_format", AAPI_VT_TEXT)
+    AAPIParam(AAPiParameter::SNAPSHOT_FORMAT,   "snapshot_format",  AAPiVariantType::TEXT)
                     .add_option("bmp", "Bitmap")
                     .add_option("png", "PNG")
                     .add_option("jpg", "JPEG")
                     .set_is_valid(show_advanced)
                     .set_description("Image file format for screenshots."),
 
-    AAPIParam(AAPI_PARAM_SHOW_ADVANCED, "show_advanced", AAPI_VT_UINT)
+    AAPIParam(AAPiParameter::SHOW_ADVANCED, "show_advanced",    AAPiVariantType::BYTE)
                     .add_option(0U, "Off")
                     .add_option(1U, "On")
                     .set_description("Display advanced menu parameters."),
@@ -386,19 +403,31 @@ AAPIParam::AAPIParam(enum AAPiParameter id, const char *name, enum AAPiVariantTy
 
 AAPIParam::AAPIParam(const AAPIParam& param)
 {
-    copy(param);
+    copyFrom(param);
+}
+
+AAPIParam::AAPIParam(AAPIParam&& param) noexcept
+{
+    moveFrom(std::move(param));
 }
 
 AAPIParam& AAPIParam::operator=(const AAPIParam& param)
 {
-    if (this != &param)
-    {
-        copy(param);
+    if (this != &param) {
+        copyFrom(param);
     }
     return *this;
 }
 
-void AAPIParam::copy(const AAPIParam& param)
+AAPIParam& AAPIParam::operator=(AAPIParam&& param) noexcept
+{
+    if (this != &param) {
+        moveFrom(std::move(param));
+    }
+    return *this;
+}
+
+void AAPIParam::copyFrom(const AAPIParam& param)
 {
     id = param.id;
     type = param.type;
@@ -406,11 +435,28 @@ void AAPIParam::copy(const AAPIParam& param)
     is_valid = param.is_valid;
     precision = param.precision;
     reboot_required = param.reboot_required;
-    // shallow copy
+
+    // copy data below
     name = param.name;
     description = param.description;
     opt_values = param.opt_values;
     opt_labels = param.opt_labels;
+}
+
+void AAPIParam::moveFrom(AAPIParam&& param) noexcept
+{
+    id = param.id;
+    type = param.type;
+    repeat_delay = param.repeat_delay;
+    is_valid = param.is_valid;
+    precision = param.precision;
+    reboot_required = param.reboot_required;
+
+    // move data below
+    name = std::move(param.name);
+    description = std::move(param.description);
+    opt_values = std::move(param.opt_values);
+    opt_labels = std::move(param.opt_labels);
 }
 
 AAPIParam &AAPIParam::set_description(const char *desc)
@@ -424,9 +470,9 @@ AAPIParam &AAPIParam::add_option(AAPiVariant value, const char *label)
     opt_values.append(value);
 
     if (label)
-        opt_labels.append(label);
+        opt_labels.append(AAPiString{label});
     else
-        opt_labels.append("");
+        opt_labels.append(AAPiString());
 
     return *this;
 }
@@ -473,13 +519,12 @@ AAPIParam &AAPIParam::add_audio_devices()
 {
     AAPiPtr<AAPiAudioReader>  reader( AAPiAudioReader::create( false ) );
 
-    for (uint i = 0; i < reader->get_num_devices(); i++)
-    {
+    for (uint i = 0; i < reader->get_num_devices(); i++) {
         if (
-            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_48K, AUDIO_SSIZE_16 ) ||
-            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_48K, AUDIO_SSIZE_24 ) ||
-            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_96K, AUDIO_SSIZE_16 ) ||
-            reader->is_format_supported( i, AUDIO_CHANNELS_2, AUDIO_SRATE_96K, AUDIO_SSIZE_24 )
+            reader->is_format_supported( i, AAPiAudioChannels::Stereo, AAPiAudioSampleRate::_48K, AAPiAudioSampleSize::_16 ) ||
+            reader->is_format_supported( i, AAPiAudioChannels::Stereo, AAPiAudioSampleRate::_48K, AAPiAudioSampleSize::_24 ) ||
+            reader->is_format_supported( i, AAPiAudioChannels::Stereo, AAPiAudioSampleRate::_96K, AAPiAudioSampleSize::_16 ) ||
+            reader->is_format_supported( i, AAPiAudioChannels::Stereo, AAPiAudioSampleRate::_96K, AAPiAudioSampleSize::_24 )
             )
         {
             // Device satisfies the requirements
@@ -496,8 +541,7 @@ AAPIParam &AAPIParam::add_uart_devices()
     int ret;
 
     ret = AAPiUartDevice::enumerate(uarts);
-    if (ret == AAPI_SUCCESS)
-    {
+    if (ret == AAPI_SUCCESS) {
         add_options(strings_to_variants(uarts), uarts);
     }
 
@@ -513,8 +557,7 @@ AAPiRadioBand::AAPiRadioBand(uint32_t lo, uint32_t hi, const char *name)
     this->lo = lo;
     this->hi = hi;
     size_t len = 0;
-    if (name)
-    {
+    if (name) {
         len = strlen(name);
         size_t max = sizeof(this->name)-1;
         if (len > max)
@@ -532,7 +575,6 @@ IMPLEMENT_AAPI_OBJECT(AAPiConfig)
 
 AAPiConfig::AAPiConfig()
 {
-    init( );
 }
 
 AAPiConfig::AAPiConfig(const AAPiConfig& config)
@@ -546,8 +588,7 @@ AAPiConfig::~AAPiConfig()
 
 AAPiConfig& AAPiConfig::operator=(const AAPiConfig& config)
 {
-    if( this != &config )
-    {
+    if (this != &config) {
         copyFrom( config );
     }
     return *this;
@@ -555,24 +596,37 @@ AAPiConfig& AAPiConfig::operator=(const AAPiConfig& config)
 
 AAPiString AAPiConfig::get_app_dir()
 {
-    AAPiString homeDir = std::getenv("HOME");
-    fs::path path( (const char *)homeDir );
-    path.append( AAPI_APP_NAME );
-    return path.c_str();
+    fs::path targetPath;
+    const char* homeEnv = std::getenv("HOME");
+
+    // Ensure HOME is valid, fallback to native /root directory safely if blank
+    if (homeEnv && std::strlen(homeEnv) > 0) {
+        targetPath = fs::path(homeEnv);
+    } else {
+        targetPath = fs::path("/root");
+    }
+
+    // Using the canonical /= operator prevents argument parsing bugs
+    // and guarantees that the folder lands strictly inside your home directory!
+    targetPath /= AAPI_APP_NAME;
+
+    return AAPiString{ targetPath.c_str() };
 }
 
 AAPiString AAPiConfig::get_config_dir()
 {
     fs::path path( (const char *)get_app_dir() );
     path.append("config");
-    return path.c_str();
+
+    return AAPiString { path.c_str() };
 }
 
 AAPiString AAPiConfig::get_config_path()
 {
     fs::path path( (const char *)get_config_dir() );
-    path.append("config.bin");
-    return path.c_str();
+    path.append("config.json");
+
+    return AAPiString{ path.c_str() };
 }
 
 AAPiRadioBand *AAPiConfig::get_ham_bands()
@@ -588,179 +642,205 @@ uint32_t AAPiConfig::get_num_ham_bands()
 void AAPiConfig::copyFrom (const AAPiConfig& config)
 {
     // deep copy
-    for( int i = 0; i < NUM_AAPI_PARAMS; i ++ )
-    {
+    for (uint i = 0; i < NUM_PARAMS; ++i) {
         m_values[i] = config.m_values[i];
     }
 }
 
 void AAPiConfig::set_defaults()
 {
-    int i;
-
-    for( i = 0; i < NUM_AAPI_PARAMS; i ++ )
-    {
+    for (uint i = 0; i < NUM_PARAMS; ++i) {
         m_values[i] = AAPiVariant();
     }
 
     // set defaults for all parameters
-    set_version(AAPI_VERSION);
+    set_version(STRINGIFY(AAPI_VERSION));
 
     // audio settings
-    set_dsp_sample_rate(AUDIO_SRATE_48K);
-    set_dsp_sample_size(AUDIO_SSIZE_24);
-    set_dsp_num_samples(1024);
+    set_dsp_sample_rate(static_cast<uint>(AAPiAudioSampleRate::_48K));
+    set_dsp_sample_size(static_cast<uint>(AAPiAudioSampleSize::_24));
+    set_dsp_num_samples(512);
 
     //set_synth_xtal_freq(AAPI_XTAL_25MHZ);
     //set_synth_xtal_corr(0);
 
-    set_osl_selected(-1); /*TODO: set back to -1*/
+    set_osl_file_selected(-1); /* No file is selected by default */
 
     set_base_r0(50);
-    set_osl_r_load(50);
-    set_osl_r_short(5);
     set_osl_r_open(500);
-    set_osl_n_scans(1); /* TODO: set back to 1 */
-    set_measure_n_scans(1);
-    set_pan_n_scans(1);
+    set_osl_r_short(5);
+    set_osl_r_load(50);
+    set_calibr_num_scans(1);
+    set_measure_num_scans(1);
+    set_pan_num_scans(1);
     set_lo_freq_div_by_2(0);
     set_generator_freq(14'000'000);
-    set_pan_freq1(7000000);
-    set_pan_span(8000/*000*/);
+    set_pan_min_freq(7'000'000);
+    set_pan_freq_span(800'000);
     set_measure_freq(14'000'000);
     set_pan_is_center_freq(0);
     set_bridge_r_measure(5.1f);
     set_bridge_r_measure_add(200.f);
-    set_bridge_r_load(52.f);
+    set_bridge_r_load(51.f);
     set_audio_input_gain(0);
     set_uart_device(""); // Raspberry Pi3 option "/dev/ttyAMA0"
     set_uart_baudrate(UART_BR_38400);
     set_pwr_save_timeout(0);
-    set_3rd_harm_enable(0);
+    set_use_3rd_harmonic(0);
     set_snapshot_format("png");
     set_s11_graph_show(1);
     set_s1p_file_type(AAPI_S1P_S_MA);
     set_show_advanced(0);
 
-    i = get_index(AAPI_PARAM_AUDIO_INPUT_DEVICE);
-    if( i >= 0 && get_num_opts(i) > 0 )
-    {
+    int i = get_index(AAPiParameter::AUDIO_INPUT_DEVICE);
+    if (i >= 0 && get_num_opts(i) > 0) {
         const AAPiVariantArray& devices = get_opt_values(i);
+
         set_audio_input_device( devices[0].toString() );
-    }
-    else
-    {
+
+    } else {
         set_audio_input_device("");
     }
 }
 
-int AAPiConfig::init()
+AAPiError AAPiConfig::init()
 {
     /* set default values as fallback */
     set_defaults();
 
-    AAPiMutexLocker locker(&m_mutex);
-
-    const fs::path dirPath( (const char *)get_config_dir() );
-    if (! fs::exists( dirPath ))
-    {
-        if (! fs::create_directory( dirPath ))
-        {
-            qDebug() << "Failed to create directory.";
-            return AAPI_E_CREATE_DIR_FAILED;
-        }
+    AAPiError ret = load();
+    if (AAPI_FAILED( ret )) {
+        return ret;
     }
-
-    std::ifstream file( get_config_path(), std::ios::in | std::ios::binary);
-    if (! file.is_open( ))
-    {
-        qDebug() << "Unable to open configuration file.";
-        return AAPI_SUCCESS;
-    }
-
-    // Read and check the header
-    uint32_t magic, version;
-    file >> magic;
-    file >> version;
-
-    if( AA_CONFIG_FILE_MAGIC    == magic	&&
-        AA_CONFIG_FILE_VERSION  == version )
-    {
-        // read parameter values
-        for( int i = 0; i < NUM_AAPI_PARAMS; i++ )
-        {
-            file >> m_values[i];
-        }
-    }
-    else
-    {
-        qDebug() << "Bad configuration file format, ignore..";
-    }
-
-    // close explicitly
-    file.close();
 
     // correct some values
     uint32_t timeout = get_pwr_save_timeout();
-    if( timeout > 0 && timeout < 10000 )
-    {
+    if( timeout > 0 && timeout < 10000 ) {
         set_pwr_save_timeout(0);
     }
 
     return 0;
 }
 
-int AAPiConfig::flush()
+AAPiError AAPiConfig::load()
 {
-    AAPiMutexLocker lock(&m_mutex);
+    AAPiMutexLocker locker(&m_mutex);
 
     const fs::path dirPath( (const char *)get_config_dir() );
-    if (! fs::exists( dirPath ))
-    {
-        if (! fs::create_directory( dirPath ))
-        {
+    if (! fs::exists( dirPath )) {
+        if (! fs::create_directory( dirPath )) {
             qDebug() << "Failed to create directory.";
             return AAPI_E_CREATE_DIR_FAILED;
         }
     }
 
-    std::ofstream file( get_config_path(), std::ios::out | std::ios::trunc | std::ios::binary);
-    if (! file.is_open( ))
-    {
-        qDebug() << "Unable to create configuration file.";
-        return AAPI_CONF_E_FILE_OPEN_FAILED;
+    std::ifstream file( (const char *)get_config_path() );
+    if (! file.is_open()) {
+        qDebug() << "Unable to open configuration file.";
+        return AAPI_SUCCESS;
     }
 
-    // we will serialize the data into the file
+    std::string line;
+    uint32_t magic = 0;
+    uint32_t version = 0;
+    bool hasMagic = false;
+    bool hasVersion = false;
 
-    // Write a header with a "magic number" and a version
-    file << static_cast< uint >( AA_CONFIG_FILE_MAGIC );
-    file << static_cast< uint >( AA_CONFIG_FILE_VERSION );
+    // Verify Metadata Headers Exception-Free
+    auto extractHexValue = [](const std::string& rawLine, size_t colonPos, unsigned int& outVal) -> bool {
+        AAPiString valStr(rawLine.substr(colonPos + 1).c_str());
+        return valStr.trim().toUInt(outVal, 16);
+    };
 
-    // flush param values
-    for ( int i = 0; i < NUM_AAPI_PARAMS; i++ )
-    {
-        file << m_values[i];
+    while (std::getline( file, line )) {
+        size_t colonPos = line.find(":");
+        if (colonPos != std::string::npos) {
+            if (!hasMagic && line.find("magic") != std::string::npos) {
+                hasMagic = extractHexValue(line, colonPos, magic);
+
+            } else if (!hasVersion && line.find("version") != std::string::npos) {
+                hasVersion = extractHexValue(line, colonPos, version);
+            }
+        }
+        if (hasMagic && hasVersion) {
+            break;
+        }
     }
 
-    // Explicit close
+    if (AA_CONFIG_FILE_MAGIC != magic || AA_CONFIG_FILE_VERSION != version) {
+        qDebug() << "Bad configuration file format or version mismatch, ignoring file.";
+        file.close();
+        return AAPI_SUCCESS;
+    }
+
+    // Phase 2: Read Parameter Stream sequentially using your native operator>>
+    for (uint i = 0; i < NUM_PARAMS; i++) {
+        // This fires friend std::istream& operator>>(std::istream& is, AAPiVariant& var)
+        if (!(file >> m_values[i])) {
+            qDebug() << "Configuration file truncated prematurely at parameter: " << i;
+            break;
+        }
+
+        // Safe guard: Clear out trailing newlines or whitespace
+        // left over by numerical or byte operators
+        while (file.good() && std::isspace(file.peek())) {
+            file.get();
+        }
+    }
+
     file.close();
-
-    return 0;
+    return AAPI_SUCCESS;
 }
 
-uint32_t AAPiConfig::get_num_params() const
+AAPiError AAPiConfig::flush()
 {
-    uint32_t num = 0, i;
-    for( i = 0; i < get_total_params(); i++ )
-    {
+    AAPiMutexLocker lock(&m_mutex);
+
+    const fs::path dirPath( (const char *)get_config_dir() );
+    if (!fs::exists(dirPath)) {
+        if (!fs::create_directories(dirPath)) {
+            qDebug() << "Failed to create directory structure.";
+            return AAPI_E_CREATE_DIR_FAILED;
+        }
+    }
+
+    std::ofstream file( (const char *)get_config_path(), std::ios::out | std::ios::trunc );
+    if (! file.is_open()) {
+        qDebug() << "Unable to create configuration file.";
+        return AAPI_CONF_E_FILE_OPEN_ERROR;
+    }
+
+    // Write simple headers
+    file << "magic: 0x" << std::hex << AA_CONFIG_FILE_MAGIC << "\n";
+    file << "version: 0x" << std::hex << AA_CONFIG_FILE_VERSION << "\n";
+    file << std::dec; // Restore base-10 numerical representations
+
+    // Serialize parameter values sequentially using your native operator<<
+    for (uint i = 0; i < NUM_PARAMS; i++) {
+        // This fires friend std::ostream& operator<<(std::ostream& os, const AAPiVariant& var)
+        file << m_values[i] << "\n";
+    }
+
+    if (!file) {
+        qDebug() << "File streaming write failure occurred.";
+        return AAPI_CONF_E_FILE_WRITE_ERROR;
+    }
+    file.close();
+
+    return AAPI_SUCCESS;
+}
+
+uint32_t AAPiConfig::get_num_valid_params() const
+{
+    uint32_t num = 0;
+    for (uint i = 0; i < get_total_params(); ++i) {
         if( is_valid(i) )
             num++;
     }
     return num;
 }
 
-AAPiVariant AAPiConfig::get_value(const AAPiConfig *config, enum AAPiParameter id)
+AAPiVariant AAPiConfig::get_value(const AAPiConfig *config, AAPiParameter id)
 {
     return config->get_value( id );
 }
@@ -770,17 +850,16 @@ uint32_t AAPiConfig::get_total_params()
     return g_param_table_num;
 }
 
-int AAPiConfig::get_index(enum AAPiParameter id)
+int AAPiConfig::get_index(AAPiParameter id)
 {
-    for( uint i = 0; i < g_param_table_num; i++ )
-    {
+    for (uint i = 0; i < g_param_table_num; ++i) {
         if( get_id(i) == id )
             return i;
     }
     return -1;
 }
 
-enum AAPiParameter AAPiConfig::get_id(int index)
+AAPiParameter AAPiConfig::get_id(int index)
 {
     return g_param_table[ index ].id;
 }
@@ -807,8 +886,8 @@ uint32_t AAPiConfig::get_precision(int index) const
 
 bool AAPiConfig::is_valid(int index) const
 {
-    if( g_param_table[ index ].is_valid )
-    {
+    if( g_param_table[ index ].is_valid ) {
+
         return g_param_table[ index ].is_valid( this );
     }
     return true;
@@ -817,7 +896,7 @@ bool AAPiConfig::is_valid(int index) const
 uint32_t AAPiConfig::get_num_opts(enum AAPiParameter id) const
 {
     int index = get_index( id );
-    if( index < 0 )
+    if (index < 0)
         return 0;
 
     return get_num_opts( index );
@@ -828,11 +907,11 @@ uint32_t AAPiConfig::get_num_opts(int index) const
     return static_cast< uint32_t > ( g_param_table[ index ].opt_values.size() );
 }
 
-const AAPiVariantArray& AAPiConfig::get_opt_values(enum AAPiParameter id) const
+const AAPiVariantArray& AAPiConfig::get_opt_values(AAPiParameter id) const
 {
     int index = get_index( id );
-    if( index < 0 )
-        throw;
+    if (index < 0)
+        throw std::out_of_range("invalid parameter id");
 
     return get_opt_values( index );
 }
@@ -842,11 +921,11 @@ const AAPiVariantArray& AAPiConfig::get_opt_values(int index) const
     return g_param_table[ index ].opt_values;
 }
 
-const AAPiStringArray& AAPiConfig::get_opt_labels(enum AAPiParameter id) const
+const AAPiStringArray& AAPiConfig::get_opt_labels(AAPiParameter id) const
 {
     int index = get_index( id );
-    if ( index < 0 )
-        throw;
+    if (index < 0)
+        throw std::out_of_range("invalid parameter id");
 
     return get_opt_labels( index );
 }
@@ -861,14 +940,9 @@ AAPiVariant AAPiConfig::get_value(int index) const
     return get_value( g_param_table[ index ].id );
 }
 
-AAPiVariant AAPiConfig::get_value(enum AAPiParameter id) const
+AAPiVariant AAPiConfig::get_value(AAPiParameter id) const
 {
-    if( id < 0 || id >= NUM_AAPI_PARAMS )
-    {
-        return AAPiVariant::Unknown;
-    }
-
-    return m_values[ id ];
+    return m_values[ (uint)id ];
 }
 
 void AAPiConfig::set_value(int index, const AAPiVariant& val)
@@ -876,50 +950,42 @@ void AAPiConfig::set_value(int index, const AAPiVariant& val)
     set_value( get_id( index ), val );
 }
 
-void AAPiConfig::set_value(enum AAPiParameter id, const AAPiVariant& val)
+void AAPiConfig::set_value(AAPiParameter id, const AAPiVariant& val)
 {
-    if( id < 0 || id >= NUM_AAPI_PARAMS )
-    {
-        return;
-    }
-
     AAPiVariant tmp = val;
     int index = get_index( id );
-    if( index >= 0 )
+    if ( index >= 0 )
     {
         // registered parameter, type is known
-        switch( get_type( index ) )
-        {
-        case AAPI_VT_BYTE:
-        case AAPI_VT_UINT:
+        switch( get_type( index ) ) {
+        case AAPiVariantType::BYTE:
+        case AAPiVariantType::UINT:
             tmp = tmp.toUInt();
             break;
-        case AAPI_VT_INT:
+        case AAPiVariantType::INT:
             tmp = tmp.toInt();
             break;
-        case AAPI_VT_FLOAT:
+        case AAPiVariantType::FLOAT:
             tmp = tmp.toFloat();
             break;
-        case AAPI_VT_TEXT:
+        case AAPiVariantType::TEXT:
             tmp = tmp.toString( );
             break;
-        case AAPI_VT_UNKNOWN:
+        case AAPiVariantType::UNKNOWN:
             break;
         }
     }
 
-    m_values[ id ] = tmp;
+    m_values[ (uint)id ] = tmp;
 }
 
 double AAPiConfig::get_dsp_fft_bin_width() const
 {
-    return static_cast<double>( get_dsp_sample_rate() / 2 ) / get_dsp_fft_num_pts();
+    return static_cast<double>(get_dsp_sample_rate()) / (get_dsp_num_samples() / 2);
 }
 
 uint32_t AAPiConfig::get_dsp_fft_num_pts() const
 {
-    // The number of useful FFT points is always 1/2 of the input samples.
-
     // IMPORTANT: When dealing with real-valued input signals, the FFT output
     // exhibits symmetry.
     // In such cases, the second half of the output spectrum is a conjugate
@@ -927,7 +993,8 @@ uint32_t AAPiConfig::get_dsp_fft_num_pts() const
     // You might be discarding this redundant half, making it appear as if
     // the output is half the size.
 
-    uint32_t num_fft_pts = get_dsp_num_samples() / 2;
+    // The exact number of unique complex output points produced by an r2c FFT is always (N / 2) + 1
+    uint32_t num_fft_pts = (get_dsp_num_samples() / 2) + 1;
     return num_fft_pts;
 }
 
@@ -938,8 +1005,7 @@ double AAPiConfig::get_dsp_fft_bin_freq(uint32_t bin) const
 
 uint32_t AAPiConfig::get_dsp_fft_if_bin() const
 {
-    // with number of samples 1024 it must be 131 at 96KHz; 262 at 48KHz
-    uint32_t bin = (uint32_t)( get_intermediate_freq() / get_dsp_fft_bin_width() + 0.5 );
+    uint32_t bin = static_cast<uint32_t>( static_cast<double>(get_intermediate_freq()) / get_dsp_fft_bin_width() + 0.5 );
     return bin;
 }
 
@@ -948,15 +1014,38 @@ uint32_t AAPiConfig::get_intermediate_freq() const
     return 10031;
 }
 
+double AAPiConfig::get_dsp_digital_preamp() const
+{
+    return 1.0; // (10.0x = +20dB boost)
+}
+
+uint32_t AAPiConfig::get_dsp_settling_delay_ms() const
+{
+    // Fetch active runtime parameters
+    uint32_t num_samples = get_dsp_num_samples(); // e.g., 1024
+    uint32_t sample_rate = get_dsp_sample_rate(); // e.g., 48000
+
+    if (sample_rate == 0)
+        return 25; // Safe fallback guard
+
+    // Calculate the exact period duration in floating-point milliseconds,
+    // then add a tiny 1-2 ms buffer to account for Linux task-switching overhead.
+    double exact_period_ms = (static_cast<double>(num_samples) / sample_rate) * 1000.0;
+
+    // Using std::ceil ensures you always wait long enough to capture a full, clean block
+    return static_cast<uint32_t>( std::ceil( exact_period_ms )) + 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
-AAPiString get_sysfs_property_path(const char *property_name)
+AAPiString get_sysfs_property_path(const char *property_name, uint dev_index)
 {
     AAPiString ss;
 
-    ss = AAPI_SYSFS_PATH;
-    ss += "/";
-    ss += property_name;
+    ss = "/sys/class/vna/aapi";
+    ss += dev_index;
+    ss += AAPiString{"/"};
+    ss += AAPiString{property_name};
 
     return ss;
 }

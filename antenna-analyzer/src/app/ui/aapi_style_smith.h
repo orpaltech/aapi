@@ -31,6 +31,10 @@ class QAAPiStyleSmith : public QObject
     Q_PROPERTY(QString swrFont READ getSwrFont CONSTANT)
 
     Q_PROPERTY(QColor helperColor READ getHelperColor CONSTANT)
+    Q_PROPERTY(QString helperFont READ getHelperFont CONSTANT)
+
+    Q_PROPERTY(QColor legendBkgndColor READ getLegendBkgndColor CONSTANT)
+    Q_PROPERTY(QColor legendBorderColor READ getLegendBorderColor CONSTANT)
 
 public:
     explicit QAAPiStyleSmith(QObject *parent = nullptr);
@@ -49,6 +53,9 @@ public:
     QColor getHelperColor() const { return m_helperColor; }
     QString getHelperFont() const { return m_helperFont; }
 
+    QColor getLegendBkgndColor() const { return m_legendBkgndColor; }
+    QColor getLegendBorderColor() const { return m_legendBorderColor; }
+
 public:
     QColor m_tickColor;
     QString m_tickFont;
@@ -63,6 +70,9 @@ public:
 
     QColor m_helperColor;
     QString m_helperFont;
+
+    QColor m_legendBkgndColor;
+    QColor m_legendBorderColor;
 };
 
 #endif // UI_AAPI_STYLE_SMITH_H

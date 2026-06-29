@@ -30,20 +30,19 @@
 // class QAAPiAboutAppView
 ///////////////////////////////////////////////////////////////////////////////
 
-
 QAAPiAboutAppView::QAAPiAboutAppView(AAPiConfig *config, QObject *parent)
     : QAAPiViewBackend(config, nullptr, nullptr, parent)
 {
 }
 
-void QAAPiAboutAppView::quit()
+void QAAPiAboutAppView::handleQuit()
 {
-    emit quitApplication();
+    emit raiseQuitApplication();
 }
 
-void QAAPiAboutAppView::reboot()
+void QAAPiAboutAppView::handleReboot()
 {
-    emit rebootApplication();
+    emit raiseRebootApplication();
 }
 
 QString QAAPiAboutAppView::getSystemInformation() const

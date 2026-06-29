@@ -4,6 +4,7 @@ qt_add_executable(aapi_app
     main.cpp
     aapi_error.h
     aapi_object.h
+    aapi_application.cpp aapi_application.h
     analyzer/antscope/antscope_device.cpp analyzer/antscope/antscope_device.h
     analyzer/aapi_calibrator.cpp analyzer/aapi_calibrator.h
     analyzer/aapi_config.cpp analyzer/aapi_config.h
@@ -11,6 +12,7 @@ qt_add_executable(aapi_app
     analyzer/aapi_measure_task.cpp analyzer/aapi_measure_task.h
     analyzer/aapi_signal_process.cpp analyzer/aapi_signal_process.h
     analyzer/aapi_device.cpp analyzer/aapi_device.h
+    analyzer/aapi_object_with_config.h
     audio/audio_reader.cpp audio/audio_reader.h
     audio/impl/alsa_reader.cpp audio/impl/alsa_reader.h
     serial/aapi_serial_modem.cpp serial/aapi_serial_modem.h
@@ -20,6 +22,7 @@ qt_add_executable(aapi_app
     utils/simple_string.cpp utils/simple_string.h
     utils/simple_variant.h utils/simple_variant.cpp
     utils/aapi_complex.h
+    utils/simple_map.h
 )
 
 set_source_files_properties(AapiTheme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
@@ -31,13 +34,15 @@ qt_add_qml_module(aapi_app
         Main.qml
         BatteryIndicator.qml
         TabOscilloscope.qml
-        TabSmithChart.qml TabSpectrum.qml TabVswrChart.qml
+        TabSmithChart.qml TabSpectrum.qml
+        TabVswrChart.qml TabRxChart.qml TabS11Chart.qml
         SwipePage.qml
-        TabRxChart.qml SmithChart.qml StatusIndicatorCtrl.qml TwoStateButtonCtrl.qml
+        SmithChart.qml
+        StatusIndicatorCtrl.qml
+        TwoStateButtonCtrl.qml
         ProgressCtrl.qml
-        TabPanVswr.qml
-        MeasureViewPage.qml
-        ViewParamEnum.qml ViewParamText.qml
+        ViewParamEnum.qml
+        ViewParamText.qml
         ViewHwCalibration.qml
         ViewOslCalibration.qml
         ViewConfiguration.qml
@@ -50,22 +55,21 @@ qt_add_qml_module(aapi_app
         MessageBoxItem.qml
         AapiMessageBox.qml
     SOURCES
-        aapi_application.cpp aapi_application.h
         ui/aapi_about_app_view.cpp ui/aapi_about_app_view.h
         ui/aapi_configuration_view.cpp ui/aapi_configuration_view.h
         ui/aapi_hw_calibration_view.cpp ui/aapi_hw_calibration_view.h
-        ui/aapi_measure_view.cpp ui/aapi_measure_view.h
+        ui/aapi_measurement_view.cpp ui/aapi_measurement_view.h
         ui/aapi_osl_calibration_view.cpp ui/aapi_osl_calibration_view.h
         ui/aapi_panoramic_scan_view.cpp ui/aapi_panoramic_scan_view.h
         ui/aapi_signal_process_view.cpp ui/aapi_signal_process_view.h
         ui/aapi_status_backend.cpp ui/aapi_status_backend.h
         ui/aapi_view_backend.cpp ui/aapi_view_backend.h
         ui/aapi_base_style.cpp ui/aapi_base_style.h
-        ui/aapi_style_smith.h ui/aapi_style_smith.cpp
+        ui/aapi_style_smith.cpp ui/aapi_style_smith.h
         ui/aapi_aquish_style.cpp ui/aapi_aquish_style.h
-        ui/aapi_style_chart.h ui/aapi_style_chart.cpp
-        ui/aapi_messages.h ui/aapi_messages.cpp
-        SOURCES utils/simple_map.h
+        ui/aapi_style_chart.cpp ui/aapi_style_chart.h
+        ui/aapi_messages.cpp ui/aapi_messages.h
+        QML_FILES TabPanScanSetup.qml
 )
 
 set_source_files_properties(resources/battery-empty.svg PROPERTIES QT_RESOURCE_ALIAS empty)
@@ -136,23 +140,32 @@ set_target_properties(aapi_app PROPERTIES
 target_compile_definitions(aapi_app PRIVATE
     AAPI_QML_UNCREATABLE_REASON="Create not allowed"
     AAPI_APP_NAME="orpal-aapi"
-    AAPI_VERSION="4.2")
+    AAPI_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
+    AAPI_VERSION_MINOR=${PROJECT_VERSION_MINOR}
+    AAPI_VERSION_PATCH=${PROJECT_VERSION_PATCH}
+    AAPI_VERSION=${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
+)
 
 
 target_link_libraries(aapi_app PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::GuiPrivate
+    Qt6::Widgets
     Qt6::Qml
     Qt6::Quick
     Qt6::QuickControls2
-    Qt6::Charts
+    Qt6::Graphs
 )
 
-# Define where you want the application to go on the device
-set(INSTALL_DESTDIR "/usr/local/bin") # Change to your preferred path
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_compile_options(aapi_app PRIVATE -Wno-psabi)
+endif()
 
 include(GNUInstallDirs)
+# Define where you want the application to go on the device
+set(INSTALL_DESTDIR ${CMAKE_INSTALL_BINDIR})
+
 install(TARGETS aapi_app
     BUNDLE DESTINATION ${INSTALL_DESTDIR}
     LIBRARY DESTINATION ${INSTALL_DESTDIR}

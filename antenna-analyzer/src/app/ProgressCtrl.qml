@@ -79,8 +79,8 @@ Item {
     width: 250
     height: 28
     clip: true
-    color: AapiTheme.style.barGradientColor1
-    secondColor: AapiTheme.style.barGradientColor2
+    color: AapiTheme.style.headerGradientColor1
+    secondColor: AapiTheme.style.headerGradientColor2
 
     Rectangle {
         id: background

@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,9 @@
 #ifndef AAPI_SIMPLE_ARRAY_H
 #define AAPI_SIMPLE_ARRAY_H
 
-#include <stdlib.h>
-#include <string.h>
+#include <utility>
+#include <stdexcept>
+#include <cstdlib>
 
 namespace aapi
 {
@@ -36,169 +37,148 @@ template<class T>
 class AAPiArray
 {
 public:
-    AAPiArray();
-    AAPiArray(const AAPiArray& sa);
-    AAPiArray(AAPiArray&& sa) noexcept;
-    ~AAPiArray();
+    AAPiArray() : m_elements(nullptr), m_numElements(0), m_capacity(0) {}
+    AAPiArray(const AAPiArray& sa) : m_elements(nullptr), m_numElements(0), m_capacity(0) { copyFrom(sa); }
+    AAPiArray(AAPiArray&& sa) noexcept : m_elements(nullptr), m_numElements(0), m_capacity(0) { moveFrom(sa); }
+    ~AAPiArray() { clear(); }
 
     bool append(const T& element);
     bool remove(const T& element);
     bool remove_at(int i);
     void clear();
 
-    const T& get_element(int i) const noexcept(false);
-    T& get_element(int i) noexcept(false);
-    int size() const;
+    bool reserve(uint capacity);
 
-    const T& operator [](int i) const;
-    T& operator [](int i);
+    uint size() const       { return m_numElements; }
+    uint capacity() const   { return m_capacity; }
+
+    const T& get_element(int i) const;
+    T& get_element(int i);
+
+    const T& operator [](int i) const   { return get_element(i); }
+    T& operator [](int i)               { return get_element(i); }
 
     AAPiArray& operator=(const AAPiArray& sa);
     AAPiArray& operator=(AAPiArray&& sa) noexcept;
 
 private:
     void copyFrom(const AAPiArray& sa);
-    void moveFrom(AAPiArray& sa);
+    void moveFrom(AAPiArray& sa) noexcept;
 
 private:
     T *m_elements;
-    int m_numElements;
+    uint m_capacity;
+    uint m_numElements;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
 template<class T>
-AAPiArray<T>::AAPiArray()
-    : m_elements(nullptr)
-    , m_numElements(0)
+bool AAPiArray<T>::reserve(uint newCapacity)
 {
-}
+    // Never shrink memory allocations via reserve
+    if (newCapacity <= m_capacity)
+        return true;
 
-template<class T>
-AAPiArray<T>::AAPiArray(const AAPiArray& sa)
-    : m_elements(nullptr)
-    , m_numElements(0)
-{
-    copyFrom(sa);
-}
+    T* newBuffer = reinterpret_cast<T*>(std::malloc(newCapacity * sizeof(T)));
+    if (!newBuffer)
+        return false;
 
-template<class T>
-AAPiArray<T>::AAPiArray(AAPiArray&& sa) noexcept
-    : m_elements(nullptr)
-    , m_numElements(0)
-{
-    moveFrom(sa);
-}
+    // Shift active objects forward into the expanded layout
+    for (uint i = 0; i < m_numElements; ++i) {
+        new (&newBuffer[i]) T(std::move(m_elements[i]));
+        m_elements[i].~T();
+    }
 
-template<class T>
-AAPiArray<T>::~AAPiArray()
-{
-    clear();
+    std::free(m_elements);
+    m_elements = newBuffer;
+    m_capacity = newCapacity;
+    return true;
 }
 
 template<class T>
 bool AAPiArray<T>::append(const T& newElement)
 {
-    T *ptr = reinterpret_cast<T *>(realloc( m_elements, (m_numElements + 1) * sizeof (T) ));
-    if (ptr != nullptr)
-    {
-        m_elements = ptr;
-        new (&m_elements[m_numElements]) T ();
-        m_elements[m_numElements++] = newElement;
-        return true;
+    // Auto-grow geometric strategy: Double capacity when boundary is breached
+    if (m_numElements >= m_capacity) {
+        uint nextCapacity = (m_capacity == 0) ? 4 : m_capacity * 2;
+        if (!reserve(nextCapacity))
+            return false;
     }
-    return false;
+
+    // Direct O(1) assignment into pre-allocated memory slot
+    new (&m_elements[m_numElements]) T(newElement);
+    ++m_numElements;
+    return true;
 }
 
 template<class T>
 bool AAPiArray<T>::remove(const T& element)
 {
-    int index = -1;
-    for (int i = 0; i < m_numElements; i++)
-    {
+    for (int i = 0; i < m_numElements; i++) {
         if (m_elements[i] == element) {
-            index = i;
-            break;
+            return remove_at(i);
         }
     }
-    return remove_at(index);
+    return false;
 }
 
 template<class T>
 bool AAPiArray<T>::remove_at(int i)
 {
-    if (i < 0 || i >= m_numElements)
+    if (i < 0 || static_cast<uint>(i) >= m_numElements)
         return false;
 
     m_elements[i].~T();
-    int right = m_numElements - i -1;
-    if (right > 0)
-        memmove(&m_elements[i], &m_elements[i+1], right * sizeof (T));
 
-    if (--m_numElements == 0)
-    {
-        free(m_elements);
-        m_elements = nullptr;
+    // Shift elements left using clean placement move construction
+    for (uint j = static_cast<uint>(i); j < m_numElements - 1; ++j) {
+        new (&m_elements[j]) T(std::move(m_elements[j + 1]));
+        m_elements[j + 1].~T();
     }
 
+    --m_numElements;
+    // To preserve reserve performance benefits, do not shrink on single removals.
+    // Memory can be left open for future insertions.
     return true;
 }
 
 template<class T>
 void AAPiArray<T>::clear()
 {
-    for (int i =0; i < m_numElements; i++)
-        m_elements[i].~T();
-
-    free(m_elements);
+    if (m_elements) {
+        for (uint i = 0; i < m_numElements; i++) {
+            m_elements[i].~T();
+        }
+        std::free(m_elements);
+        m_elements = nullptr;
+    }
     m_numElements = 0;
+    m_capacity = 0; // Clear allocation boundary
 }
 
 template<class T>
-const T& AAPiArray<T>::get_element(int index) const noexcept(false)
+const T& AAPiArray<T>::get_element(int index) const
 {
-    for (int i = 0; i < m_numElements; i++)
-    {
-        if (i == index)
-            return m_elements[i];
+    if (index < 0 || index >= m_numElements) {
+        throw std::out_of_range("Index out of bounds");
     }
-    throw;
+    return m_elements[index]; // O(1) Fast lookup optimization
 }
 
 template<class T>
-T& AAPiArray<T>::get_element(int index) noexcept(false)
+T& AAPiArray<T>::get_element(int index)
 {
-    for (int i = 0; i < m_numElements; i++)
-    {
-        if (i == index)
-            return m_elements[i];
+    if (index < 0 || index >= m_numElements) {
+        throw std::out_of_range("Index out of bounds");
     }
-    throw;
-}
-
-template<class T>
-const T& AAPiArray<T>::operator [](int i) const
-{
-    return get_element(i);
-}
-
-template<class T>
-T& AAPiArray<T>::operator [](int i)
-{
-    return get_element(i);
-}
-
-template<class T>
-int AAPiArray<T>::size() const
-{
-    return m_numElements;
+    return m_elements[index]; // O(1) Fast lookup optimization
 }
 
 template<class T>
 AAPiArray<T>& AAPiArray<T>::operator=(const AAPiArray& sa)
 {
-    if (this != &sa)
-    {
+    if (this != &sa) {
         copyFrom(sa);
     }
     return *this;
@@ -207,8 +187,7 @@ AAPiArray<T>& AAPiArray<T>::operator=(const AAPiArray& sa)
 template<class T>
 AAPiArray<T>& AAPiArray<T>::operator=(AAPiArray&& sa) noexcept
 {
-    if (this != &sa)
-    {
+    if (this != &sa) {
         moveFrom(sa);
     }
     return *this;
@@ -219,30 +198,30 @@ void AAPiArray<T>::copyFrom(const AAPiArray& sa)
 {
     clear();
 
-    if (sa.m_numElements > 0)
-    {
-        m_elements = reinterpret_cast<T *>(malloc( sa.m_numElements * sizeof (T) ));
-        if (m_elements != nullptr)
-        {
-            m_numElements = sa.m_numElements;
-            for (int i = 0; i < m_numElements; i++)
-            {
-                new (&m_elements[i]) T ();
-                m_elements[i] = sa.m_elements[i];
+    if (sa.m_numElements > 0) {
+        m_elements = reinterpret_cast<T*>(std::malloc(sa.m_numElements * sizeof(T)));
+        if (m_elements != nullptr) {
+            for (uint i = 0; i < sa.m_numElements; i++) {
+                new (&m_elements[i]) T(sa.m_elements[i]);
             }
+            m_numElements = sa.m_numElements;
+            m_capacity = sa.m_numElements;
         }
     }
 }
 
 template<class T>
-void AAPiArray<T>::moveFrom(AAPiArray& sa)
+void AAPiArray<T>::moveFrom(AAPiArray& sa) noexcept
 {
     clear();
-    // move
+
     m_elements = sa.m_elements;
     m_numElements = sa.m_numElements;
+    m_capacity = sa.m_capacity;
+
     sa.m_elements = nullptr;
     sa.m_numElements = 0;
+    sa.m_capacity = 0;
 }
 
 } //namespace aapi

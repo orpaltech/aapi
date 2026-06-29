@@ -57,14 +57,10 @@ Canvas {
         ctx.reset();
 
         drawImpedanceCircles(ctx);
-
         drawSWRCircles(ctx);
-
         drawHemisphereLabels(ctx);
-
         drawHorizontalAxis(ctx);
-
-        //drawGammaCurve(ctx);
+        drawGammaCurve(ctx);
     }
 
     function calcPlotArea() {
@@ -72,8 +68,8 @@ Canvas {
         return Qt.rect(center.x - radius, center.y - radius, radius*2, radius*2)
     }
 
-    function append(gamma) {
-        canvas.gammaVals.push(gamma);
+    function appendSweepTrace(points) {
+        canvas.gammaVals.push(...points);
 
         // Only request a paint if one isn't already queued for the next frame
         if (!canvas._paintRequested) {
@@ -85,12 +81,31 @@ Canvas {
         }
     }
 
-    function refresh() {
-        canvas.requestPaint();
+    function updateSweepTrace(points) {
+        canvas.gammaVals = points;
+
+        // Leverage your callLater flag to safely collapse paint requests
+        if (!canvas._paintRequested) {
+            canvas._paintRequested = true;
+            Qt.callLater(function() {
+                canvas.requestPaint();
+                canvas._paintRequested = false;
+            });
+        }
+    }
+
+    // Add the clean, single-pass loading receiver method
+    function drawFullSweepTrace(points) {
+        canvas.gammaVals = points;   // The full pre-packaged list from C++
+        refresh();
     }
 
     function clear() {
         canvas.gammaVals = [];
+        refresh();
+    }
+
+    function refresh() {
         canvas.requestPaint();
     }
 
@@ -274,37 +289,42 @@ Canvas {
         var xOffset = center.x - (radius * 0.5);
         var yOffset = radius * 0.6;
 
-        // Top: Inductive
+        // Top Hemisphere: Inductive reactance axis
         ctx.fillText("Inductive (+jX)", xOffset, center.y - yOffset);
 
-        // Bottom: Capacitive
+        // Bottom Hemisphere: Capacitive reactance axis
         ctx.fillText("Capacitive (-jX)", xOffset, center.y + yOffset);
 
         ctx.restore();
     }
 
-    function gamma2Point(gamma) {
-        return Qt.point(
-            Math.round(center.x + gamma.x * radius),
-            Math.round(center.y - gamma.y * radius)
-        );
-    }
-
+    // The high-speed loop inside your drawing engine
     function drawGammaCurve(ctx) {
-        if (gammaVals.length < 2)
+        if (!canvas.gammaVals || canvas.gammaVals.length === 0) {
             return;
+        }
+
+        ctx.save();
+        setGammaStyle(ctx);
 
         ctx.beginPath();
-        var g0 = gammaVals[0];
-        var pt0 = gamma2Point(g0);
-        ctx.moveTo(pt0.x, pt0.y);
 
-        for (var i = 1; i < gammaVals.length; i++) {
-            var g = gammaVals[i];
-            var pt = gamma2Point(g);
-            ctx.lineTo(pt.x, pt.y);
+        for (var i = 0; i < canvas.gammaVals.length; i++) {
+            var gamma = canvas.gammaVals[i];
+
+            // Map from standard math bounds (-1.0 to 1.0) to your canvas coordinate center
+            // Note: QML Y-axis points DOWN, so we invert the imag/y axis component
+            var ptX = center.x + (gamma.x * radius);
+            var ptY = center.y - (gamma.y * radius);
+
+            if (i === 0) {
+                ctx.moveTo(ptX, ptY);
+            } else {
+                ctx.lineTo(ptX, ptY);
+            }
         }
-        setGammaStyle(ctx)
+
         ctx.stroke();
+        ctx.restore();
     }
 }

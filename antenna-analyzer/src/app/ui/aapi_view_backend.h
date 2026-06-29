@@ -60,8 +60,8 @@ class QAAPiViewBackend : public QObject,
 
     /* Properties */
     Q_PROPERTY(QString error_message READ getErrorMessage CONSTANT)
-    Q_PROPERTY(quint32 freq_min READ getFreqMin CONSTANT)
-    Q_PROPERTY(quint32 freq_max READ getFreqMax CONSTANT)
+    Q_PROPERTY(quint32 freq_min READ getFrequencyMinKHz CONSTANT)
+    Q_PROPERTY(quint32 freq_max READ getFrequencyMaxKHz CONSTANT)
     Q_PROPERTY(quint32 base_r0 READ getBaseR0 CONSTANT)
     Q_PROPERTY(bool is_design_mode READ isDesignMode CONSTANT)
 
@@ -83,77 +83,90 @@ public:
 public:
     /* Property accessors */
     bool isActive() const { return m_active; }
-    bool isDesignMode() const {
+    constexpr bool isDesignMode() const {
 #ifdef AAPI_QML_DESIGN
         return true;
 #else
         return false;
 #endif
     }
+
     QString getErrorMessage() const { return m_errorMsg; }
-    uint32_t getFreqMin() const { return AAPI_BAND_FMIN;}
-    uint32_t getFreqMax() const { return AAPI_BAND_FMAX; }
-    uint32_t getBaseR0() const;
+    uint32_t getBaseR0() const { return m_config->get_base_r0(); }
+
+    constexpr uint32_t getFrequencyMin() const { return AAPI_BAND_FREQ_MIN; }
+    constexpr uint32_t getFrequencyMax() const { return AAPI_BAND_FREQ_MAX; }
+
+    constexpr uint32_t getFrequencyMinKHz() const { return getFrequencyMin() / 1000; }
+    constexpr uint32_t getFrequencyMaxKHz() const { return getFrequencyMax() / 1000; }
+
+    constexpr bool isFrequencyValid(uint32_t freq) const {
+        return (freq > 0 && freq >= getFrequencyMin() && freq <= getFrequencyMax() && (freq % 100'000) == 0);
+    }
 
 protected:
     void setErrorMessage(const char *message);
     void clearErrorMessage();
     bool hasErrorMessage() const;
 
-    /* Skip frames after frequency switch */
-    void skipFrames() const;
+    // Initiates a new measurement sequence (will steal input data)
+    AAPiError startMeasures(AAPiMeasureTaskList&& measures);
+    AAPiError cancelMeasures();
 
-    /* Initiates a new measurement sequence */
-    int startMeasure(const AAPiMeasureTaskList& measure_steps);
+    //
+    // Override to invoke view-specific logic
+    //
+    virtual AAPiError loadView() { return AAPI_SUCCESS; }
+    virtual AAPiError activateView() { return AAPI_SUCCESS; }
+    virtual void deactivateView() {}
+    virtual void destroyView() {}
 
-    AAPiMeasureTask *getCurrentMeasure() const;
+    //
+    // Override to handle measure finished (called in main thread)
+    //
+    virtual AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) { return AAPI_SUCCESS; }
+    virtual void onViewMeasureError(AAPiError error) {}
 
-    /* Override to invoke view-specific logic*/
-    virtual int load_view() { return 0; }
-    virtual int activate_view() { return 0; }
-    virtual void deactivate_view() {}
-    virtual void destroy_view() {}
-
-    /* Override to handle measure finished (called in main thread)*/
-    virtual int onViewMeasureFinished(AAPiMeasureTask *measure) { return AAPI_SUCCESS; }
-    virtual void onViewMeasureError(int error) {}
-
-    bool isValidFreq(uint32_t f) const
-    {
-        return (f != 0 && f >= (getFreqMin() / 1000) && f <= (getFreqMax() / 1000) && (f % 100) == 0);
-    }
+    uint32_t getMaxMeasures() const { return m_maxMeasures; }
 
 private:
 // AAPiSignalProcessEvents
     virtual void onSignalProcessMags(AAPiComplex *mags, uint32_t num_mags);
-
 // AAPiMeasureEvents
-    virtual void onMeasureFinished(AAPiMeasureTask *measure);
+    virtual void onMeasureTaskFinished(AAPiMeasureTask *measure);
+
+    AAPiError startNextMeasure();
+    void cleanupMeasures();
+    AAPiError prepareGenerator();
+    void releaseGenerator();
 
 protected:
-    AAPiConfig              *m_config;
-    AAPiGenerator           *m_generator;
-    AAPiSignalProcessor     *m_dsp;
-    AAPiMeasureTaskList     m_measures;
+    AAPiPtr<AAPiConfig>             m_config;
+    AAPiPtr<AAPiGenerator>          m_generator;
+    AAPiPtr<AAPiSignalProcessor>    m_dsp;
 
 private:
-    AAPiMeasureTaskList::const_iterator m_measureIter;
+    uint                        m_maxMeasures;
+    AAPiMeasureTaskList         m_measureSteps;
+    AAPiPtr<AAPiMeasureTask>    m_currentMeasure;
 
+    QThread     *m_timerThread;
+    QTimer      *m_settlingTimer; // Tracks our active settling delays
     QString     m_errorMsg;
     bool        m_active;   /* view is shown to user */
 
 signals:
-    void measureFinished(AAPiMeasureTask *measure);
+    void measureTaskFinished(AAPiPtr<AAPiMeasureTask> measure);
     void snapshotTaken(QString file, QImage image);
-    void quitApplication();
-    void rebootApplication();
+    void raiseQuitApplication();
+    void raiseRebootApplication();
 
 public slots:
-    int loaded();
-    int activated();
-    void deactivated();
-    void destroyed();
-    void measureFinishedHandler(AAPiMeasureTask *measure);
+    int handleLoaded();
+    int handleActivated();
+    void handleDeactivated();
+    void handleDestroyed();
+    void handleMeasureTaskFinished(AAPiPtr<AAPiMeasureTask> measure);
 };
 
 #endif // UI_AAPI_VIEW_BACKEND_H

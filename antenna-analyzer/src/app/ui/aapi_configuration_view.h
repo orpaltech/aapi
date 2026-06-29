@@ -22,8 +22,6 @@
 
 #include "ui/aapi_view_backend.h"
 
-using namespace aapi;
-
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPiConfigurationView
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,11 +30,11 @@ class QAAPiConfigurationView : public QAAPiViewBackend
 {
 public:
     enum ConfigParamType {
-        PT_BYTE = AAPI_VT_BYTE,
-        PT_UINT = AAPI_VT_UINT,
-        PT_INT = AAPI_VT_INT,
-        PT_FLOAT = AAPI_VT_FLOAT,
-        PT_TEXT = AAPI_VT_TEXT
+        PT_BYTE = (uint)AAPiVariantType::BYTE,
+        PT_UINT = (uint)AAPiVariantType::UINT,
+        PT_INT = (uint)AAPiVariantType::INT,
+        PT_FLOAT = (uint)AAPiVariantType::FLOAT,
+        PT_TEXT = (uint)AAPiVariantType::TEXT
     };
 
     Q_OBJECT
@@ -47,9 +45,9 @@ public:
     Q_ENUM(ConfigParamType)
 
     /* Properties */
-    Q_PROPERTY(uint num_params READ get_num_params NOTIFY numParamsChanged)
+    Q_PROPERTY(uint num_params READ get_num_params NOTIFY raiseNumParamsChanged)
     Q_PROPERTY(uint param_index READ get_param_index)
-    Q_PROPERTY(uint param_num_options READ get_num_options NOTIFY paramNumOptionsChanged)
+    Q_PROPERTY(uint param_num_options READ get_num_options NOTIFY raiseNumOptionsChanged)
     Q_PROPERTY(QStringList param_opt_values READ get_opt_values)
     Q_PROPERTY(QStringList param_opt_labels READ get_opt_labels)
     Q_PROPERTY(QString param_description READ get_description)
@@ -73,27 +71,29 @@ public:
     ConfigParamType get_type() const;
 
 private:
-    virtual int load_view();
-    virtual void destroy_view();
+// QAAPiViewBackend
+    AAPiError loadView() override;
+    void destroyView() override;
 
-    QString formatValue(AAPiVariant value) const;
+    QString formatValue(const AAPiVariant& value) const;
 
 private:
-    AAPiConfig  *m_tmpConfig;
-    int         m_index;
+    AAPiPtr<AAPiConfig> m_tmpConfig;
+    int m_index;
 
-signals:
-    void numParamsChanged();
-    void paramNumOptionsChanged();
+Q_SIGNALS:
+    void raiseNumParamsChanged();
+    void raiseNumOptionsChanged();
 
-public slots:
-    void move_prev_param();
-    void move_next_param();
-    void move_first_param();
-    void set_param_value(QString new_val);
-    void set_param_option(int new_opt);
-    void accept_changes();
-    void discard_changes();
+public Q_SLOTS:
+    void handleMovePrevParam();
+    void handleMoveNextParam();
+    void handleMoveFirstParam();
+    void handleSetParamValue(QString new_val);
+    void handleSetParamOption(int new_opt);
+    void handleUseDefaults();
+    void handleAcceptChanges();
+    void handleDiscardChanges();
 };
 
 #endif // UI_AAPI_CONFIGURATION_VIEW_H

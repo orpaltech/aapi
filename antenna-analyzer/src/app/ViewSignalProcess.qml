@@ -54,10 +54,7 @@ SwipePage {
                     leftPadding: 6
 
                     DesignEffect {
-                        effects: [
-                            DesignInnerShadow {
-                            }
-                        ]
+                        effects: [ DesignInnerShadow { } ]
                     }
                 }
 
@@ -70,10 +67,7 @@ SwipePage {
                     leftPadding: 6
 
                     DesignEffect {
-                        effects: [
-                            DesignInnerShadow {
-                            }
-                        ]
+                        effects: [ DesignInnerShadow { } ]
                     }
                 }
             }
@@ -105,10 +99,18 @@ SwipePage {
                     }
                 }
 
-                onCurrentIndexChanged: backend.tab_changed(currentIndex)
+                onCurrentIndexChanged: backend.handleTabChange(currentIndex)
             }
         }
     }
 
+    // This event runs automatically when swiped into focus
+    onActivated: {
+        console.log("is now ACTIVE")
+    }
 
+    // This event runs automatically when swiped out of focus or destroyed
+    onDeactivated: {
+        console.log("is now INACTIVE")
+    }
 }

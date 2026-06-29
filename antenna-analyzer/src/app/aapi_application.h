@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QQuickWindow>
-#include "ui/aapi_measure_view.h"
+#include "ui/aapi_measurement_view.h"
 #include "ui/aapi_configuration_view.h"
 #include "ui/aapi_osl_calibration_view.h"
 #include "ui/aapi_hw_calibration_view.h"
@@ -37,8 +37,6 @@
 #include "analyzer/aapi_signal_process.h"
 #include "analyzer/aapi_device.h"
 
-template <class T>
-using QPtr = std::unique_ptr<T>;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Define reboot exit code
@@ -59,7 +57,7 @@ public:
     QAAPiShutdownManager(QObject *parent = nullptr);
     ~QAAPiShutdownManager();
 
-    int openDevice();
+    int openDevice(uint dev_index = 0);
     void setShutdownRequested(bool requested, const QString &reason = QString());
     void performSystemShutdown();
 
@@ -74,7 +72,7 @@ private:
 private:
     bool m_shutdownRequested;
     QString m_shutdownReason;
-    AAPiDevice *m_device;
+    AAPiPtr<AAPiDevice> m_device;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,9 +137,9 @@ public:
 private:
     AAPiPtr<AAPiConfig>             m_config;
     AAPiPtr<AAPiGenerator>          m_generator;
-    AAPiPtr<AntScopeDevice>         m_antscope;
-    AAPiPtr<AAPiSignalProcessor>    m_signalProcess;
+    AAPiPtr<AAPiSignalProcessor>    m_processor;
     AAPiPtr<AAPiCalibrator>         m_calibrator;
+    AAPiPtr<AntScopeDevice>         m_antscope;
     QString                         m_lastSnapshot;
 
     QAAPiBaseStyle                  *m_style;
@@ -152,29 +150,29 @@ private:
     QQuickWindow                    *m_mainWindow;
 
     QAAPiShutdownManager            *m_shutdownMgr;
-    QPtr<QSocketNotifier>           m_deviceNotifier;
+    QPointer<QSocketNotifier>       m_deviceNotifier;
 
     // ------------- Models --------------
-    QPtr<QAAPiConfigurationView>    m_configurationView;
-    QPtr<QAAPiSignalProcessView>    m_signalProcessView;
-    QPtr<QAAPiMeasurementView>      m_measurementView;
-    QPtr<QAAPiPanoramicScanView>    m_panoramicScanView;
-    QPtr<QAAPiOSLCalibrationView>   m_oslCalibrationView;
-    QPtr<QAAPiHWCalibrationView>    m_hwCalibrationView;
-    QPtr<QAAPiAboutAppView>         m_aboutAppView;
-    QPtr<QAAPiStatusBackend>        m_appStatus;
+    QPointer<QAAPiConfigurationView>    m_configurationView;
+    QPointer<QAAPiSignalProcessView>    m_signalProcessView;
+    QPointer<QAAPiMeasurementView>      m_measurementView;
+    QPointer<QAAPiPanoramicScanView>    m_panoramicScanView;
+    QPointer<QAAPiOSLCalibrationView>   m_oslCalibrationView;
+    QPointer<QAAPiHWCalibrationView>    m_hwCalibrationView;
+    QPointer<QAAPiAboutAppView>         m_aboutAppView;
+    QPointer<QAAPiStatusBackend>        m_appStatus;
 
 private:
     void initiateShutdown(const QString &reason);
 
 Q_SIGNALS:
-    void quitApplication();
+    void raiseQuitApplication();
 
 public Q_SLOTS:
-    void process_snapshot(QString file_name, QImage snapshot);
-    void reboot_application();
-    void quit_application();
-    void device_status_change();
+    void handleSnapshotTaken(QString file_name, QImage snapshot);
+    void handleRebootApplication();
+    void handleQuitApplication();
+    void handleDeviceStatusChange();
 };
 
 } // namespace aapi

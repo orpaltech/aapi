@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,106 +28,107 @@ QAAPiHWCalibrationView::QAAPiHWCalibrationView(AAPiConfig *config, AAPiSignalPro
                                                QObject *parent)
     : QAAPiViewBackend(config, dsp, gen, parent)
     , m_calibrator(cal)
-    , m_scanCancel(false)
+    , m_scanCancelled(false)
 {
-    AAPI_ADDREF(m_calibrator);
-
     // Subscribe for DSP events 
-    dsp->addCallback( this );
+    dsp->addCallback(this);
 }
 
 QAAPiHWCalibrationView::~QAAPiHWCalibrationView()
 {
-    AAPI_DISPOSE(m_calibrator);
 }
 
-int QAAPiHWCalibrationView::load_view()
+AAPiError QAAPiHWCalibrationView::loadView()
 {
-    return 0;
+    return AAPI_SUCCESS;
 }
 
-void QAAPiHWCalibrationView::destroy_view()
+void QAAPiHWCalibrationView::destroyView()
 {
 }
 
-int QAAPiHWCalibrationView::onViewMeasureFinished(AAPiMeasureTask *measure)
+void QAAPiHWCalibrationView::deactivateView()
 {
-    double mag_ratio, phas_diff;
-    int ret;
+    cancelMeasures();
+}
 
-    // NOTE: We are in the main thread now 
+AAPiError QAAPiHWCalibrationView::onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure)
+{
+    // NOTE: We are in the main thread now
 
-    if (! measure)
-    {
-        // Finalize measurement
-        m_calibrator->scan_hwe_ended();
+    if (measure == nullptr) {
+        // Finalize standard successful measurement
+        m_calibrator->hw_err_scan_finalize();
 
         // Save calibration data to file
-        ret = m_calibrator->flush_hwe_correction_file();
-        // TODO: check error
-    }
-    else
-    {
-        if (m_scanCancel) /*User cancelled*/
-        {
+        int ret = m_calibrator->flush_hw_err_correction_file();
+        if (AAPI_FAILED( ret )) {
+            // TODO: check error
+        }
+
+    } else {
+        if (m_scanCancelled) { /*User cancelled*/
             return AAPI_E_CANCELLED;
         }
 
-        if (measure->is_low_signal( ))
-        {
-            // Hardware problem 
+        uint32_t freq = measure->measure_freq;
+        double mag_ratio = measure->mag_ratio;
+        double phas_diff = measure->phase_diff;
+
+        // Notify UI progress
+        int step = m_scanIndex + 1; // Make step 1-based
+        int total = getMaxMeasures();
+        emit scanProgress( step, total, freq, mag_ratio, phas_diff);
+
+        if (measure->is_low_signal()) {
+            // Hardware problem
             emit scanNoSignal();
 
             return AAPI_E_FAILURE;
         }
 
-        mag_ratio = measure->mag_ratio;
-        phas_diff = measure->Phas_diff;
-
-        ret = m_calibrator->set_hwe_entry( m_scanIndex++, mag_ratio, phas_diff);
-        // TODO: check error
-        
-        // Notify UI progress 
-        emit scanProgress( m_scanIndex, m_measures.length(), mag_ratio, phas_diff);
+        int ret = m_calibrator->set_hw_err_entry( m_scanIndex++, mag_ratio, phas_diff);
+        if (AAPI_FAILED( ret )) {
+            // TODO: check error
+        }
     }
 
     return AAPI_SUCCESS;
 }
 
-int QAAPiHWCalibrationView::start_hwcal()
+AAPiError QAAPiHWCalibrationView::handleStartScan()
 {
-    AAPiMeasureTaskList     measure_steps;
-    unsigned int            freq, num_scans;
-    int                     ret;
+    // Read number of scans
+    uint32_t num_scans = qMin( m_config->get_calibr_num_scans(), AAPI_MAX_MEASURE_SCANS );
 
-    /* Read number of scans*/
-    num_scans = m_config->get_osl_n_scans();
+    AAPiMeasureTaskList steps;
+    // Reserve memory upfront so the list never reallocates
+    steps.reserve(AAPiCalibrator::NUM_ENTRIES);
+    // Prepare measurement steps
+    for (uint i = 0; i < AAPiCalibrator::NUM_ENTRIES; i++) {
+        uint32_t freq = AAPiCalibrator::get_freq_by_index( i );
 
-    /* Prepare measurement steps */
-    for (uint i = 0; i < AAPI_CAL_NUM_ENTRIES; i++)
-    {
-        freq = AAPiCalibrator::freq_by_index( i );
-
-        AAPiPtr<AAPiMeasureTask> measure( AAPiMeasureTask::create( m_config, m_calibrator, this, freq, false, false, num_scans, false ));
-        measure_steps.push_back( measure );
+        AAPiPtr<AAPiMeasureTask> measure(
+            AAPiMeasureTask::create( m_config, nullptr, this, freq, false, false, num_scans, false )
+        );
+        steps.push_back( std::move(measure) );
     }
 
-    m_calibrator->scan_hwe_begin();
+    m_calibrator->hw_err_scan_begin();
 
     // reset scan index & cancel flag
     m_scanIndex = 0;
-    m_scanCancel = false;
+    m_scanCancelled = false;
 
-    ret = startMeasure( measure_steps );
-    if (AAPI_FAILED( ret ))
-    {
+    int ret = startMeasures( std::move(steps) );
+    if (AAPI_FAILED( ret )) {
         return ret;
     }
 
     return AAPI_SUCCESS;
 }
 
-void QAAPiHWCalibrationView::cancel_hwcal()
+void QAAPiHWCalibrationView::handleCancelScan()
 {
-    m_scanCancel = true;
+    m_scanCancelled = true;
 }

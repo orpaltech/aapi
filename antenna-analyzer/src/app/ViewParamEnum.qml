@@ -60,10 +60,7 @@ Item {
                 font.bold: true
 
                 DesignEffect {
-                    effects: [
-                        DesignDropShadow {
-                        }
-                    ]
+                    effects: [ DesignDropShadow { } ]
                 }
             }
         }
@@ -88,7 +85,7 @@ Item {
 
                 contentItem: Text {
                     id: cbOptionsText
-                    leftPadding: 0
+                    /*leftPadding: 0*/
                     rightPadding: cbOptions.indicator.width + cbOptions.spacing
 
                     text: cbOptions.displayText
@@ -137,16 +134,11 @@ Item {
                 }
 
                 DesignEffect {
-                    effects: [
-                        DesignInnerShadow {
-                        },
-                        DesignDropShadow {
-                        }
-                    ]
+                    effects: [ DesignInnerShadow { }, DesignDropShadow { } ]
                 }
 
                 /* When an item is selected, update the backend */
-                onActivated: backend.set_param_option(currentIndex)
+                onActivated: backend.handleSetParamOption(currentIndex)
 
                 Component.onCompleted: {
                     console.log("param enum loaded")
@@ -161,7 +153,7 @@ Item {
                             value: opt_values[i]
                         };
                         cbOptions.model.append(el);
-                        if (backend.param_value == opt_values[i]) {
+                        if (backend.param_value === opt_values[i]) {
                             cur_sel = i;
                         }
                     }

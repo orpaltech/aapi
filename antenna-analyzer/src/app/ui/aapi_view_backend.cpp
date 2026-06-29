@@ -16,16 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <unistd.h>
+
 #include "aapi_view_backend.h"
+#include <QTimer>
+#include <QThread>
 
 using namespace aapi;
 
-///////////////////////////////////////////////////////////////////////////////
-// Definitions
-///////////////////////////////////////////////////////////////////////////////
-
-#define DSP_PAUSE_MICROSEC  20'000U     /*20 millisec*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPIQmlView
@@ -39,29 +36,31 @@ QAAPiViewBackend::QAAPiViewBackend(AAPiConfig *config, AAPiSignalProcessor *dsp,
     , m_dsp(dsp)
     , m_generator(gen)
 {
-    AAPI_ADDREF(m_dsp);
-    AAPI_ADDREF(m_generator);
-    AAPI_ADDREF(m_config);
+    m_timerThread = new QThread(this);
+    m_timerThread->start();
 
-    m_measureIter = m_measures.end();
+    m_settlingTimer = new QTimer(nullptr); // No parent yet
+    m_settlingTimer->setSingleShot(true);
+    m_settlingTimer->moveToThread(m_timerThread); // Run strictly inside your timer loop thread
 
-    // Connect signal and slot 
-    QObject::connect(this, SIGNAL(measureFinished(AAPiMeasureTask*)), this,
-                     SLOT(measureFinishedHandler(AAPiMeasureTask*)),
+    // Connect the timer wake event cleanly to your signal parsing loop
+    QObject::connect(m_settlingTimer, &QTimer::timeout, this, [this]() {
+            signal_process_enable();
+        }, Qt::DirectConnection); // Executes safely within the background thread context!
+
+
+    // Connect signals and slots
+    QObject::connect(this, &QAAPiViewBackend::measureTaskFinished,
+                     this, &QAAPiViewBackend::handleMeasureTaskFinished,
                      Qt::QueuedConnection);
-
 }
 
 QAAPiViewBackend::~QAAPiViewBackend()
 {
-    AAPI_DISPOSE(m_config);
-    AAPI_DISPOSE(m_dsp);
-    AAPI_DISPOSE(m_generator);
-}
-
-quint32 QAAPiViewBackend::getBaseR0() const
-{
-    return static_cast<quint32> (m_config->get_base_r0( ));
+    if (m_timerThread) {
+        m_timerThread->quit();    // Stop the background event loop
+        m_timerThread->wait();    // Wait for the OS thread to close completely
+    }
 }
 
 void QAAPiViewBackend::setErrorMessage(const char *message)
@@ -79,177 +78,187 @@ bool QAAPiViewBackend::hasErrorMessage() const
     return m_errorMsg.length() > 0;
 }
 
-AAPiMeasureTask *QAAPiViewBackend::getCurrentMeasure() const
+void QAAPiViewBackend::cleanupMeasures()
 {
-    if (m_measureIter != m_measures.end())
-        return *m_measureIter;
-
-    return nullptr;
+    m_measureSteps.clear();
+    m_maxMeasures = 0;
+    m_currentMeasure = nullptr;
 }
 
-int QAAPiViewBackend::startMeasure(const AAPiMeasureTaskList& measure_steps)
+AAPiError QAAPiViewBackend::prepareGenerator()
 {
-    uint32_t    measure_freq;
-    int         ret;
-
-    if (measure_steps.isEmpty())
-    {
-        return AAPI_E_INVALID_ARG;
-    }
-
-    if (! m_measures.isEmpty())
-    {
-        return AAPI_E_INVALID_STATE;
-    }
-
     // Lock generator to this owner
-    ret = m_generator->lock( this );
-    if (AAPI_FAILED( ret ))
-    {
+    AAPiError ret = m_generator->lock( this );
+    if (AAPI_FAILED( ret )) {
         return ret;
     }
 
-    m_generator->resume();
-
-    // Here is the starting frequency
-    measure_freq = measure_steps.at( 0 )->measure_freq;
-
-    enableSignalProcessing( false );
-
-    // Setup generator to 1-st frequency value
-    ret = m_generator->set_measure_freq( measure_freq, this );
-    if (AAPI_FAILED( ret ))
-    {
-        m_generator->unlock( this );
-        m_generator->suspend( );
-
+    ret = m_generator->resume();
+    if (AAPI_FAILED( ret )) {
         return ret;
     }
-
-    // Let the filter stabilize after frequency switch
-    skipFrames( );
-
-    m_measures = measure_steps;
-    m_measureIter = m_measures.begin();
-
-    enableSignalProcessing( );
 
     return AAPI_SUCCESS;
 }
 
-void QAAPiViewBackend::skipFrames() const
+void QAAPiViewBackend::releaseGenerator()
 {
-    usleep( DSP_PAUSE_MICROSEC );
+    if (m_generator->is_locked() ) {
+        // Set default generator frequency
+        m_generator->set_measure_freq(
+            m_config->get_generator_freq(), this );
+        m_generator->unlock( this );
+        m_generator->suspend( );
+    }
 }
 
-int QAAPiViewBackend::loaded()
+AAPiError QAAPiViewBackend::startNextMeasure()
+{
+    // Setup generator to the first frequency value
+    AAPiError ret = m_generator->set_measure_freq(
+                    m_measureSteps.first()->measure_freq, this );
+    if (AAPI_FAILED( ret )) {
+        return ret;
+    }
+
+    // Grab the first measure from the queue
+    m_currentMeasure = m_measureSteps.takeFirst();
+
+    // Fetch the dynamic hardware settling gate (e.g., 22 ms for 48k/1024)
+    uint32_t settling_time = m_config->get_dsp_settling_delay_ms();
+
+    // Start our dedicated tracking instance cleanly
+    QMetaObject::invokeMethod(m_settlingTimer, "start",
+                              Qt::QueuedConnection,
+                              Q_ARG(int, settling_time));
+
+    return AAPI_SUCCESS;
+}
+
+AAPiError QAAPiViewBackend::startMeasures(AAPiMeasureTaskList&& measures)
+{
+    if (measures.isEmpty()) {
+        return AAPI_E_INVALID_ARG;
+    }
+
+    if (! m_measureSteps.isEmpty()) {
+        return AAPI_E_INVALID_STATE;
+    }
+
+    signal_process_enable( false );
+
+    // Lock generator to this owner
+    AAPiError ret = prepareGenerator();
+    if (AAPI_FAILED( ret )) {
+        return ret;
+    }
+
+    m_measureSteps = std::move(measures);
+    m_maxMeasures = m_measureSteps.length();
+
+    ret = startNextMeasure();
+    if (AAPI_FAILED( ret )) {
+        releaseGenerator();
+        cleanupMeasures();
+        return ret;
+    }
+
+    return AAPI_SUCCESS;
+}
+
+AAPiError QAAPiViewBackend::cancelMeasures()
+{
+    cleanupMeasures();
+    releaseGenerator();
+    return AAPI_SUCCESS;
+}
+
+int QAAPiViewBackend::handleLoaded()
 {
     // Allow derived class load resources 
-    int ret = load_view();
-    if (AAPI_SUCCEEDED( ret ))
-    {
+    int ret = loadView();
+    if (AAPI_SUCCEEDED( ret )) {
         clearErrorMessage();
     }
 
     return ret;
 }
 
-int QAAPiViewBackend::activated()
+int QAAPiViewBackend::handleActivated()
 {
     // Set active flag 
     m_active = true;
 
     // Allow derived class activate view
-    int ret = activate_view();
-    if (AAPI_SUCCEEDED( ret ))
-    {
+    int ret = activateView();
+    if (AAPI_SUCCEEDED( ret )) {
         clearErrorMessage();
     }
 
     return ret;
 }
 
-void QAAPiViewBackend::deactivated()
+void QAAPiViewBackend::handleDeactivated()
 {
     // Allow derived class deactivate view 
-    deactivate_view( );
+    deactivateView( );
 
     // Clear active flag 
     m_active = false;
 }
 
-void QAAPiViewBackend::destroyed()
+void QAAPiViewBackend::handleDestroyed()
 {
-    // Allow derived class destroy resources 
-    destroy_view();
+    // Allow derived class destroy resources
+    destroyView();
 }
 
 void QAAPiViewBackend::onSignalProcessMags(AAPiComplex *mags, uint32_t num_mags)
 {
     // Process measurement
-    if (getCurrentMeasure() != nullptr)
-    {
-        getCurrentMeasure()->process_mags( mags[DSP_V_CHANNEL], mags[DSP_I_CHANNEL] );
+    if (m_currentMeasure != nullptr) {
+        m_currentMeasure->process_mags( mags[DSP_V_CHANNEL], mags[DSP_I_CHANNEL] );
     }
 }
 
-void QAAPiViewBackend::onMeasureFinished(AAPiMeasureTask *measure)
+void QAAPiViewBackend::onMeasureTaskFinished(AAPiMeasureTask *measure)
 {
-    enableSignalProcessing( false );
+    signal_process_enable( false );
 
-    // Queue result to the main thread 
-    emit measureFinished( measure );
+    if (m_currentMeasure != nullptr) {
+        emit measureTaskFinished( std::move(m_currentMeasure));
+    }
 }
 
-void QAAPiViewBackend::measureFinishedHandler(AAPiMeasureTask *measure)
+void QAAPiViewBackend::handleMeasureTaskFinished(AAPiPtr<AAPiMeasureTask> measure)
 {
-    uint32_t    measure_freq;
-    int         ret;
+    // Let derived class handle the measure
+    AAPiError ret = onViewMeasureFinished( measure );
+    if (AAPI_FAILED( ret )) {
 
-    // Allow derived class to handle measure 
-    if (onViewMeasureFinished( measure ))
-    {
-        // An error occurred or derived class wants to cancel measure
-        m_generator->unlock( this );
-        m_generator->suspend( );
-
-        // Cleanup measurement steps 
-        m_measures.clear();
+        // An error occurred or derived class wants to cancel sweep
+        releaseGenerator();
+        cleanupMeasures();
         return;
     }
 
-    // Move to the next measure 
-    if (++m_measureIter != m_measures.end())
-    {
-        measure_freq = (*m_measureIter)->measure_freq;
+    if (! m_measureSteps.isEmpty()) {
 
-        // Setup generator
-        ret = m_generator->set_measure_freq( measure_freq, this );
-        if (AAPI_FAILED( ret ))
-        {
-            // handle error 
+        // Move to the next measure
+        ret = startNextMeasure();
+        if (AAPI_FAILED( ret )) {
+            releaseGenerator();
+            cleanupMeasures();
+            // Notify derived class of error occurred
             onViewMeasureError( ret );
-
-            // finish measurement sequence
-            m_generator->unlock( this );
-            m_generator->suspend( );
-            return;
         }
-
-        // Pause after switching operating frequency 
-        skipFrames( );
-
-        enableSignalProcessing( );
         return;
     }
 
-    // Finished all measurements 
-    m_generator->unlock( this );
-    m_generator->suspend( );
+    // Let derived class finalize
+    onViewMeasureFinished( AAPiPtr<AAPiMeasureTask>() );
 
-    // Let derived class finalize 
-    onViewMeasureFinished( nullptr );
-
-    // Cleanup measurement steps 
-    m_measures.clear();
+    // Finished all measurements
+    releaseGenerator();
+    cleanupMeasures();
 }

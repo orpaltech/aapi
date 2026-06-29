@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #define UI_AAPI_ABOUT_APP_VIEW_H
 
 #include "aapi_view_backend.h"
-
-using namespace aapi;
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPiAboutAppView
@@ -44,11 +42,11 @@ public:
     // --------- Property accessors -------
     QString getSystemInformation() const;
 
-signals:
+Q_SIGNALS:
 
-public slots:
-    void quit();
-    void reboot();
+public Q_SLOTS:
+    void handleQuit();
+    void handleReboot();
 };
 
 #endif // UI_AAPI_ABOUT_APP_VIEW_H

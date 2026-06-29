@@ -86,23 +86,17 @@ SwipePage {
                                     font.pointSize: 24
 
                                     DesignEffect {
-                                        effects: [
-                                            DesignDropShadow {
-                                            }
-                                        ]
+                                        effects: [ DesignDropShadow { } ]
                                     }
                                 }
                                 Label {
                                     id: lblAppVersion
-                                    text: qsTr("Ver ") + Application.version
+                                    text: qsTr("Ver %1").arg(Application.version)
                                     font.bold: true
                                     font.pointSize: 18
 
                                     DesignEffect {
-                                        effects: [
-                                            DesignDropShadow {
-                                            }
-                                        ]
+                                        effects: [ DesignDropShadow { } ]
                                     }
                                 }
                                 Label {
@@ -111,15 +105,12 @@ SwipePage {
                                     font.pointSize: 16
 
                                     DesignEffect {
-                                        effects: [
-                                            DesignDropShadow {
-                                            }
-                                        ]
+                                        effects: [ DesignDropShadow { } ]
                                     }
                                 }
                                 Label {
                                     id: lblCopyright
-                                    text: qsTr("Copyright (C) 2013-2025 ORPAL Technology, Inc.")
+                                    text: qsTr("© 2013-2026 %1").arg(Application.organization)
                                     Layout.topMargin: 20
                                     font.pointSize: 18
                                 }
@@ -206,7 +197,7 @@ SwipePage {
                             leftPadding: 12
                             font.pointSize: 18
                             onClicked: {
-                                backend.reboot()
+                                backend.handleReboot()
                             }
                         }
                     }
@@ -224,7 +215,7 @@ SwipePage {
                             leftPadding: 12
                             font.pointSize: 18
                             onClicked: {
-                                backend.quit()
+                                backend.handleQuit()
                             }
                         }
                     }

@@ -19,20 +19,55 @@
 
 import QtQuick
 import QtQuick.Controls
+import aapi
+
 
 Button {
+    id: control
+
     property bool on: false
     property string onText: "Stop"
     property string offText: "Start"
 
-    id: button
     text: offText
+    state: "off"
+
+    // Reads from your centralized themes, falling back to clean slate muted colors when disabled
+    contentItem: Text {
+        text: control.text
+        font: control.font
+
+        color: !control.enabled ? AapiTheme.style.buttonDisabledTextColor // Dimmed when disabled
+               : (control.on   ? AapiTheme.style.buttonOnTextColor
+                               : AapiTheme.style.buttonOffTextColor)
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+    }
+
+    background: Rectangle {
+        implicitWidth: 200
+        implicitHeight: 44
+
+        // Mutes the background fill and borders to clearly signal that the hardware control is locked
+        color: !control.enabled ? AapiTheme.style.buttonDisabledBackColor // Muted when disabled
+               : (control.on    ? AapiTheme.style.buttonOnBackColor
+                                : AapiTheme.style.buttonOffBackColor)
+
+        border.color: !control.enabled ? AapiTheme.style.buttonDisabledBorderColor // Dimmed slate edge border
+                      : (control.on    ? AapiTheme.style.buttonOnBorderColor
+                                       : AapiTheme.style.buttonOffBorderColor)
+
+        border.width: control.visualFocus ? 2 : 1
+        radius: 4
+    }
 
     states: [
         State {
             name: "off";
             PropertyChanges {
-                target: button;
+                target: control;
                 on: false;
                 text: offText;
             }
@@ -40,7 +75,7 @@ Button {
         State {
             name: "on";
             PropertyChanges {
-                target: button;
+                target: control;
                 on: true;
                 text: onText;
             }
@@ -48,27 +83,109 @@ Button {
     ]
 
     onClicked: {
-        if (button.state === "on") {
-            if (button.onStop)
-                button.onStop();
-            button.state = "off"
+        // Native QML automatically rejects mouse clicks if enabled is false,
+        // but adding this structural check protects your callbacks against rogue script events
+        if (!control.enabled) return;
+
+        if (control.state === "on") {
+            if (control.onStop)
+                control.onStop();
+            control.state = "off"
         }
         else if (handleStart()) {
-            button.state = "on";
+            control.state = "on";
         }
     }
 
     function setOn() {
-        button.state = "on"
+        control.state = "on"
     }
     function setOff() {
-        button.state = "off"
+        control.state = "off"
     }
 
     function handleStart() {
-        if (button.onStart)
-            return button.onStart();
+        if (control.onStart)
+            return control.onStart();
         else
             return true;
     }
 }
+
+
+/*Button {
+    id: control
+
+    property bool on: false
+    property string onText: "Stop"
+    property string offText: "Start"
+
+    text: offText
+    state: "off"
+
+    contentItem: Text {
+        text: control.text
+        font: control.font
+        color: control.on ? AapiTheme.style.buttonOnTextColor
+                          : AapiTheme.style.buttonOffTextColor
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+    }
+
+    // Modern background component that automatically reads control.on changes
+    background: Rectangle {
+        implicitWidth: 200
+        implicitHeight: 44
+        color: control.on ? AapiTheme.style.buttonOnBackColor
+                          : AapiTheme.style.buttonOffBackColor
+        border.color: control.on ? "#FF3344" : "#00CCAA"
+        border.width: control.visualFocus ? 2 : 1
+        radius: 4
+    }
+
+    states: [
+        State {
+            name: "off";
+            PropertyChanges {
+                target: control;
+                on: false;
+                text: offText;
+            }
+        },
+        State {
+            name: "on";
+            PropertyChanges {
+                target: control;
+                on: true;
+                text: onText;
+            }
+        }
+    ]
+
+    onClicked: {
+        if (control.state === "on") {
+            if (control.onStop)
+                control.onStop();
+            control.state = "off"
+        }
+        else if (handleStart()) {
+            control.state = "on";
+        }
+    }
+
+    function setOn() {
+        control.state = "on"
+    }
+    function setOff() {
+        control.state = "off"
+    }
+
+    function handleStart() {
+        if (control.onStart)
+            return control.onStart();
+        else
+            return true;
+    }
+}*/
+

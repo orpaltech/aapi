@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ class QAAPiOSLCalibrationView : public QAAPiViewBackend
 {
 public:
     enum ScanType {
-        SCAN_SHORT  = AAPI_CAL_FILE_SHORT_SCANNED,
-        SCAN_LOAD   = AAPI_CAL_FILE_LOAD_SCANNED,
-        SCAN_OPEN   = AAPI_CAL_FILE_OPEN_SCANNED,
+        SCAN_OPEN   = AAPiCalibrator::FILE_STATUS_SCAN_OPEN,
+        SCAN_SHORT  = AAPiCalibrator::FILE_STATUS_SCAN_SHORT,
+        SCAN_LOAD   = AAPiCalibrator::FILE_STATUS_SCAN_LOAD
     };
 
     Q_OBJECT
@@ -47,11 +47,11 @@ public:
     Q_ENUM(ScanType)
 
     /* Properties */
-    Q_PROPERTY(int osl_file READ getOslFile WRITE setOslFile NOTIFY oslFileChanged)
-    Q_PROPERTY(uint num_osl_files READ getNumOslFiles CONSTANT)
+    Q_PROPERTY(int osl_file READ getFile WRITE setFile NOTIFY oslFileChanged)
+    Q_PROPERTY(uint num_osl_files READ getNumFiles CONSTANT)
     Q_PROPERTY(QIntList file_opt_values READ getFileOptionValues CONSTANT)
     Q_PROPERTY(QStringList file_opt_labels READ getFileOptionLabels CONSTANT)
-    Q_PROPERTY(bool osl_file_exists READ getOslFileExists CONSTANT)
+    Q_PROPERTY(bool osl_file_exists READ getFileExists NOTIFY oslFileExistsChanged)
     Q_PROPERTY(uint r_short READ getRShort CONSTANT)
     Q_PROPERTY(uint r_load READ getRLoad CONSTANT)
     Q_PROPERTY(uint r_open READ getROpen CONSTANT)
@@ -63,46 +63,41 @@ public:
     ~QAAPiOSLCalibrationView();
 
 private:
-    virtual int load_view();
-    virtual void destroy_view();
+// QAAPiViewBackend
+    AAPiError loadView() override;
+    void destroyView() override;
+    AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
 
     /* ---------- Properties ----------- */
-    int getOslFile() const;
-    void setOslFile(int osl_file);
+    int getFile() const;
+    void setFile(int osl_file);
 
-    uint32_t getNumOslFiles() const;
+    uint32_t getNumFiles() const;
     QIntList getFileOptionValues() const;
     QStringList getFileOptionLabels() const;
 
-    bool getOslFileExists() const;
+    bool getFileExists() const;
 
     uint32_t getRShort() const { return m_config->get_osl_r_short(); }
     uint32_t getRLoad() const { return m_config->get_osl_r_load(); }
     uint32_t getROpen() const { return m_config->get_osl_r_open(); }
 
-    void setRShort(uint32_t val) {}
-    void setRLoad(uint32_t val) {}
-    void setROpen(uint32_t val) {}
-
-// Measurement callback
-    virtual int onViewMeasureFinished(AAPiMeasureTask *measure);
-
 private:
-    AAPiCalibrator  *m_calibrator;
+    AAPiPtr<AAPiCalibrator> m_calibrator;
     ScanType        m_scanType;
     uint32_t        m_scanIndex;
-    bool            m_scanCancel;
+    volatile bool   m_scanCancelled;
 
-signals:
-    void oslFileChanged(int oslFile);
+Q_SIGNALS:
+    void oslFileChanged(int osl_file);
     void oslFileExistsChanged();
     void numOslFilesChanged();
-    void scanProgress(enum ScanType type, int step, int total, double r, double x);
-    void scanNoSignal(enum ScanType type);
+    void scanProgress(enum ScanType scan_type, int step, int total, quint32 freq, double rx_re, double rx_im);
+    void scanNoSignal(enum ScanType scan_type);
 
-public slots:
-    int start_scan(enum ScanType type);
-    void cancel_scan();
+public Q_SLOTS:
+    AAPiError handleStartScan(enum ScanType scan_type);
+    void handleCancelScan();
 };
 
 #endif // UI_AAPI_OSL_CAL_VIEW_H

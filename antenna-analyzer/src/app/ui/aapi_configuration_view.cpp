@@ -25,30 +25,30 @@
 
 QAAPiConfigurationView::QAAPiConfigurationView(AAPiConfig *config, QObject *parent)
     : QAAPiViewBackend(config, nullptr, nullptr, parent)
-    , m_tmpConfig( AAPiConfig::create( ))
+    , m_tmpConfig( AAPiConfig::create( false ))
     , m_index(-1)
 {
 }
 
 QAAPiConfigurationView::~QAAPiConfigurationView()
 {
-    AAPI_DISPOSE(m_tmpConfig);
 }
 
-int QAAPiConfigurationView::load_view()
+AAPiError QAAPiConfigurationView::loadView()
 {
     // Copy configuration into temp 
     *m_tmpConfig = *m_config;
     m_index = 0;
-    emit numParamsChanged();
-    return 0;
+
+    emit raiseNumParamsChanged();
+
+    return AAPI_SUCCESS;
 }
 
-void QAAPiConfigurationView::destroy_view()
+void QAAPiConfigurationView::destroyView()
 {
-    if (is_dirty_config( ))
-    {
-        accept_changes( );
+    if (is_dirty_config( )) {
+        handleAcceptChanges( );
     }
 }
 
@@ -59,7 +59,7 @@ QAAPiConfigurationView::ConfigParamType QAAPiConfigurationView::get_type() const
 
 uint32_t QAAPiConfigurationView::get_num_params() const
 {
-    return m_tmpConfig->get_num_params();
+    return m_tmpConfig->get_num_valid_params();
 }
 
 uint32_t QAAPiConfigurationView::get_num_options() const
@@ -77,8 +77,7 @@ QStringList QAAPiConfigurationView::get_opt_values() const
     const AAPiArray<AAPiVariant>&   values = m_tmpConfig->get_opt_values( m_index );
     QStringList                     res;
 
-    for (int i = 0; i < values.size(); i++)
-    {
+    for (uint i = 0; i < values.size(); i++) {
         res.append( formatValue( values[i] ) );
     }
     return res;
@@ -90,30 +89,28 @@ QStringList QAAPiConfigurationView::get_opt_labels() const
     const AAPiArray<AAPiString>&    labels = m_tmpConfig->get_opt_labels( m_index );
     QStringList                     res;
 
-    for (int i = 0; i < values.size(); i++)
-    {
+    for (uint i = 0; i < values.size(); i++) {
         res.append( labels[i].length() != 0 ? (const char *)labels[i] : formatValue( values[i] ) );
     }
     return res;
 }
 
-QString QAAPiConfigurationView::formatValue(AAPiVariant value) const
+QString QAAPiConfigurationView::formatValue(const AAPiVariant& value) const
 {
     QString formatted;
-    switch (m_tmpConfig->get_type( m_index ))
-    {
-    case AAPI_VT_BYTE:
-    case AAPI_VT_UINT:
-    case AAPI_VT_INT:
-    case AAPI_VT_TEXT:
+    switch (m_tmpConfig->get_type( m_index )) {
+    case AAPiVariantType::BYTE:
+    case AAPiVariantType::UINT:
+    case AAPiVariantType::INT:
+    case AAPiVariantType::TEXT:
         formatted = value.toString();
         break;
 
-    case AAPI_VT_FLOAT:
+    case AAPiVariantType::FLOAT:
         formatted.setNum( value.toFloat(), 'f', m_tmpConfig->get_precision( m_index ) );
         break;
 
-    case AAPI_VT_UNKNOWN:
+    case AAPiVariantType::UNKNOWN:
         break;
     }
     return formatted;
@@ -121,12 +118,8 @@ QString QAAPiConfigurationView::formatValue(AAPiVariant value) const
 
 bool QAAPiConfigurationView::is_dirty_config() const
 {
-    unsigned i;
-
-    for (i = 0; i < m_config->get_total_params(); i++)
-    {
-        if (m_config->get_value( i ) != m_tmpConfig->get_value( i ))
-        {
+    for (uint i = 0; i < m_config->get_total_params(); i++) {
+        if (m_config->get_value( i ) != m_tmpConfig->get_value( i )) {
             return true;
         }
     }
@@ -138,7 +131,7 @@ QString QAAPiConfigurationView::get_value() const
     return formatValue( m_tmpConfig->get_value( m_index ));
 }
 
-void QAAPiConfigurationView::move_prev_param()
+void QAAPiConfigurationView::handleMovePrevParam()
 {
     int i = this->m_index;
 
@@ -147,7 +140,7 @@ void QAAPiConfigurationView::move_prev_param()
     m_index = std::max( i, 0 );
 }
 
-void QAAPiConfigurationView::move_next_param()
+void QAAPiConfigurationView::handleMoveNextParam()
 {
     int total = (int) m_tmpConfig->get_total_params();
     int i = this->m_index;
@@ -157,7 +150,7 @@ void QAAPiConfigurationView::move_next_param()
     m_index = std::min( i, total-1 );
 }
 
-void QAAPiConfigurationView::move_first_param()
+void QAAPiConfigurationView::handleMoveFirstParam()
 {
     int total = (int) m_tmpConfig->get_total_params();
     int i = -1;
@@ -167,38 +160,41 @@ void QAAPiConfigurationView::move_first_param()
     m_index = std::min( i, total-1 );
 }
 
-void QAAPiConfigurationView::set_param_value(QString new_val)
+void QAAPiConfigurationView::handleSetParamValue(QString new_val)
 {
     /* parameter has been changed */
     m_tmpConfig->set_value( m_index, new_val.toLatin1().constData() );
 }
 
-void QAAPiConfigurationView::set_param_option(int opt)
+void QAAPiConfigurationView::handleSetParamOption(int opt)
 {
-    enum AAPiParameter param_id = AAPiConfig::get_id( m_index );
+    AAPiParameter param_id = AAPiConfig::get_id( m_index );
     AAPiVariant old_val = m_tmpConfig->get_value( param_id );
     AAPiVariant new_val = m_tmpConfig->get_opt_values( m_index )[ opt ];
 
-    if ( old_val != new_val )
-    {
+    if ( old_val != new_val ) {
         // parameter has been changed
         m_tmpConfig->set_value( param_id, new_val );
 
-        if (param_id == AAPI_PARAM_SHOW_ADVANCED)
-        {
+        if (param_id == AAPiParameter::SHOW_ADVANCED) {
             m_index = 0;
-            emit numParamsChanged();
+            emit raiseNumParamsChanged();
         }
     }
 }
 
-void QAAPiConfigurationView::accept_changes()
+void QAAPiConfigurationView::handleUseDefaults()
+{
+    // TODO: set all default values
+}
+
+void QAAPiConfigurationView::handleAcceptChanges()
 {
     *m_config = *m_tmpConfig;
     m_config->flush();
 }
 
-void QAAPiConfigurationView::discard_changes()
+void QAAPiConfigurationView::handleDiscardChanges()
 {
     *m_tmpConfig = *m_config;
 }

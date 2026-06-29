@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AAPI_ERROR_CODE_H
-#define AAPI_ERROR_CODE_H
+#ifndef AAPI_ERROR_H
+#define AAPI_ERROR_H
 
 namespace aapi
 {
 
+typedef int AAPiError;
+
 /*
  * Basic error codes
  */
-enum AAPiError {
+enum AAPiBasicError {
     AAPI_SUCCESS                = 0,
     AAPI_E_FAILURE              = -1,
     AAPI_E_CANCELLED            = -2,
@@ -61,4 +63,4 @@ enum AAPiError {
 #define AAPI_SUCCEEDED(rc)        ((rc) >= AAPI_SUCCESS)
 #define AAPI_FAILED(rc)         ((rc) < AAPI_SUCCESS)
 
-#endif // AAPI_ERROR_CODE_H
+#endif // AAPI_ERROR_H

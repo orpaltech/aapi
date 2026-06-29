@@ -20,7 +20,7 @@
 #ifndef AAPI_GENERATOR_H
 #define AAPI_GENERATOR_H
 
-#include "aapi_config.h"
+#include "aapi_object_with_config.h"
 
 namespace aapi
 {
@@ -50,28 +50,28 @@ protected:
     ~AAPiGenerator();
 
 public:
-    int open();
+    AAPiError open();
     void close();
 
-    int suspend();
-    int resume();
+    AAPiError suspend();
+    AAPiError resume();
 
-    int lock(void *owner);
+    AAPiError lock(void *owner);
     void unlock(void *owner);
     bool is_locked() const;
 
-    int set_intermediate_freq(uint32_t freq);
-    int get_intermediate_freq(uint32_t& freq) const;
+    AAPiError set_intermediate_freq(uint32_t freq);
+    AAPiError get_intermediate_freq(uint32_t& freq) const;
 
-    int set_measure_freq(uint32_t freq, void *owner = nullptr);
-    int get_measure_freq(uint32_t& freq) const;
+    AAPiError set_measure_freq(uint32_t freq, void *owner = nullptr);
+    AAPiError get_measure_freq(uint32_t& freq) const;
 
     // the last measure frequency that was set
     uint32_t get_last_freq() const;
 
 private:
-    int write_uint(const char *prop_name, uint32_t val);
-    int read_uint(const char *prop_name, uint32_t& val) const;
+    AAPiError write_uint(const char *prop_name, uint32_t val);
+    AAPiError read_uint(const char *prop_name, uint32_t& val) const;
 
 private:
     uint32_t        m_lastFreq;

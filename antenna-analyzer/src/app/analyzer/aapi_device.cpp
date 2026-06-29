@@ -73,8 +73,7 @@ struct AAPiDevice::Private
         struct AAPiDeviceStatus status;
 
         int ret = (int) ::read (fd, &status, sizeof(status));
-        if (ret < 0)
-        {
+        if (ret < 0) {
             return ret;
         }
 
@@ -139,26 +138,23 @@ void *AAPiDevice::Private::signal_thread(void *arg)
     pthread_sigmask (SIG_BLOCK, &waitset, NULL);
 
     /* Setup fasync */
-    if (fcntl (d->fd, F_SETOWN, getpid()) < 0)
-    {
+    if (fcntl (d->fd, F_SETOWN, getpid()) < 0) {
         return NULL;
     }
 
     int flags = fcntl (d->fd, F_GETFL);
-    if (fcntl (d->fd, F_SETFL, flags | FASYNC) < 0)
-    {
+    if (fcntl (d->fd, F_SETFL, flags | FASYNC) < 0) {
         return NULL;
     }
 
     /* FASYNC configured, waiting for signals... */
 
-    while (d->keep_running)
-    {
+    while (d->keep_running) {
+
         /* sigwait blocks until signal arrives */
         ret = sigwait (&waitset, &sig);
 
-        if (ret != 0)
-        {
+        if (ret != 0) {
             // sigwait failed, exit thread
             break;
         }
@@ -169,8 +165,7 @@ void *AAPiDevice::Private::signal_thread(void *arg)
         /* SIGIO received; */
         ret = d->write_socket();
 
-        if (ret < 0)
-        {
+        if (ret < 0) {
             // copy data failed, exit thread
             break;
         }
@@ -185,8 +180,7 @@ int AAPiDevice::open(const char *dev_path)
     int ret;
     sigset_t set;
 
-    if (!(m_priv->fd < 0))
-    {
+    if (!(m_priv->fd < 0)) {
         return AAPI_E_INVALID_STATE;
     }
 
@@ -197,8 +191,7 @@ int AAPiDevice::open(const char *dev_path)
 
     /* Open device */
     ret = ::open (dev_path, O_RDONLY | O_NONBLOCK);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         qCritical() << "device open failed: " << strerror(ret);
         return AAPI_CDEV_E_OPEN_FAILED;
     }
@@ -208,8 +201,7 @@ int AAPiDevice::open(const char *dev_path)
     qDebug() << "Device opened (fd=" << m_priv->fd << ")";
 
     /* Using socketpair is slightly more portable than pipe() */
-    if (::socketpair(AF_UNIX, SOCK_STREAM, 0, m_priv->sock_fd))
-    {
+    if (::socketpair(AF_UNIX, SOCK_STREAM, 0, m_priv->sock_fd)) {
         qCritical() << "couldn't create socket pair";
         m_priv->close_file();
         return AAPI_E_CREATE_SOCKET;
@@ -219,8 +211,7 @@ int AAPiDevice::open(const char *dev_path)
 
     /* Create signal thread */
     ret = pthread_create (&m_priv->thread_id, NULL, Private::signal_thread, m_priv.get());
-    if (ret != 0)
-    {
+    if (ret != 0) {
         qCritical() << "pthread_create() failed: " << strerror(ret);
         m_priv->close_file();
         m_priv->close_socks();

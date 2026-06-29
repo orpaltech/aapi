@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,23 +54,20 @@ SwipePage {
                     font.bold: false
                     
                     ToolButton {
-                        id: btnConfigLoad
+                        id: btnDiscardChanges
                         width: 280
                         text: qsTr("Reload")
                         font.bold: false
                         font.pointSize: 22
                         
                         DesignEffect {
-                            effects: [
-                                DesignDropShadow {
-                                }
-                            ]
+                            effects: [ DesignDropShadow { } ]
                         }
                     }
                     
                     
                     ToolButton {
-                        id: btnConfigDefault
+                        id: btnUseDefaults
                         x: 282
                         width: 280
                         text: qsTr("Use Defaults")
@@ -78,40 +75,35 @@ SwipePage {
                         font.pointSize: 22
                         
                         DesignEffect {
-                            effects: [
-                                DesignDropShadow {
-                                }
-                            ]
+                            effects: [ DesignDropShadow { } ]
                         }
                     }
+
                     ToolButton {
-                        id: btnConfigSave
+                        id: btnAcceptChanges
                         x: 564
                         width: 280
-                        text: qsTr("Save Changes")
+                        text: qsTr("Accept Changes")
                         font.bold: false
                         font.pointSize: 22
                         
                         DesignEffect {
-                            effects: [
-                                DesignDropShadow {
-                                }
-                            ]
+                            effects: [ DesignDropShadow { } ]
                         }
                     }
                 }
                 
                 SwipeView {
-                    id: configViews
-                    
-                    property int previousIndex: 0
+                    id: svConfigViews
+                                        
                     anchors.fill: parent
                     anchors.topMargin: 48
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     
+                    property int previousIndex: 0
+
                     Repeater {
-                        id: configViewsRepeater
                         model: getNumParams()
                         Loader {
                             // keep only one page instantiated as the backend status is updated dynamically
@@ -121,17 +113,16 @@ SwipePage {
                     }
                     
                     onCurrentIndexChanged: {
-                        console.log("config swipe view: current = " + configViews.currentIndex + ", previous:" + configViews.previousIndex);
-                        if (configViews.currentIndex < 0) {
+                        console.log("config swipe view: current = " + svConfigViews.currentIndex + ", previous:" + svConfigViews.previousIndex);
+                        if (svConfigViews.currentIndex < 0) {
                             // all pages have been removed
-                            configViews.previousIndex = 0;
-                            gbConfigViews.title = "";
+                            svConfigViews.previousIndex = 0;
                             return;
                         }
                         
-                        var direction = configViews.currentIndex - configViews.previousIndex;
+                        var direction = svConfigViews.currentIndex - svConfigViews.previousIndex;
                         
-                        if (configViews.currentIndex === 0) {
+                        if (svConfigViews.currentIndex === 0) {
                             onMoveFirstParam();
                         } else {
                             if (direction > 0) {
@@ -142,9 +133,9 @@ SwipePage {
                         }
                         
                         // save current index as previous for the next call
-                        configViews.previousIndex = configViews.currentIndex;
+                        svConfigViews.previousIndex = svConfigViews.currentIndex;
                         
-                        var viewItem = configViews.itemAt(configViews.currentIndex);
+                        var viewItem = svConfigViews.itemAt(svConfigViews.currentIndex);
                         viewItem.source = getParamViewUrl();
                     }
                 }
@@ -156,7 +147,6 @@ SwipePage {
             spacing: 0
             
             Item {
-                id: itemPageIndicator
                 width: 1280
                 height: 36
                 
@@ -168,7 +158,7 @@ SwipePage {
                     padding: 0
                     spacing: 8
                     count: getNumParams()
-                    currentIndex: configViews.currentIndex
+                    currentIndex: svConfigViews.currentIndex
                     
                     delegate: Rectangle {
                         implicitWidth: 20
@@ -190,6 +180,26 @@ SwipePage {
         }
     }
 
+    Connections {
+        target: btnUseDefaults
+        onClicked: {
+            backend.handleUseDefaults()
+        }
+    }
+
+    Connections {
+        target: btnDiscardChanges
+        onClicked: {
+            backend.handleDiscardChanges()
+        }
+    }
+
+    Connections {
+        target: btnAcceptChanges
+        onClicked: {
+            backend.handleAcceptChanges()
+        }
+    }
     
     function getNumParams() {
         if (AAPI_DESIGN_MODE) {
@@ -205,7 +215,7 @@ SwipePage {
             return;
         
         // move first
-        backend.move_first_param();
+        backend.handleMoveFirstParam();
     }
     
     function onMovePrevParam() {
@@ -213,7 +223,7 @@ SwipePage {
             return;
         
         // move prev
-        backend.move_prev_param();
+        backend.handleMovePrevParam();
     }
     
     function onMoveNextParam() {
@@ -221,7 +231,7 @@ SwipePage {
             return;
         
         // move next
-        backend.move_next_param();
+        backend.handleMoveNextParam();
     }
     
     function getParamViewUrl() {

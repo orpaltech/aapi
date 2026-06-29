@@ -3,5 +3,4 @@
 QAAPiStyleChart::QAAPiStyleChart(QObject *parent)
     : QObject(parent)
 {
-
 }

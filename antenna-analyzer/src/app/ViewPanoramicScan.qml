@@ -19,7 +19,6 @@
 
 import QtQuick
 import QtQuick.Window
-import QtCharts
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Studio.DesignEffects
@@ -29,32 +28,34 @@ SwipePage {
     id: swpPanoramicScan
     property alias tabChartRX: tabChartRX
     title: "Panoramic Scan"
-    transformOrigin: Item.TopLeft
     contentHeight: 656
     contentWidth: 1280
+    transformOrigin: Item.TopLeft
     backend: aapi.view_panoramic_scan
 
-    Column {
+    ColumnLayout {
         id: column1
-        transformOrigin: Item.TopLeft
+        anchors.fill: parent
+        spacing: 0
 
-        Row {
+        Item {
             id: row1
-            width: 1280
-            height: 620
-            transformOrigin: Item.TopLeft
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
             StackLayout {
                 id: tabsCharts
                 anchors.fill: parent
-                transformOrigin: Item.TopLeft
-                anchors {
-                    top: tabBar.bottom
-                }
                 currentIndex: tabBar.currentIndex
+
+                TabPanScanSetup {
+                    id: tabPanFreqSetup
+                    transformOrigin: Item.TopLeft
+                }
 
                 TabVswrChart {
                     id: tabChartVSWR
+                    transformOrigin: Item.TopLeft
                 }
 
                 TabRxChart {
@@ -62,7 +63,7 @@ SwipePage {
                     transformOrigin: Item.TopLeft
                 }
 
-                TabPanVswr {
+                TabS11Chart {
                     id: tabChartS11
                     transformOrigin: Item.TopLeft
                 }
@@ -72,20 +73,23 @@ SwipePage {
                     transformOrigin: Item.TopLeft
                 }
 
+                Layout.fillWidth: false
+                Layout.fillHeight: false
+
                 Connections {
                     target: tabsCharts
-                    onCurrentIndexChanged: {
-                        backend.tab_changed(tabsCharts.currentIndex)
+
+                    function onCurrentIndexChanged() {
+                        backend.handleTabChange(tabsCharts.currentIndex)
                     }
                 }
             }
         }
 
-        Row {
+        Item {
             id: row2
-            width: 1280
-            height: 36
-            transformOrigin: Item.TopLeft
+            Layout.fillWidth: true
+            Layout.preferredHeight: 36
 
             TabBar {
                 id: tabBar
@@ -97,118 +101,103 @@ SwipePage {
                 font.pointSize: 18
 
                 TabButton {
+                    id: btnTabFreq
+                    text: "Scan Setup"
+                    rightPadding: 6
+                    leftPadding: 6
+                    width: implicitWidth + leftPadding + rightPadding
+                    DesignEffect { effects: [ DesignInnerShadow {} ] }
+                }
+
+                TabButton {
+                    id: btnTabVswr
                     text: "VSWR Chart"
-                    anchors.top: parent.top
                     rightPadding: 6
                     leftPadding: 6
                     width: implicitWidth + leftPadding + rightPadding
 
-                    DesignEffect {
-                        effects: [
-                            DesignInnerShadow {
-                            }
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignInnerShadow { } ] }
                 }
 
                 TabButton {
+                    id: btnTabRx
                     text: "RX Chart"
-                    anchors.top: parent.top
+                    rightPadding: 6
+                    leftPadding: 6
                     width: implicitWidth + leftPadding + rightPadding
 
-                    DesignEffect {
-                        effects: [
-                            DesignInnerShadow {
-                            }
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignInnerShadow {} ] }
                 }
 
                 TabButton {
                     text: "S11 Chart"
+                    rightPadding: 6
+                    leftPadding: 6
                     width: implicitWidth + leftPadding + rightPadding
 
-                    DesignEffect {
-                        effects: [
-                            DesignInnerShadow {
-                            }
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignInnerShadow {} ] }
                 }
 
                 TabButton {
                     text: "Smith Chart"
                     width: implicitWidth + leftPadding + rightPadding
 
-                    DesignEffect {
-                        effects: [
-                            DesignInnerShadow {
-                            }
-                        ]
-                    }
+                    DesignEffect { effects: [ DesignInnerShadow {} ] }
                 }
             }
         }
     }
 
-    Dialog {
+    AapiMessageBox {
         id: scanError
-        title: "Scan Error"
-        modal: true
-        font.pointSize: 10
-        x: (Screen.width - scanError.width)/2
-        y: (Screen.height - scanError.height)/2
+        caption: qsTr("Scan Error")
+        detailedText: ""
         standardButtons: Dialog.Ok
 
-        Label {
-            id: labelScanError
-        }
-
         function show(message) {
-            labelScanError.text = message
+            messageText = message
             open()
         }
     }
 
     Connections {
         target: backend
-        onScanStarted: {
+
+        function onScanStarted() {
             enableControls(false)
         }
 
-        onScanComplete: {
+        function onScanComplete() {
             enableControls(true)
         }
 
-        onScanError: {
+        function onScanError(message) {
             console.log("Scan error: " + message)
             scanError.show("Error occurred during scan: " + message)
             enableControls(true)
         }
 
-        onScanNoSignal: {
+        function onScanNoSignal() {
             scanError.show("Low signal. Please, check hardware.")
             enableControls(true)
         }
     }
 
-
     onLoaded: {
-        for (var i=0; i< tabsCharts.children.length; i++) {
+        for (var i = 0; i < tabsCharts.children.length; i++) {
             var tab = tabsCharts.children[i];
-            if (tab.loaded)
+            if (tab && tab.loaded) {
                 tab.loaded();
+            }
         }
     }
 
-    /* ------------------------------------------------------------------- */
-    /* The code below will handle state of the controls (enabled/disabled)
-    /* ------------------------------------------------------------------- */
     function enableControls(enable) {
-        for (var i=0; i< tabsCharts.children.length; i++) {
+        for (var i = 0; i < tabsCharts.children.length; i++) {
             var tab = tabsCharts.children[i];
-            if (tab.enableControls)
+            if (tab && tab.enableControls) {
                 tab.enableControls(enable);
+            }
         }
     }
 }
