@@ -31,6 +31,7 @@
 #include "ui/aapi_signal_process_view.h"
 #include "ui/aapi_panoramic_scan_view.h"
 #include "ui/aapi_status_backend.h"
+#include "ui/aapi_generator_view.h"
 #include "ui/aapi_base_style.h"
 #include "ui/aapi_messages.h"
 #include "analyzer/antscope/antscope_device.h"
@@ -90,6 +91,7 @@ class QAAPiApplication : public QObject
     Q_PROPERTY(QAAPiSignalProcessView*  view_signal_process     READ    getSignalProcessViewBackend CONSTANT)
     Q_PROPERTY(QAAPiMeasurementView*    view_measurement        READ    getMeasurementViewBackend CONSTANT)
     Q_PROPERTY(QAAPiPanoramicScanView*  view_panoramic_scan     READ    getPanoramicScanViewBackend CONSTANT)
+    Q_PROPERTY(QAAPiGeneratorView*      view_generator          READ    getGeneratorViewBackend CONSTANT)
     Q_PROPERTY(QAAPiOSLCalibrationView* view_osl_calibration    READ    getOslCalibrationViewBackend CONSTANT)
     Q_PROPERTY(QAAPiHWCalibrationView*  view_hw_calibration     READ    getHwCalibrationViewBackend CONSTANT)
     Q_PROPERTY(QAAPiAboutAppView*       view_about              READ    getAboutAppViewBackend CONSTANT)
@@ -117,6 +119,7 @@ public:
     QAAPiSignalProcessView  *getSignalProcessViewBackend() const { return m_signalProcessView.get(); }
     QAAPiMeasurementView    *getMeasurementViewBackend() const { return m_measurementView.get(); }
     QAAPiPanoramicScanView  *getPanoramicScanViewBackend() const { return m_panoramicScanView.get(); }
+    QAAPiGeneratorView      *getGeneratorViewBackend() const { return m_generatorView.get(); }
     QAAPiOSLCalibrationView *getOslCalibrationViewBackend() const { return m_oslCalibrationView.get(); }
     QAAPiHWCalibrationView  *getHwCalibrationViewBackend() const { return m_hwCalibrationView.get(); }
     QAAPiAboutAppView       *getAboutAppViewBackend() const { return m_aboutAppView.get(); }
@@ -155,6 +158,7 @@ private:
     // ------------- Models --------------
     QPointer<QAAPiConfigurationView>    m_configurationView;
     QPointer<QAAPiSignalProcessView>    m_signalProcessView;
+    QPointer<QAAPiGeneratorView>        m_generatorView;
     QPointer<QAAPiMeasurementView>      m_measurementView;
     QPointer<QAAPiPanoramicScanView>    m_panoramicScanView;
     QPointer<QAAPiOSLCalibrationView>   m_oslCalibrationView;
@@ -166,7 +170,7 @@ private:
     void initiateShutdown(const QString &reason);
 
 Q_SIGNALS:
-    void raiseQuitApplication();
+    void quitApplication();
 
 public Q_SLOTS:
     void handleSnapshotTaken(QString file_name, QImage snapshot);

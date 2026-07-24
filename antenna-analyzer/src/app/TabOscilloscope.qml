@@ -39,7 +39,7 @@ Item {
 
     Timer {
         id: timerOsc
-        interval: 2000
+        interval: 3000
         running: true
         repeat: true
         onTriggered: backend.handleWaveformUpdate()

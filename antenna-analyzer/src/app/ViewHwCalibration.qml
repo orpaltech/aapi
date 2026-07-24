@@ -26,6 +26,7 @@ import aapi
 
 SwipePage {
     id: swpHWCal
+    title: qsTr("HW Calibration")
     backend: aapi.view_hw_calibration
 
     // Visual Anchor Highlights
@@ -186,7 +187,7 @@ SwipePage {
             function onStart() {
                 console.log("HW Cal: onStart Initiated")
                 if (backend) {
-                    return backend.handleStartScan() === 0
+                    return backend.handleStartScan()
                 }
                 return false
             }
@@ -235,7 +236,7 @@ SwipePage {
         target: backend
         ignoreUnknownSignals: true
 
-        onScanProgress: (step, total, freq, mag_ratio, phase_diff) => {
+        function onScanProgress(step, total, freq, mag_ratio, phase_diff) {
             progressHWCal.minimum = 0
             progressHWCal.maximum = total
             progressHWCal.value = step
@@ -256,9 +257,13 @@ SwipePage {
             }
         }
 
-        onScanNoSignal: {
+        function onScanNoSignal() {
             scanError.show(qsTr("Low signal level detected. Please inspect physical hardware lines."))
             buttonHWCal.setOff()
+        }
+
+        function onScanError(message) {
+            scanError.show(message)
         }
     }
 }

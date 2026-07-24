@@ -30,11 +30,12 @@ import ru.orpaltech.aapi
 
 Item {
     id: tabVSWRChart
-    property PanoramicScanViewBackend backend: aapi.view_panoramic_scan
-    readonly property string seriesColor: "#dc1e1e"
     width: 1280
     height: 620
     transformOrigin: Item.TopLeft
+
+    property PanoramicScanViewBackend backend: aapi.view_panoramic_scan
+    readonly property string seriesColor: "#dc1e1e"
 
     ColumnLayout {
         id: col1
@@ -126,7 +127,6 @@ Item {
                         anchors.fill: parent
                         antialiasing: true
                         layer.enabled: true
-                        layer.samples: 4
 
                         visible: plotArea.width > 0
 

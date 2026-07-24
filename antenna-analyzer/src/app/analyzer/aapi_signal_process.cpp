@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 #include "aapi_signal_process.h"
 #include "utils/aapi_math_utils.h"
-#include <fftw3.h>
 
 namespace aapi
 {
@@ -76,7 +75,7 @@ void AAPiSignalProcessor::releaseBuffers()
     m_fft_wnd = nullptr;
 }
 
-double AAPiSignalProcessor::mag2db(double mag)
+AAPiReal AAPiSignalProcessor::mag2db(AAPiReal mag)
 {
     // Protect against log10(0) which returns NaN/Infinity
     if (mag < 1e-10) {
@@ -88,25 +87,19 @@ double AAPiSignalProcessor::mag2db(double mag)
     return 20. * std::log10(mag);
 }
 
-// Declare this as a member variable in your class header (e.g., double m_window_gain;)
-double AAPiSignalProcessor::setBlackman(double *wnd, uint32_t num)
+AAPiReal AAPiSignalProcessor::setBlackman(AAPiReal *wnd, uint32_t num)
 {
-    double sum = 0.0;
+    AAPiReal sum = 0.0;
 
-    for ( uint i = 0; i < num; i++ )
-    {
+    for ( uint i = 0; i < num; i++ ) {
         wnd[ i ] = (
             0.42659071 -
-            0.49656062 * std::cos( ( 2.0 * M_PI * i ) / ( num - 1 ) ) +
-            0.07684867 * std::cos( ( 4.0 * M_PI * i ) / ( num - 1 ) )
+            0.49656062 * std::cos( ( 2.0 * math::pi * i ) / ( num - 1 ) ) +
+            0.07684867 * std::cos( ( 4.0 * math::pi * i ) / ( num - 1 ) )
             );
         sum += wnd[ i ]; // Accumulate the total weight of the window
     }
 
-    // w(n) = 0.42 - 0.5 * cos(2πn / (N-1)) + 0.08 * cos(4πn / (N-1))
-
-    // Get the coherent gain as the sum divided by the number of samples
-    //
     // The Coherent Gain of any window is mathematically defined as the average value
     // of all the window's weights.
     // For a theoretical Blackman window of infinite length, this sum evaluates exactly
@@ -115,7 +108,7 @@ double AAPiSignalProcessor::setBlackman(double *wnd, uint32_t num)
     // For real digital windows of finite length, the actual average changes slightly
     // depending on the exact value of N due to discrete sampling artifacts.
     //
-    double window_gain = sum / num;
+    AAPiReal window_gain = sum / num;
     return window_gain;
 }
 
@@ -126,7 +119,7 @@ AAPiComplex AAPiSignalProcessor::calcMagnitude(int channel)
     uint32_t num_samples = m_config->get_dsp_num_samples();
     int num_fft_pts = static_cast<int>(m_config->get_dsp_fft_num_pts());
 
-    double pwr = 0.0;
+    AAPiReal pwr = 0.0;
     uint num_used_bins = 0;
 
     // Loop across the 5-bin cluster around your target IF channel carrier
@@ -134,20 +127,20 @@ AAPiComplex AAPiSignalProcessor::calcMagnitude(int channel)
 
         // Enforce boundary validation strictly against the actual r2c buffer size limit
         if (i >= 0 && i < num_fft_pts) {
-            double fft_mag = m_fft_mags[channel][i];
+            AAPiReal fft_mag = m_fft_mags[channel][i];
             pwr += MathUtils::sqr(fft_mag);
             num_used_bins++;
         }
     }
 
     // Prevent division-by-zero if 'bin' is completely out of range
-    double mag = 0.0;
+    AAPiReal mag = 0.0;
     if (num_used_bins > 0) {
         mag = std::sqrt(pwr / num_used_bins);
     }
 
     // Ensure 'bin' itself is within bounds before dereferencing m_fft_out
-    double phase = 0.0;
+    AAPiReal phase = 0.0;
     if (bin >= 0 && bin < num_fft_pts) {
         AAPiComplex *bf = &m_fft_out[bin];
         phase = std::atan2(bf->imag(), bf->real());
@@ -158,7 +151,7 @@ AAPiComplex AAPiSignalProcessor::calcMagnitude(int channel)
     return AAPiComplex(mag, phase);
 }
 
-double AAPiSignalProcessor::readSample(int index, char *buffer)
+AAPiReal AAPiSignalProcessor::readSample(int index, char *buffer)
 {
     int32_t sample_val = 0;
     uint32_t max_val;
@@ -204,7 +197,7 @@ double AAPiSignalProcessor::readSample(int index, char *buffer)
     }
 
     // Divide by maximum possible positive 32-bit signed integer value
-    return static_cast<double>(sample_val) / max_val;
+    return static_cast<AAPiReal>(sample_val) / max_val;
 }
 
 void AAPiSignalProcessor::processAudioBuffer(int channel, char *buffer, uint32_t /*buff_size*/)
@@ -235,6 +228,9 @@ void AAPiSignalProcessor::processAudioBuffer(int channel, char *buffer, uint32_t
     fftw_execute_dft_r2c ( plan, m_fft_inp [ channel ],
                          reinterpret_cast<fftw_complex *>( m_fft_out ) );
 
+
+    //fftwf_execute_dft_r2c ()
+
     // number of FFT points
     uint32_t max_out_pts = m_config->get_dsp_fft_num_pts();
 
@@ -243,7 +239,7 @@ void AAPiSignalProcessor::processAudioBuffer(int channel, char *buffer, uint32_t
         // Normalize by Blackman gain, and multiply by our digital pre-amp
         // to scale the raw numbers upward before they reach any callbacks.
         //
-        double normalized_mag = std::abs( m_fft_out[i] ) / ( max_out_pts * m_fft_wnd_gain );
+        AAPiReal normalized_mag = std::abs( m_fft_out[i] ) / ( max_out_pts * m_fft_wnd_gain );
 
         m_fft_mags [channel][i] = normalized_mag * m_config->get_dsp_digital_preamp();
     }
@@ -264,8 +260,6 @@ void AAPiSignalProcessor::onAudioReaderData(char **buffers, uint32_t num_channel
 
     AAPiSignalProcessEvents *cb;
     bool processing = false;
-    uint32_t num_samples = m_config->get_dsp_num_samples();
-    uint32_t max_fft_pts = m_config->get_dsp_fft_num_pts();
 
     // check if at least one callback has enabled signal processing
     for (uint i = 0; i < m_callbacks.size(); i++) {
@@ -280,6 +274,9 @@ void AAPiSignalProcessor::onAudioReaderData(char **buffers, uint32_t num_channel
         return;
     }
 
+    uint32_t num_samples = m_config->get_dsp_num_samples();
+    uint32_t max_fft_pts = m_config->get_dsp_fft_num_pts();
+
     for (uint ch = 0; ch < num_channels; ch++) {
         processAudioBuffer( ch, buffers[ch], buf_size );
     }
@@ -292,6 +289,19 @@ void AAPiSignalProcessor::onAudioReaderData(char **buffers, uint32_t num_channel
             cb->onSignalProcessRaw( m_raw_inp, num_channels, num_samples );
             cb->onSignalProcessFFT( m_fft_mags, num_channels, max_fft_pts );
             cb->onSignalProcessMags( m_fft_xmag, num_channels );
+        }
+    }
+}
+
+void AAPiSignalProcessor::onAudioBufferOverrun()
+{
+    AAPiSignalProcessEvents *cb;
+
+    for (uint i = 0; i < m_callbacks.size(); i++) {
+        cb = m_callbacks[i];
+
+        if (cb && cb->is_signal_processing()) {
+            cb->onSignalProcessError(AAPI_DSP_E_ADC_BUFFER_OVERRUN);
         }
     }
 }
@@ -358,17 +368,13 @@ AAPiError AAPiSignalProcessor::start()
     // Prepare blackman window 
     m_fft_wnd_gain = setBlackman( m_fft_wnd, num_samples );
 
-    if (fftw_init_threads() != 0) {
-        fftw_plan_with_nthreads(2); // parallelize across processor cores
-    }
-
     /*
      * Create a new FFTW plan for "real-to-complex" 1-dim transform
      * According to FFTW3 documenation, direct cast from std::complex to fftw_complex is allowed
      */
     m_plan = fftw_plan_dft_r2c_1d( num_samples, m_fft_inp [ DSP_V_CHANNEL ],
                                 reinterpret_cast<fftw_complex *>( m_fft_out ),
-                                FFTW_MEASURE );
+                                FFTW_ESTIMATE );
 
     // Start audio reader, providing a callback pointer
     ret = m_reader->start( this );
@@ -387,8 +393,6 @@ void AAPiSignalProcessor::stop()
     m_reader->close();
 
     releaseBuffers();
-
-    fftw_cleanup_threads();
 }
 
 uint32_t AAPiSignalProcessor::getBufferSize() const

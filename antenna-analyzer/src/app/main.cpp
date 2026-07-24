@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,22 +68,6 @@ void logFileMessage(QtMsgType type, const QMessageLogContext &context, const QSt
     }
 }
 
-/*#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QObject>
-#include <QTouchEvent>
-#include <QEvent>
-#include <QList>
-
-
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QObject>
-#include <QTouchEvent>
-#include <QEvent>
-#include <QList>
-#include <QSet>
-*/
 
 int main(int argc, char *argv[])
 {
@@ -93,7 +77,7 @@ int main(int argc, char *argv[])
     qInstallMessageHandler(logFileMessage);
 
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-    format.setSamples(4);
+    format.setSamples(0);
     QSurfaceFormat::setDefaultFormat(format);
 
     QAAPiShutdownManager shutdownManager;
@@ -125,6 +109,7 @@ int main(int argc, char *argv[])
         qmlRegisterUncreatableType<QAAPiMeasurementView>    (AAPI_QML_NAMESPACE, AAPI_QML_VER, "MeasurementViewBackend",    AAPI_QML_UNCREATABLE_REASON);
         qmlRegisterUncreatableType<QAAPiPanoramicScanView>  (AAPI_QML_NAMESPACE, AAPI_QML_VER, "PanoramicScanViewBackend",  AAPI_QML_UNCREATABLE_REASON);
         qmlRegisterUncreatableType<QAAPiSignalProcessView>  (AAPI_QML_NAMESPACE, AAPI_QML_VER, "SignalProcessViewBackend",  AAPI_QML_UNCREATABLE_REASON);
+        qmlRegisterUncreatableType<QAAPiGeneratorView>      (AAPI_QML_NAMESPACE, AAPI_QML_VER, "GeneratorViewBackend",      AAPI_QML_UNCREATABLE_REASON);
 
 
         do {

@@ -31,18 +31,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 QAAPiAboutAppView::QAAPiAboutAppView(AAPiConfig *config, QObject *parent)
-    : QAAPiViewBackend(config, nullptr, nullptr, parent)
+    : QAAPiViewBackend(config, nullptr, nullptr, nullptr, parent)
 {
 }
 
 void QAAPiAboutAppView::handleQuit()
 {
-    emit raiseQuitApplication();
+    emit quitApplication();
 }
 
 void QAAPiAboutAppView::handleReboot()
 {
-    emit raiseRebootApplication();
+    emit rebootApplication();
 }
 
 QString QAAPiAboutAppView::getSystemInformation() const

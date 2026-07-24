@@ -39,15 +39,15 @@ Page {
 
     // Trigger the events directly off the property change
     onIsPageActiveChanged: {
-       if (isPageActive) {
-           if (backend)
-               backend.handleActivated()
-           activated()
-       } else {
-           if (backend)
-               backend.handleDeactivated()
-           deactivated()
-       }
+        if (isPageActive) {
+            if (backend)
+                backend.handleActivated()
+            activated()
+        } else {
+            if (backend)
+                backend.handleDeactivated()
+            deactivated()
+        }
    }
 
     /*
@@ -59,18 +59,18 @@ Page {
 
 
     Component.onCompleted: {
-       if (backend) {
+        if (backend) {
             backend.handleLoaded()
         }
         viewStatus = ViewBackend.VS_IDLE
         loaded()
 
-       // Handle initial activation if it loads directly into view
-       if (isPageActive) {
+        // Handle initial activation if it loads directly into view
+        if (isPageActive) {
            if (backend)
                backend.handleActivated()
            activated()
-       }
+        }
     }
 
     Component.onDestruction: {

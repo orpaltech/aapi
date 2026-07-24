@@ -22,6 +22,7 @@
 
 #include "aapi_view_backend.h"
 #include "analyzer/aapi_calibrator.h"
+#include "aapi_messages.h"
 
 using namespace aapi;
 
@@ -59,14 +60,15 @@ public:
 public:
     explicit QAAPiOSLCalibrationView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                      AAPiGenerator *gen, AAPiCalibrator *cal,
-                                     QObject *parent = Q_NULLPTR);
+                                     QAAPiMessages *msgs, QObject *parent = Q_NULLPTR);
     ~QAAPiOSLCalibrationView();
 
 private:
 // QAAPiViewBackend
-    AAPiError loadView() override;
-    void destroyView() override;
+    AAPiError onViewLoad() override;
+    void onViewDestroy() override;
     AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
+    void onViewMeasureError(AAPiError error) override;
 
     /* ---------- Properties ----------- */
     int getFile() const;
@@ -94,9 +96,10 @@ Q_SIGNALS:
     void numOslFilesChanged();
     void scanProgress(enum ScanType scan_type, int step, int total, quint32 freq, double rx_re, double rx_im);
     void scanNoSignal(enum ScanType scan_type);
+    void scanError(QString message);
 
 public Q_SLOTS:
-    AAPiError handleStartScan(enum ScanType scan_type);
+    bool handleStartScan(enum ScanType scan_type);
     void handleCancelScan();
 };
 

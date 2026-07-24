@@ -244,4 +244,4 @@ int AAPiDevice::read_status(struct AAPiDeviceStatus *status)
     return m_priv->read_socket(status);
 }
 
-};
+} //namespace aapi

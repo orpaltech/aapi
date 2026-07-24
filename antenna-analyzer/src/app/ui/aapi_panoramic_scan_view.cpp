@@ -29,9 +29,8 @@ QAAPiPanoramicScanView::QAAPiPanoramicScanView(AAPiConfig *config, AAPiSignalPro
                                                AAPiGenerator *gen, AAPiCalibrator *cal,
                                                QAAPiBaseStyle *style, QAAPiMessages *msgs,
                                                QObject *parent)
-    : QAAPiViewBackend(config, dsp, gen, parent)
+    : QAAPiViewBackend(config, dsp, gen, msgs, parent)
     , m_style(style)
-    , m_msgs(msgs)
     , m_calibrator(cal)
     , m_rxAxisX(nullptr), m_rxAxisY(nullptr)
     , m_vswrAxisX(nullptr), m_vswrAxisY(nullptr)
@@ -220,23 +219,15 @@ int QAAPiPanoramicScanView::startSweep(SweepPoints numPoints)
     switch (m_chartType) {
     case ChartType::VSWR:
         m_vswrSeries->clear();      /* Clear chart series */
-        m_vswrAxisY->setRange(1.0, 11.0);
-        m_vswrAxisY->setTickInterval(1.0);
-        m_vswrAxisY->setTickAnchor(1.0);
         break;
 
     case ChartType::RX:
         m_rxSeries[0]->clear();     /* Clear chart series */
         m_rxSeries[1]->clear();
-        m_rxAxisY->setRange(-500.0, 500.0);
-        m_rxAxisY->setTickAnchor(0.0);
         break;
 
     case ChartType::S11:
         m_s11Series->clear();       /* Clear chart series */
-        m_s11AxisY->setRange(-40.0, 0.0);
-        m_s11AxisY->setTickInterval(10.0);
-        m_s11AxisY->setTickAnchor(0.0);
         break;
 
     case ChartType::SMITH:
@@ -246,6 +237,8 @@ int QAAPiPanoramicScanView::startSweep(SweepPoints numPoints)
     default:
         break;
     }
+
+    setDefaultYRange(m_chartType);
 
     // Start measurement sequence
     int ret = startMeasures( std::move(steps) );
@@ -292,15 +285,15 @@ int QAAPiPanoramicScanView::validateConfig()
         // Update configuration
         AAPiError ret = m_config->flush();
         if (AAPI_FAILED( ret )) {
-            setErrorMessage("Failed to update configuration");
+            // Failed to update configuration
             return ret;
         }
     }
 
-    return 0;
+    return AAPI_SUCCESS;
 }
 
-AAPiError QAAPiPanoramicScanView::loadView()
+AAPiError QAAPiPanoramicScanView::onViewLoad()
 {
     AAPiError ret = validateConfig();
     if (AAPI_FAILED( ret )) {
@@ -319,7 +312,7 @@ AAPiError QAAPiPanoramicScanView::loadView()
     return AAPI_SUCCESS;
 }
 
-void QAAPiPanoramicScanView::destroyView()
+void QAAPiPanoramicScanView::onViewDestroy()
 {
     m_rxSeries[0] = nullptr;
     m_rxSeries[1] = nullptr;
@@ -385,14 +378,14 @@ qreal calculateCleanStep(qreal rangeSpan)
 void QAAPiPanoramicScanView::setDefaultYRange(ChartType chart_type)
 {
     switch (chart_type) {
+    case ChartType::VSWR:
+        m_vswrAxisY->setRange(1.0, 20.0);
+        m_vswrAxisY->setTickInterval(1.0);
+        m_vswrAxisY->setTickAnchor(1.0);
+        break;
     case ChartType::RX:
         m_rxAxisY->setRange(-500.0, 500.0);
         m_rxAxisY->setTickAnchor(0.0);
-        break;
-    case ChartType::VSWR:
-        m_vswrAxisY->setRange(1.0, 11.0); // Clean, industry-standard starting view for VSWR
-        m_vswrAxisY->setTickInterval(1.0);
-        m_vswrAxisY->setTickAnchor(1.0);
         break;
     case ChartType::S11:
         m_s11AxisY->setRange(-40.0, 0.0);
@@ -751,22 +744,22 @@ void QAAPiPanoramicScanView::handleSmithScanSlow()
 
 void QAAPiPanoramicScanView::handleRXSnapshot(QQuickItemGrabResult *result)
 {
-    emit snapshotTaken("pan_rx", result->image());
+    emit snapshotTaken("PAN_RX", result->image());
 }
 
 void QAAPiPanoramicScanView::handleVSWRSnapshot(QQuickItemGrabResult *result)
 {
-    emit snapshotTaken("pan_vswr", result->image());
+    emit snapshotTaken("PAN_VSWR", result->image());
 }
 
 void QAAPiPanoramicScanView::handleS11Snapshot(QQuickItemGrabResult *result)
 {
-    emit snapshotTaken("pan_s11", result->image());
+    emit snapshotTaken("PAN_S11", result->image());
 }
 
 void QAAPiPanoramicScanView::handleSmithSnapshot(QQuickItemGrabResult *result)
 {
-    emit snapshotTaken("pan_smith", result->image());
+    emit snapshotTaken("PAN_SMITH", result->image());
 }
 
 void QAAPiPanoramicScanView::handleTuneFrequency(TuneDirection dir)

@@ -26,9 +26,8 @@
 QAAPiMeasurementView::QAAPiMeasurementView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                            AAPiGenerator *gen, AAPiCalibrator *cal,
                                            QAAPiMessages *msgs, QObject *parent)
-    : QAAPiViewBackend(config, dsp, gen, parent)
+    : QAAPiViewBackend(config, dsp, gen, msgs, parent)
     , m_calibrator(cal)
-    , m_msgs(msgs)
 {
     // Subscribe for DSP events
     dsp->addCallback(this);
@@ -38,12 +37,8 @@ QAAPiMeasurementView::~QAAPiMeasurementView()
 {
 }
 
-AAPiError QAAPiMeasurementView::loadView()
+AAPiError QAAPiMeasurementView::onViewLoad()
 {
-    if (hasErrorMessage()) {
-        // TODO: wut should be here ?
-    }
-
     uint32_t measure_freq = m_config->get_measure_freq();
 
     // Validate measurement frequency
@@ -54,20 +49,18 @@ AAPiError QAAPiMeasurementView::loadView()
     m_frequency = measure_freq;
 
     // trigger a signal notifying QML of the new validated frequency
-    emit currentFrequencyChanged();
+    emit frequencyChanged();
 
     int oslFile = m_config->get_osl_file_selected();
     if (oslFile < 0) {
-        setErrorMessage("No OSL-calibration file selected");
+        // No OSL-calibration file selected
         return AAPI_E_FAILURE;
     }
-
-    clearErrorMessage();
 
     return AAPI_SUCCESS;
 }
 
-void QAAPiMeasurementView::destroyView()
+void QAAPiMeasurementView::onViewDestroy()
 {
 }
 
@@ -93,7 +86,7 @@ AAPiError QAAPiMeasurementView::onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> m
 
 void QAAPiMeasurementView::onViewMeasureError(AAPiError error)
 {
-    emit measureError(m_msgs->error(error));
+    emit metricsMeasureError(m_msgs->error(error));
 }
 
 AAPiError QAAPiMeasurementView::startMetricsMeasure()
@@ -115,22 +108,22 @@ AAPiError QAAPiMeasurementView::startMetricsMeasure()
     return AAPI_SUCCESS;
 }
 
-void QAAPiMeasurementView::handleTuneFrequency(TuneDirection dir)
+/*void QAAPiMeasurementView::handleTuneFrequency(TuneDirection dir)
 {
     uint32_t stepHz = 0;
 
     switch (dir) {
     case TUNE_DOWN_SMALL:
     case TUNE_UP_SMALL:
-        stepHz = 1000;   // 1 kHz
+        stepHz = 5000;      // 5 kHz
         break;
     case TUNE_DOWN_MEDIUM:
     case TUNE_UP_MEDIUM:
-        stepHz = 10'000;  // 10 kHz
+        stepHz = 100'000;   // 100 kHz
         break;
     case TUNE_DOWN_LARGE:
     case TUNE_UP_LARGE:
-        stepHz = 100'000; // 100 kHz
+        stepHz = 500'000;   // 500 kHz
         break;
     }
 
@@ -156,28 +149,96 @@ void QAAPiMeasurementView::handleTuneFrequency(TuneDirection dir)
 
     AAPiError ret = startMetricsMeasure();
     if (AAPI_FAILED( ret )) {
-        emit measureError(m_msgs->error( ret ));
+        emit metricsMeasureError(m_msgs->error( ret ));
+    }
+}*/
+
+void QAAPiMeasurementView::handleTuneFrequency(TuneDirection dir)
+{
+    uint32_t stepHz = 0;
+
+    switch (dir) {
+    case TUNE_DOWN_SMALL:
+    case TUNE_UP_SMALL:
+        stepHz = 5000;      // 5 kHz
+        break;
+    case TUNE_DOWN_MEDIUM:
+    case TUNE_UP_MEDIUM:
+        stepHz = 100'000;   // 100 kHz
+        break;
+    case TUNE_DOWN_LARGE:
+    case TUNE_UP_LARGE:
+        stepHz = 500'000;   // 500 kHz
+        break;
+    }
+
+    if (stepHz == 0) return;
+
+    int64_t newFreq = m_frequency;
+
+    if (dir == TUNE_DOWN_SMALL || dir == TUNE_DOWN_MEDIUM || dir == TUNE_DOWN_LARGE) {
+
+        // Apply Yury Kuchura's original step grid alignment constraint
+        if (newFreq > stepHz && (newFreq % stepHz) != 0) {
+            newFreq -= (newFreq % stepHz); // Snap down to the nearest even block boundary
+        } else {
+            newFreq -= stepHz;
+        }
+
+    } else { // Handle up directions safely
+
+        if (newFreq % stepHz != 0) {
+            newFreq -= (newFreq % stepHz); // Clear remainder grid lines first
+        }
+        newFreq += stepHz;
+    }
+
+    // 3. Safety clamp using base class boundaries
+    int64_t minLimit = getFrequencyMin();
+    int64_t maxLimit = getFrequencyMax();
+    if (newFreq < minLimit) newFreq = minLimit;
+    if (newFreq > maxLimit) newFreq = maxLimit;
+
+    // Prevent redundant processing if limits are hit and frequency didn't change
+    if (m_frequency == static_cast<uint32_t>(newFreq)) {
+        return;
+    }
+
+    // Apply the update to the hardware
+    m_frequency = static_cast<uint32_t>(newFreq);
+
+    // Trigger a signal notifying QML of the new validated frequency
+    emit frequencyChanged();
+
+    AAPiError ret = startMetricsMeasure();
+    if (AAPI_FAILED( ret )) {
+        emit metricsMeasureError(m_msgs->error( ret ));
     }
 }
 
-void QAAPiMeasurementView::handleDirectFreqInput(quint32 freq)
+void QAAPiMeasurementView::handleDirectFreqInput(quint32 typedKHz)
 {
     // Convert direct user typing from KHz back up to raw Hz
-    uint32_t target_freq = freq * 1000;
+    uint64_t newFreq = static_cast<uint64_t>(typedKHz) * 1000;
 
-    bool valid = isFrequencyValid (target_freq);
-    if (valid) {
-        // Apply the update to the hardware
-        m_frequency = target_freq;
+    // Clamp to limits
+    int64_t minLimit = getFrequencyMin();
+    int64_t maxLimit = getFrequencyMax();
+    if (newFreq < minLimit) newFreq = minLimit;
+    if (newFreq > maxLimit) newFreq = maxLimit;
+
+    // Prevent redundant processing if limits are hit and frequency didn't change
+    if (m_frequency == static_cast<uint32_t>(newFreq)) {
+        return;
     }
 
-    // trigger a signal notifying QML of the new validated frequency
-    emit currentFrequencyChanged();
+    m_frequency = static_cast<uint32_t>(newFreq);
 
-    if (valid) {
-        AAPiError ret = startMetricsMeasure();
-        if (AAPI_FAILED( ret )) {
-            emit measureError(m_msgs->error( ret ));
-        }
+    // trigger a signal notifying QML of the new validated frequency
+    emit frequencyChanged();
+
+    AAPiError ret = startMetricsMeasure();
+    if (AAPI_FAILED( ret )) {
+        emit metricsMeasureError(m_msgs->error( ret ));
     }
 }

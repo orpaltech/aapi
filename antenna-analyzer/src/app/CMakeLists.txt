@@ -21,7 +21,7 @@ qt_add_executable(aapi_app
     utils/simple_array.h
     utils/simple_string.cpp utils/simple_string.h
     utils/simple_variant.h utils/simple_variant.cpp
-    utils/aapi_complex.h
+    utils/aapi_dsp_defs.h
     utils/simple_map.h
 )
 
@@ -70,6 +70,8 @@ qt_add_qml_module(aapi_app
         ui/aapi_style_chart.cpp ui/aapi_style_chart.h
         ui/aapi_messages.cpp ui/aapi_messages.h
         QML_FILES TabPanScanSetup.qml
+        SOURCES ui/aapi_generator_view.h
+        SOURCES ui/aapi_generator_view.cpp
 )
 
 set_source_files_properties(resources/battery-empty.svg PROPERTIES QT_RESOURCE_ALIAS empty)
@@ -140,6 +142,7 @@ set_target_properties(aapi_app PROPERTIES
 target_compile_definitions(aapi_app PRIVATE
     AAPI_QML_UNCREATABLE_REASON="Create not allowed"
     AAPI_APP_NAME="orpal-aapi"
+    AAPI_DSP_DOUBLE_PRECISION=1
     AAPI_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
     AAPI_VERSION_MINOR=${PROJECT_VERSION_MINOR}
     AAPI_VERSION_PATCH=${PROJECT_VERSION_PATCH}

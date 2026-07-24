@@ -25,7 +25,7 @@ import aapi
 
 SwipePage {
     id: swpMeasurement
-    title: "Measurement"
+    title: qsTr("Measurement")
     backend: aapi.view_measurement
 
 
@@ -432,8 +432,26 @@ SwipePage {
         }
     }
 
+    AapiMessageBox {
+        id: measureError
+        caption: qsTr("Error")
+        detailedText: ""
+        standardButtons: Dialog.Ok
+
+        function show(message) {
+            messageText = message
+            open()
+        }
+    }
+
+    // This event runs automatically when swiped into focus
+    onActivated: {
+        console.log("is now ACTIVE")
+    }
+
+    // This event runs automatically when swiped out of focus or destroyed
     onDeactivated: {
-        console.log("Measurement Page: User swiped away. Force-halting active stream tasks.")
+        console.log("is now INACTIVE")
     }
 
     Connections {
@@ -441,7 +459,7 @@ SwipePage {
         ignoreUnknownSignals: true  // Emitted continuously directly from your non-blocking C++ consumer thread pipeline pass
 
         // Change from an arrow function to standard function syntax
-        onMetricsMeasureFinished: (vswr, r_real, x_imag, return_loss, phase_deg, component_val, is_inductive) => {
+        function onMetricsMeasureFinished(vswr, r_real, x_imag, return_loss, phase_deg, component_val, is_inductive) {
             lblGiantSWR.text = vswr.toFixed(2)
 
             var signStr = x_imag >= 0 ? " + j" : " - j"
@@ -463,6 +481,10 @@ SwipePage {
 
             lblReturnLoss.text = return_loss.toFixed(2) + " dB"
             lblVectorPhase.text = "Phase: " + phase_deg.toFixed(1) + "°"
+        }
+
+        function onMetricsMeasureError(message) {
+            measureError.show(message);
         }
     }
 

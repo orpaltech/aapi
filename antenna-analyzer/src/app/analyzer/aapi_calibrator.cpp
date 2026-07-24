@@ -170,7 +170,7 @@ void AAPiCalibrator::hw_err_scan_begin()
     m_hw_err_status = FILE_STATUS_INVALID;
 }
 
-AAPiError AAPiCalibrator::set_hw_err_entry(int index, double mag0, double phas0)
+AAPiError AAPiCalibrator::set_hw_err_entry(int index, AAPiReal mag0, AAPiReal phas0)
 {
     if ( index < 0 || index >= NUM_ENTRIES ) {
         return AAPI_E_INVALID_ARG;
@@ -499,7 +499,7 @@ AAPiError AAPiCalibrator::calc_osl_entries()
     return AAPI_SUCCESS;
 }
 
-AAPiError AAPiCalibrator::correct_hw_err(uint32_t freq, double& mag_ratio, double& phas_diff)
+AAPiError AAPiCalibrator::correct_hw_err(uint32_t freq, AAPiReal& mag_ratio, AAPiReal& phas_diff)
 {
     int i = get_index_by_freq( freq );
     if ( i < 0 ) {
@@ -554,7 +554,7 @@ AAPiError AAPiCalibrator::correct_gamma(uint32_t freq, AAPiComplex& gamma)
 
     } else if ( i == 0 ) {
         // Linear interpolate 2 OSL factors from 2 nearby entries
-        double prop = static_cast<double>( freq - AAPI_BAND_FREQ_MIN ) / AAPI_CAL_SCAN_STEP;
+        AAPiReal prop = static_cast<AAPiReal>( freq - AAPI_BAND_FREQ_MIN ) / AAPI_CAL_SCAN_STEP;
 
         // Convert to AAPiComplex for the math, then call .__rep() to store back into AAPiComplexType
         ent.e_00 = (( AAPiComplex(entries[1].e_00) - AAPiComplex(entries[0].e_00) ) * prop + AAPiComplex(entries[0].e_00)).__rep();
@@ -563,28 +563,28 @@ AAPiError AAPiCalibrator::correct_gamma(uint32_t freq, AAPiComplex& gamma)
 
     } else {
         // We have 3 OSL points near freq, use parabolic interpolation 
-        double f1, f2, f3;
-        f1 = static_cast<double>( i - 1 ) * AAPI_CAL_SCAN_STEP + AAPI_BAND_FREQ_MIN;
-        f2 = static_cast<double>( i + 0 ) * AAPI_CAL_SCAN_STEP + AAPI_BAND_FREQ_MIN;
-        f3 = static_cast<double>( i + 1 ) * AAPI_CAL_SCAN_STEP + AAPI_BAND_FREQ_MIN;
+        AAPiReal f1, f2, f3;
+        f1 = static_cast<AAPiReal>( i - 1 ) * AAPI_CAL_SCAN_STEP + AAPI_BAND_FREQ_MIN;
+        f2 = static_cast<AAPiReal>( i + 0 ) * AAPI_CAL_SCAN_STEP + AAPI_BAND_FREQ_MIN;
+        f3 = static_cast<AAPiReal>( i + 1 ) * AAPI_CAL_SCAN_STEP + AAPI_BAND_FREQ_MIN;
 
         ent.e_00 = MathUtils::parabolic_interpolate( AAPiComplex(entries[i-1].e_00),
                                                     AAPiComplex(entries[i].e_00),
                                                     AAPiComplex(entries[i+1].e_00),
                                                     f1, f2, f3,
-                                                    static_cast<double>(freq)).__rep();
+                                                    static_cast<AAPiReal>(freq)).__rep();
 
         ent.e_11 = MathUtils::parabolic_interpolate( AAPiComplex(entries[i-1].e_11),
                                                     AAPiComplex(entries[i].e_11),
                                                     AAPiComplex(entries[i+1].e_11),
                                                     f1, f2, f3,
-                                                    static_cast<double>(freq)).__rep();
+                                                    static_cast<AAPiReal>(freq)).__rep();
 
         ent.d_e = MathUtils::parabolic_interpolate( AAPiComplex(entries[i-1].d_e),
                                                     AAPiComplex(entries[i].d_e),
                                                     AAPiComplex(entries[i+1].d_e),
                                                     f1, f2, f3,
-                                                    static_cast<double>(freq)).__rep();
+                                                    static_cast<AAPiReal>(freq)).__rep();
     }
 
 
@@ -653,7 +653,7 @@ AAPiString AAPiCalibrator::get_hw_err_correction_file_name()
     return AAPiString{ filePath.c_str()};
 }
 
-AAPiComplex AAPiCalibrator::gamma_from_z(const AAPiComplex& z, double r0)
+AAPiComplex AAPiCalibrator::gamma_from_z(const AAPiComplex& z, AAPiReal r0)
 {
     AAPiComplex z0( r0, 0. );
 
@@ -673,25 +673,25 @@ AAPiComplex AAPiCalibrator::gamma_from_z(const AAPiComplex& z, double r0)
     return g;
 }
 
-AAPiComplex AAPiCalibrator::z_from_gamma(const AAPiComplex& gamma, double r0)
+AAPiComplex AAPiCalibrator::z_from_gamma(const AAPiComplex& gamma, AAPiReal r0)
 {
-    double gamma_re_2 = MathUtils::sqr( gamma.real() );
-    double gamma_im_2 = MathUtils::sqr( gamma.imag() );
+    AAPiReal gamma_re_2 = MathUtils::sqr( gamma.real() );
+    AAPiReal gamma_im_2 = MathUtils::sqr( gamma.imag() );
 
     // Protect against division-by-zero when gamma hits the (1.0, 0.0) Open Circuit point
-    double dg = MathUtils::_nonz( MathUtils::sqr(1.0 - gamma.real()) + gamma_im_2 );
+    AAPiReal dg = MathUtils::_nonz( MathUtils::sqr(1.0 - gamma.real()) + gamma_im_2 );
 
-    double re = r0 * ( 1. - gamma_re_2 - gamma_im_2 ) / dg;
+    AAPiReal re = r0 * ( 1. - gamma_re_2 - gamma_im_2 ) / dg;
     if ( re < 0. ) {
         // This may happen due to limited computational accuracy
         re = 0.;
     }
 
-    double im = r0 * 2. * gamma.imag() / dg;
+    AAPiReal im = r0 * 2. * gamma.imag() / dg;
 
     // If an open circuit causes the real or imaginary vectors to skyrocket,
     // we clamp them to a safe maximum boundary to protect our UI legend strings!
-    constexpr double MAX_IMPEDANCE_OHMS = 100000.;
+    constexpr AAPiReal MAX_IMPEDANCE_OHMS = 100000.;
 
     re = std::min(re, MAX_IMPEDANCE_OHMS);
     im = std::clamp(im, -MAX_IMPEDANCE_OHMS, MAX_IMPEDANCE_OHMS);

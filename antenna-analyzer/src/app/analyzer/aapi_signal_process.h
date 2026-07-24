@@ -24,7 +24,7 @@
 #include "aapi_object_with_config.h"
 #include "audio/audio_reader.h"
 #include "utils/simple_array.h"
-#include "utils/aapi_complex.h"
+#include "utils/aapi_dsp_defs.h"
 
 namespace aapi
 {
@@ -42,6 +42,7 @@ enum AAPiSignalProcessError {
     AAPI_DSP_E_UNSPECIFIED              = (AAPI_DSP_ERROR_START - 0),
     AAPI_DSP_E_ADC_DEVICE_NOT_FOUND     = (AAPI_DSP_ERROR_START - 1),   /* The selected audio device was not found. */
     AAPI_DSP_E_ADC_UNSUPPORT_FORMAT     = (AAPI_DSP_ERROR_START - 2),   /* The specified audio format is not suported by the device.*/
+    AAPI_DSP_E_ADC_BUFFER_OVERRUN       = (AAPI_DSP_ERROR_START - 3),   /* Audio buffer overrun: Consumer thread fell behind hardware reader. */
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,8 +69,9 @@ public:
         return m_processing.load(std::memory_order_acquire);
     }
 
-    virtual void onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buf_size) { }
-    virtual void onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buf_size) { }
+    virtual void onSignalProcessError(AAPiError error) { }
+    virtual void onSignalProcessRaw(AAPiReal **buffers, uint32_t num_buffers, uint32_t buf_size) { }
+    virtual void onSignalProcessFFT(AAPiReal **buffers, uint32_t num_buffers, uint32_t buf_size) { }
     virtual void onSignalProcessMags(AAPiComplex *mags, uint32_t num_mags) { }
 };
 
@@ -94,19 +96,20 @@ public:
 
     void addCallback(AAPiSignalProcessEvents *cb);
 
-    static double setBlackman(double *wnd, uint32_t nsamples);
-    static double mag2db(double magnitude);
+    static AAPiReal setBlackman(AAPiReal *wnd, uint32_t nsamples);
+    static AAPiReal mag2db(AAPiReal magnitude);
 
 private:
 // AAPiAudioReaderEvents
-    virtual void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size);
+    void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size) override;
+    void onAudioBufferOverrun() override;
 
     // Caclulates magnitude for a bin considering +/- 2 bins from maximum
     AAPiComplex calcMagnitude(int channel);
 
     // Process audio buffer for a channel
     void processAudioBuffer(int channel, char *buffer, uint32_t buf_size);
-    double readSample(int index, char *buffer);
+    AAPiReal readSample(int index, char *buffer);
 
     void releaseBuffers();
 
@@ -114,13 +117,13 @@ private:
     AAPiArray<AAPiSignalProcessEvents*> m_callbacks;
     AAPiPtr<AAPiAudioReader>            m_reader;
 
-    double          *m_fft_mags[N_DSP_CHANNELS];
+    AAPiReal        *m_fft_mags[N_DSP_CHANNELS];
     AAPiComplex     m_fft_xmag[N_DSP_CHANNELS];
-    double          *m_raw_inp[N_DSP_CHANNELS];
-    double          *m_fft_inp[N_DSP_CHANNELS];
+    AAPiReal        *m_raw_inp[N_DSP_CHANNELS];
+    AAPiReal        *m_fft_inp[N_DSP_CHANNELS];
     AAPiComplex     *m_fft_out;
-    double          *m_fft_wnd;
-    double          m_fft_wnd_gain;
+    AAPiReal        *m_fft_wnd;
+    AAPiReal        m_fft_wnd_gain;
     void*           m_plan;
 };
 

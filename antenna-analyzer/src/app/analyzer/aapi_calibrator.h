@@ -21,7 +21,7 @@
 #define AAPI_CALIBRATOR_H
 
 #include "aapi_object_with_config.h"
-#include "utils/aapi_complex.h"
+#include "utils/aapi_dsp_defs.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Calibrator definitions
@@ -86,8 +86,8 @@ public:
     } OSLCorrectionEntry;
 
     typedef struct {
-        double mag_0;    /* magnitude correction value */
-        double phas_0;   /* phase correction value */
+        AAPiReal mag_0;    /* magnitude correction value */
+        AAPiReal phas_0;   /* phase correction value */
     } HwErrCorrectionEntry;
 
 protected:
@@ -119,10 +119,10 @@ public:
     AAPiError flush_hw_err_correction_file();
     void hw_err_scan_begin();
     void hw_err_scan_finalize();
-    AAPiError set_hw_err_entry(int index, double mag0, double phas0);
+    AAPiError set_hw_err_entry(int index, AAPiReal mag0, AAPiReal phas0);
 
     // Correction methods
-    AAPiError correct_hw_err(uint32_t freq, double& mag_ratio, double& phas_diff);
+    AAPiError correct_hw_err(uint32_t freq, AAPiReal& mag_ratio, AAPiReal& phas_diff);
     AAPiError correct_z(uint32_t freq, AAPiComplex& z);
     AAPiError correct_gamma(uint32_t freq, AAPiComplex& g);
 
@@ -145,8 +145,8 @@ public:
     static AAPiString get_osl_correction_file_name(int osl_file);
     static AAPiString get_hw_err_correction_file_name();
 
-    static AAPiComplex gamma_from_z(const AAPiComplex& z, double r0);
-    static AAPiComplex z_from_gamma(const AAPiComplex& g, double r0);
+    static AAPiComplex gamma_from_z(const AAPiComplex& z, AAPiReal r0);
+    static AAPiComplex z_from_gamma(const AAPiComplex& g, AAPiReal r0);
 
 private:
     friend std::ostream& operator<<(std::ostream& os, const OSLCorrectionEntry& entry);

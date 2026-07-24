@@ -20,7 +20,7 @@
 #ifndef AAPI_MATH_UTILS_H
 #define AAPI_MATH_UTILS_H
 
-#include "aapi_complex.h"
+#include "aapi_dsp_defs.h"
 
 /*
  * Bitwise operations

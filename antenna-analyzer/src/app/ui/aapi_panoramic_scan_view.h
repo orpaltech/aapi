@@ -63,8 +63,7 @@ class QAAPiPanoramicScanView : public QAAPiViewBackend
 public:
     explicit QAAPiPanoramicScanView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                     AAPiGenerator *gen, AAPiCalibrator *cal,
-                                    QAAPiBaseStyle *style,
-                                    QAAPiMessages *msgs,
+                                    QAAPiBaseStyle *style, QAAPiMessages *msgs,
                                     QObject *parent = Q_NULLPTR);
     ~QAAPiPanoramicScanView();
 
@@ -128,8 +127,8 @@ public:
 
 protected:
 // QAAPiViewBackend
-    AAPiError loadView() override;
-    void destroyView() override;
+    AAPiError onViewLoad() override;
+    void onViewDestroy() override;
     AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
     void onViewMeasureError(AAPiError error) override;
 
@@ -169,7 +168,6 @@ private:
     uint32_t                m_bandSpanKHz; /* expressed in KHz*/
 
     QAAPiBaseStyle          *m_style;
-    QAAPiMessages           *m_msgs;
 
     // Variables to cache the latest scanned point data
     uint32_t                m_lastFreq;

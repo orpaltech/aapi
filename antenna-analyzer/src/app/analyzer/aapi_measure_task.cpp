@@ -48,13 +48,14 @@ AAPiMeasureTask *AAPiMeasureTask::create(AAPiConfig *config, AAPiCalibrator *cal
         obj->num_retries    = 3;
 
         // allocate internal buffers
-        obj->mag_v_buf      = static_cast<double *> (malloc( max_scans * sizeof(double) ));
-        obj->mag_i_buf      = static_cast<double *> (malloc( max_scans * sizeof(double) ));
-        obj->phase_diff_buf = static_cast<double *> (malloc( max_scans * sizeof(double) ));
+        obj->mag_v_buf      = static_cast<AAPiReal *> (malloc( max_scans * sizeof(AAPiReal) ));
+        obj->mag_i_buf      = static_cast<AAPiReal *> (malloc( max_scans * sizeof(AAPiReal) ));
+        obj->phase_diff_buf = static_cast<AAPiReal *> (malloc( max_scans * sizeof(AAPiReal) ));
 
         // read configuration 
         obj->R0             = config->get_base_r0();
-        obj->Rx             = AAPiComplex( obj->R0, 0. );
+        obj->Rx_raw         = AAPiComplex( obj->R0, 0. );
+        obj->Rx             = obj->Rx_raw;
         obj->R_measure      = config->get_bridge_r_measure();
         obj->R_measure_add  = config->get_bridge_r_measure_add();
         obj->R_load         = config->get_bridge_r_load();
@@ -91,7 +92,7 @@ AAPiMeasureTask::~AAPiMeasureTask()
 
 AAPiComplex AAPiMeasureTask::calc_rx()
 {
-    double r, x;
+    AAPiReal r, x;
 
     r = ( std::cos( phase_diff ) * R_total * mag_ratio ) - ( R_measure + R_measure_add );
 
@@ -113,9 +114,9 @@ AAPiComplex AAPiMeasureTask::calc_rx()
     return rx;
 }
 
-double AAPiMeasureTask::calc_vswr(const AAPiComplex& z, double r0)
+AAPiReal AAPiMeasureTask::calc_vswr(const AAPiComplex& z, AAPiReal r0)
 {
-    double r, swr, ro, x2;
+    AAPiReal r, swr, ro, x2;
 
     r = z.real();
     x2 = MathUtils::sqr( z.imag());
@@ -136,24 +137,24 @@ double AAPiMeasureTask::calc_vswr(const AAPiComplex& z, double r0)
     return swr;
 }
 
-double AAPiMeasureTask::calc_phase_diff(double im_i, double im_v)
+AAPiReal AAPiMeasureTask::calc_phase_diff(AAPiReal im_i, AAPiReal im_v)
 {
     // calculate diff
-    double diff = im_i - im_v;
+    AAPiReal diff = im_i - im_v;
 
     // correct phase difference quadrant
-    diff = std::fmod( diff + M_PI, M_PI*2 ) - M_PI;
+    diff = std::fmod( diff + math::pi, math::pi*2 ) - math::pi;
 
-    if( diff < -M_PI )
-        diff += M_PI*2;
+    if( diff < -math::pi )
+        diff += math::pi*2;
 
-    else if( diff > M_PI )
-        diff -= M_PI*2;
+    else if( diff > math::pi )
+        diff -= math::pi*2;
 
     return diff;
 }
 
-double AAPiMeasureTask::calc_return_loss(double vswr)
+AAPiReal AAPiMeasureTask::calc_return_loss(AAPiReal vswr)
 {
     // Handle invalid uninitialized variables or impossible negative VSWR inputs
     if (vswr < 1.0 || std::isnan(vswr) || std::isinf(vswr)) {
@@ -172,10 +173,10 @@ double AAPiMeasureTask::calc_return_loss(double vswr)
     }
 
     // Calculate reflection coefficient magnitude (rho) from VSWR
-    double rho = (vswr - 1.0) / (vswr + 1.0);
+    AAPiReal rho = (vswr - 1.0) / (vswr + 1.0);
 
     // Return Loss = -20 * log10(rho)
-    double return_loss_db = -20.0 * std::log10(rho);
+    AAPiReal return_loss_db = -20.0 * std::log10(rho);
 
     return return_loss_db;
 }
@@ -186,13 +187,13 @@ double AAPiMeasureTask::calc_return_loss(double vswr)
  * In normal distribution i.e. our case ~68% entries fall into single
  * standard deviation range.
  */
-double AAPiMeasureTask::process_array(double *arr, uint32_t len, int retries)
+AAPiReal AAPiMeasureTask::process_array(AAPiReal *arr, uint32_t len, int retries)
 {
     if( len == 0 )
         return 0.;
 
     // calculate mean value
-    double mean = 0.;
+    AAPiReal mean = 0.;
     for ( uint i = 0; i < len; ++i ) {
         mean += arr[i];
     }
@@ -204,19 +205,19 @@ double AAPiMeasureTask::process_array(double *arr, uint32_t len, int retries)
     // Filter outliers
 
     // Calculate standard deviation (sigma)
-    double deviation = 0.;
+    AAPiReal deviation = 0.;
     for ( uint i = 0; i < len; ++i ) {
-        double t = arr[i] - mean;
+        AAPiReal t = arr[i] - mean;
         deviation += (t * t);
     }
     deviation = std::sqrt( deviation / len );
 
     // calculate mean of entries within part of standard deviation range
-    double bot = mean - deviation * 0.75;
-    double top = mean + deviation * 0.75;
+    AAPiReal bot = mean - deviation * 0.75;
+    AAPiReal top = mean + deviation * 0.75;
 
     uint count = 0;
-    double ret = 0.;
+    AAPiReal ret = 0.;
     for ( uint i = 0; i < len; i++ ) {
         if ( arr[i] >= bot && arr[i] <= top ) {
             ret += arr[i];
@@ -285,7 +286,7 @@ bool AAPiMeasureTask::is_low_signal() const
 {
     // Comparing with 10.0 mV now is completely valid if you want to detect
     // a weak or heavily attenuated signal before it hits the noise floor!
-    constexpr double SIGNAL_WEAK_LIMIT_MV = 10.0;
+    constexpr AAPiReal SIGNAL_WEAK_LIMIT_MV = 10.0;
 
     if (mag_mv_v < SIGNAL_WEAK_LIMIT_MV || mag_mv_i < SIGNAL_WEAK_LIMIT_MV) {
         /* hardware problem ? */
@@ -298,8 +299,8 @@ bool AAPiMeasureTask::is_low_signal() const
 bool AAPiMeasureTask::calc_finalize()
 {
     // finalize measurement
-    double mag_v    = process_array( mag_v_buf, max_scans, num_retries );
-    double mag_i    = process_array( mag_i_buf, max_scans, num_retries );
+    AAPiReal mag_v  = process_array( mag_v_buf, max_scans, num_retries );
+    AAPiReal mag_i  = process_array( mag_i_buf, max_scans, num_retries );
 
     phase_diff = process_array( phase_diff_buf, max_scans, num_retries );
 
@@ -327,7 +328,8 @@ bool AAPiMeasureTask::calc_finalize()
 
         // Force a clean, standard baseline complex impedance.
         // We set it to system reference (R0), which is typically 50.0 + j0 Ohms.
-        Rx = AAPiComplex(R0, 0.0);
+        Rx_raw = AAPiComplex(R0, 0.0);
+        Rx = Rx_raw;
 
         // A perfect 50 Ohm match corresponds to a VSWR = 1.0
         vswr = 1.0;
@@ -343,10 +345,11 @@ bool AAPiMeasureTask::calc_finalize()
 
         mag_ratio_db = 20. * std::log10( mag_ratio );
 
-        phase_diff_d = ( phase_diff * 180. ) / M_PI;
+        phase_diff_d = ( phase_diff * 180. ) / math::pi;
 
         // calculate complex impedance
-        Rx = calc_rx( );
+        Rx_raw = calc_rx( );
+        Rx = Rx_raw;
 
         if ( use_osl_corr && calibrator ) {
             // Perform OSL error correction
@@ -365,11 +368,11 @@ bool AAPiMeasureTask::calc_finalize()
 
 void AAPiMeasureTask::calc_component()
 {
-    double reactance = Rx.imag();
+    AAPiReal reactance = Rx.imag();
 
     // Calculate angular frequency (omega = 2 * pi * f)
     // Ensure measure_freq is strictly in Hz!
-    double omega = 2.0 * M_PI * measure_freq;
+    AAPiReal omega = 2.0 * math::pi * measure_freq;
 
     // Enhanced Safety Check for noise/zero-crossings
     if (omega <= 0.0 || std::abs(reactance) < 1e-4) { // Slightly wider threshold for real VNA noise

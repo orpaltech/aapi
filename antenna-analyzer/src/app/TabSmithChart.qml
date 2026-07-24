@@ -327,25 +327,19 @@ Item {
         backend.handleSmithChartSetup(chartSmith)
     }
 
-    Dialog {
+    AapiMessageBox {
         id: snapshotDialog
-        title: qsTr("New Snapshot")
-        modal: true
-        x: (Screen.width - snapshotDialog.width) / 2
-        y: (Screen.height - snapshotDialog.height) / 2
+        caption: qsTr("New Snapshot")
+        iconType: "exclamation"
+        detailedText: ""
         standardButtons: Dialog.Ok
-
-        Label {
-            id: labelMessage
-            wrapMode: Text.WordWrap
-        }
+        scale: 1
 
         function show() {
-            labelMessage.text = qsTr("Smith snapshot taken into: ") + aapi.last_snapshot
+            messageText = qsTr("Smith snapshot taken into:\n") + aapi.last_snapshot
             open()
         }
     }
-
 
     function enableControls(enable) {
         btnFastSmith.enabled = enable

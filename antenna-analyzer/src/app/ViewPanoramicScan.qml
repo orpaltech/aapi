@@ -26,12 +26,13 @@ import aapi
 
 SwipePage {
     id: swpPanoramicScan
-    property alias tabChartRX: tabChartRX
-    title: "Panoramic Scan"
+    title: qsTr("Panoramic Scan")
     contentHeight: 656
     contentWidth: 1280
     transformOrigin: Item.TopLeft
     backend: aapi.view_panoramic_scan
+
+    property alias tabChartRX: tabChartRX
 
     ColumnLayout {
         id: column1

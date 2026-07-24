@@ -41,7 +41,7 @@ protected:
     ~AAPiAlsaReader();
 
 public:
-    uint32_t get_num_devices() override;
+    uint32_t get_num_devices() override { return m_numDevices; }
     AAPiString get_device_id(int dev_index) override;
     AAPiString get_device_name(int dev_index) override;
 

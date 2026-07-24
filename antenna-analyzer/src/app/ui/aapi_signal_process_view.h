@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #include <QtGraphs/QLineSeries>
 #include <QtGraphs/QValueAxis>
 #include "aapi_view_backend.h"
-#include <atomic>
 
 using namespace aapi;
 
@@ -45,28 +44,28 @@ public:
 
 private:
 // QAAPiViewBackend
-    AAPiError loadView() override;
-    AAPiError activateView() override;
-    void deactivateView() override;
-    void destroyView() override;
+    AAPiError onViewLoad() override;
+    AAPiError onViewActivate() override;
+    void onViewDeactivate() override;
+    void onViewDestroy() override;
 
 // AAPiSignalProcessEvents
-    void onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buf_size) override;
-    void onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buf_size) override;
+    void onSignalProcessRaw(AAPiReal **buffers, uint32_t num_buffers, uint32_t buf_size) override;
+    void onSignalProcessFFT(AAPiReal **buffers, uint32_t num_buffers, uint32_t buf_size) override;
 
     bool isSpectrumTab() const;
     bool isWaveformTab() const;
 
 private:
-    QRecursiveMutex m_mutex;
+    //QRecursiveMutex m_mutex;
 
     volatile int    m_tabIndex;
     volatile bool   m_dataRequested;
 
-    QVector<double> m_spectrumPointsV;
-    QVector<double> m_spectrumPointsI;
-    QVector<double> m_waveformPointsV;
-    QVector<double> m_waveformPointsI;
+    QVector<AAPiReal>   m_spectrumPointsV;
+    QVector<AAPiReal>   m_spectrumPointsI;
+    QVector<AAPiReal>   m_waveformPointsV;
+    QVector<AAPiReal>   m_waveformPointsI;
 
     QLineSeries *m_waveformSeriesV;
     QLineSeries *m_waveformSeriesI;

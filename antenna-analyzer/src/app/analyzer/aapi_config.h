@@ -56,7 +56,7 @@
 /* Maximum number of measurements */
 #define AAPI_MAX_MEASURE_SCANS  20U
 
-// Texas Instruments PCM1803 ADC requires a full-scale input of exactly 3.0Vp-p (Peak-to-Peak).
+// Texas Instruments PCM1803 requires a full-scale input of exactly 3.0Vp-p (Peak-to-Peak).
 // Define the true conversion factor that accounts for the 1500mV peak ceiling
 // AND the RMS-to-Peak trigonometric conversion factor (1500.0 * 1.4142135)
 #define AAPI_MAG_CORR_FACTOR(preamp)    (2121.32 / (preamp))
@@ -329,12 +329,14 @@ class AAPiConfig : public AAPiObject
 protected:
     AAPiConfig();
     AAPiConfig(const AAPiConfig& config);
+    AAPiConfig(AAPiConfig&& config) noexcept;
     ~AAPiConfig();
 
     static constexpr uint NUM_PARAMS = (uint)AAPiParameter::NUM_PARAMS;
 
 public:
     AAPiConfig& operator=(const AAPiConfig& config);
+    AAPiConfig& operator=(AAPiConfig&& config) noexcept;
 
     uint32_t get_num_valid_params() const;
 
@@ -425,6 +427,7 @@ public:
 private:
     void set_defaults();
     void copyFrom(const AAPiConfig& config);
+    void moveFrom(AAPiConfig&& config);
 
 private:
     AAPiVariant m_values[ NUM_PARAMS ];

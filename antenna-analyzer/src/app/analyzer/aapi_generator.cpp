@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ namespace aapi
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// AAPIGenerator implementation
+// class AAPIGenerator
 ///////////////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_AAPI_OBJECT_WITH_CONFIG(AAPiGenerator)

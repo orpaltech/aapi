@@ -128,7 +128,6 @@ Item {
                         z: 3
                         antialiasing: true
                         layer.enabled: true
-                        layer.samples: 4
 
                         visible: plotArea.width > 0
 

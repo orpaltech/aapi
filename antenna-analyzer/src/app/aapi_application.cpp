@@ -236,14 +236,15 @@ int QAAPiApplication::load()
     AAPiPtr<AAPiSignalProcessor>    processor   ( AAPiSignalProcessor::create( config, false ));
     AAPiPtr<AntScopeDevice>         antscope    ( AntScopeDevice::create( config, generator, false ));
 
-    QPointer<QAAPiConfigurationView>  configurationView     ( new QAAPiConfigurationView( config, this ));
-    QPointer<QAAPiSignalProcessView>  signalProcessView     ( new QAAPiSignalProcessView( config, processor, generator, this ) );
-    QPointer<QAAPiMeasurementView>    measurementView       ( new QAAPiMeasurementView( config, processor, generator, calibrator, m_messages, this ) );
-    QPointer<QAAPiPanoramicScanView>  panoramicScanView     ( new QAAPiPanoramicScanView( config, processor, generator, calibrator, m_style, m_messages, this ) );
-    QPointer<QAAPiOSLCalibrationView> oslCalibrationView    ( new QAAPiOSLCalibrationView( config, processor, generator, calibrator, this ) );
-    QPointer<QAAPiHWCalibrationView>  hwCalibrationView     ( new QAAPiHWCalibrationView( config, processor, generator, calibrator, this ) );
-    QPointer<QAAPiAboutAppView>       aboutAppView          ( new QAAPiAboutAppView( config, this ) );
-    QPointer<QAAPiStatusBackend>      appStatus             ( new QAAPiStatusBackend( this ) );
+    QPointer<QAAPiConfigurationView>    configurationView   ( new QAAPiConfigurationView( config, this ));
+    QPointer<QAAPiSignalProcessView>    signalProcessView   ( new QAAPiSignalProcessView( config, processor, generator, this ));
+    QPointer<QAAPiMeasurementView>      measurementView     ( new QAAPiMeasurementView( config, processor, generator, calibrator, m_messages, this ));
+    QPointer<QAAPiPanoramicScanView>    panoramicScanView   ( new QAAPiPanoramicScanView( config, processor, generator, calibrator, m_style, m_messages, this ));
+    QPointer<QAAPiGeneratorView>        generatorView       ( new QAAPiGeneratorView( config, processor, generator, calibrator, m_messages, this ));
+    QPointer<QAAPiOSLCalibrationView>   oslCalibrationView  ( new QAAPiOSLCalibrationView( config, processor, generator, calibrator, m_messages, this ));
+    QPointer<QAAPiHWCalibrationView>    hwCalibrationView   ( new QAAPiHWCalibrationView( config, processor, generator, calibrator, m_messages, this ));
+    QPointer<QAAPiAboutAppView>         aboutAppView        ( new QAAPiAboutAppView( config, this ) );
+    QPointer<QAAPiStatusBackend>        appStatus           ( new QAAPiStatusBackend( this ) );
 
 
     ret = config->init( );
@@ -294,6 +295,7 @@ int QAAPiApplication::load()
     m_signalProcessView     = std::move(signalProcessView);
     m_measurementView       = std::move(measurementView);
     m_panoramicScanView     = std::move(panoramicScanView);
+    m_generatorView         = std::move(generatorView);
     m_oslCalibrationView    = std::move(oslCalibrationView);
     m_hwCalibrationView     = std::move(hwCalibrationView);
     m_aboutAppView          = std::move(aboutAppView);
@@ -301,28 +303,17 @@ int QAAPiApplication::load()
 
     // Set up QSocketNotifiers to monitor the read ends
     m_deviceNotifier = QPointer<QSocketNotifier>(new QSocketNotifier( m_shutdownMgr->getDevice()->get_event_handle(), QSocketNotifier::Read, this ));
-    QObject::connect( m_deviceNotifier.get(), &QSocketNotifier::activated,
-                     this, &QAAPiApplication::handleDeviceStatusChange );
+    QObject::connect( m_deviceNotifier.get(), &QSocketNotifier::activated, this, &QAAPiApplication::handleDeviceStatusChange );
 
     // Connect snapshot signal and slot
-    QObject::connect( m_panoramicScanView.get(), &QAAPiPanoramicScanView::snapshotTaken,
-                     this, &QAAPiApplication::handleSnapshotTaken );
+    QObject::connect( m_panoramicScanView.get(), &QAAPiPanoramicScanView::snapshotTaken, this, &QAAPiApplication::handleSnapshotTaken );
 
     // Connect quit, reboot signals and slots
-    QObject::connect( m_aboutAppView.get(), &QAAPiAboutAppView::raiseRebootApplication,
-                     this, &QAAPiApplication::handleRebootApplication );
-    QObject::connect( m_aboutAppView.get(), &QAAPiAboutAppView::raiseQuitApplication,
-                     this, &QAAPiApplication::handleQuitApplication );
+    QObject::connect( m_aboutAppView.get(), &QAAPiAboutAppView::rebootApplication, this, &QAAPiApplication::handleRebootApplication );
+    QObject::connect( m_aboutAppView.get(), &QAAPiAboutAppView::quitApplication, this, &QAAPiApplication::handleQuitApplication );
 
-    QObject::connect( this, &QAAPiApplication::raiseQuitApplication,
-                     this, &QAAPiApplication::handleQuitApplication );
+    QObject::connect( this, &QAAPiApplication::quitApplication, this, &QAAPiApplication::handleQuitApplication );
 
-    /*===========================================================*/
-/*REMOVE THIS */
-   /*QTimer *timer = new QTimer(this);
-   connect(timer, SIGNAL(timeout()), this, SLOT(quit_application()));
-   timer->setSingleShot(true);
-   timer->start(2*30000);*/
 
     return AAPI_SUCCESS;
 }
@@ -360,6 +351,7 @@ void QAAPiApplication::unload()
     // Release views
     m_configurationView = nullptr;
     m_signalProcessView = nullptr;
+    m_generatorView = nullptr;
     m_measurementView = nullptr;
     m_panoramicScanView = nullptr;
     m_oslCalibrationView = nullptr;
@@ -389,7 +381,7 @@ void QAAPiApplication::initiateShutdown(const QString &reason)
     // Notify ShutdownManager that shutdown is requested
     m_shutdownMgr->setShutdownRequested(true, reason);
 
-    emit raiseQuitApplication();
+    emit quitApplication();
 }
 
 void QAAPiApplication::handleSnapshotTaken(QString file_name, QImage snapshot)

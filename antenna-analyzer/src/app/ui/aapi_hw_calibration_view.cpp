@@ -25,8 +25,9 @@
 
 QAAPiHWCalibrationView::QAAPiHWCalibrationView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                                AAPiGenerator *gen, AAPiCalibrator *cal,
+                                               QAAPiMessages *msgs,
                                                QObject *parent)
-    : QAAPiViewBackend(config, dsp, gen, parent)
+    : QAAPiViewBackend(config, dsp, gen, msgs, parent)
     , m_calibrator(cal)
     , m_scanCancelled(false)
 {
@@ -38,16 +39,16 @@ QAAPiHWCalibrationView::~QAAPiHWCalibrationView()
 {
 }
 
-AAPiError QAAPiHWCalibrationView::loadView()
+AAPiError QAAPiHWCalibrationView::onViewLoad()
 {
     return AAPI_SUCCESS;
 }
 
-void QAAPiHWCalibrationView::destroyView()
+void QAAPiHWCalibrationView::onViewDestroy()
 {
 }
 
-void QAAPiHWCalibrationView::deactivateView()
+void QAAPiHWCalibrationView::onViewDeactivate()
 {
     cancelMeasures();
 }
@@ -61,9 +62,9 @@ AAPiError QAAPiHWCalibrationView::onViewMeasureFinished(AAPiPtr<AAPiMeasureTask>
         m_calibrator->hw_err_scan_finalize();
 
         // Save calibration data to file
-        int ret = m_calibrator->flush_hw_err_correction_file();
+        auto ret = m_calibrator->flush_hw_err_correction_file();
         if (AAPI_FAILED( ret )) {
-            // TODO: check error
+            emit scanError(m_msgs->error(ret));
         }
 
     } else {
@@ -87,16 +88,21 @@ AAPiError QAAPiHWCalibrationView::onViewMeasureFinished(AAPiPtr<AAPiMeasureTask>
             return AAPI_E_FAILURE;
         }
 
-        int ret = m_calibrator->set_hw_err_entry( m_scanIndex++, mag_ratio, phas_diff);
+        auto ret = m_calibrator->set_hw_err_entry( m_scanIndex++, mag_ratio, phas_diff);
         if (AAPI_FAILED( ret )) {
-            // TODO: check error
+            emit scanError(m_msgs->error(ret));
         }
     }
 
     return AAPI_SUCCESS;
 }
 
-AAPiError QAAPiHWCalibrationView::handleStartScan()
+void QAAPiHWCalibrationView::onViewMeasureError(AAPiError error)
+{
+    // TODO: implement
+}
+
+bool QAAPiHWCalibrationView::handleStartScan()
 {
     // Read number of scans
     uint32_t num_scans = qMin( m_config->get_calibr_num_scans(), AAPI_MAX_MEASURE_SCANS );
@@ -122,10 +128,11 @@ AAPiError QAAPiHWCalibrationView::handleStartScan()
 
     int ret = startMeasures( std::move(steps) );
     if (AAPI_FAILED( ret )) {
-        return ret;
+        emit scanError(m_msgs->error(ret));
+        return false;
     }
 
-    return AAPI_SUCCESS;
+    return true;
 }
 
 void QAAPiHWCalibrationView::handleCancelScan()

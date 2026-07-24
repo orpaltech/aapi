@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #ifndef UI_AAPI_CONFIGURATION_VIEW_H
 #define UI_AAPI_CONFIGURATION_VIEW_H
 
-#include "ui/aapi_view_backend.h"
+#include "aapi_view_backend.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // class QAAPiConfigurationView
@@ -72,8 +72,8 @@ public:
 
 private:
 // QAAPiViewBackend
-    AAPiError loadView() override;
-    void destroyView() override;
+    AAPiError onViewLoad() override;
+    void onViewDestroy() override;
 
     QString formatValue(const AAPiVariant& value) const;
 

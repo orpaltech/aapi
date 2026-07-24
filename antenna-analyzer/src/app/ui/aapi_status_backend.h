@@ -59,10 +59,10 @@ public:
     int init();
     void destroy();
 
-signals:
+Q_SIGNALS:
     void batteryStatusChanged(BatteryStatus newStatus);
 
-public slots:
+public Q_SLOTS:
     void handleBatteryStatus();
 
 private:

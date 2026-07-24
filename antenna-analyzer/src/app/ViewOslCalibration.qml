@@ -27,7 +27,7 @@ import aapi
 
 SwipePage {
     id: viewOslCal
-    title: "OSL Calibration"
+    title: qsTr("OSL Calibration")
     backend: aapi.view_osl_calibration
 
     property alias layoutOslCal: layoutOslCal
@@ -480,8 +480,7 @@ SwipePage {
         property int scanType
 
         onAccepted: {
-            if (backend.handleStartScan(scanType) !== 0) {
-                // TODO: display error
+            if (!backend.handleStartScan(scanType)) {
                 return;
             }
             switch (scanType) {
@@ -586,7 +585,7 @@ SwipePage {
         target: backend
         ignoreUnknownSignals: true
 
-        onScanProgress: (scan_type, step, total, freq, rx_re, rx_im) => {
+        function onScanProgress(scan_type, step, total, freq, rx_re, rx_im) {
             console.log("OSL calibration scan progress");
 
             scanProgress.minimum = 0;
@@ -620,7 +619,7 @@ SwipePage {
             }
         }
 
-        onScanNoSignal: (scan_type) => {
+        function onScanNoSignal(scan_type) {
             scanError.show(qsTr("Low signal. Please, check hardware."));
 
             enableControls();
@@ -641,7 +640,11 @@ SwipePage {
             }
         }
 
-        onOslFileChanged: {
+        function onScanError(message) {
+            scanError.show(message);
+        }
+
+        function onOslFileChanged() {
             updateOslFileExists();
 
             // invalidate previous OSL calibration attempts made
@@ -650,7 +653,7 @@ SwipePage {
             statOpen.state = "disabled";
         }
 
-        onOslFileExistsChanged: {
+        function onOslFileExistsChanged() {
             updateOslFileExists();
         }
     }

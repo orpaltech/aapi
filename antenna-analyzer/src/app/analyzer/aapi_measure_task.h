@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,24 +71,24 @@ private:
     AAPiComplex calc_rx();
     void calc_component();
 
-    static double calc_vswr(const AAPiComplex& z, double r0);
-    static double calc_phase_diff(double im_i, double im_v) ;
-    static double calc_return_loss(double vswr);
+    static AAPiReal calc_vswr(const AAPiComplex& z, AAPiReal r0);
+    static AAPiReal calc_phase_diff(AAPiReal im_i, AAPiReal im_v) ;
+    static AAPiReal calc_return_loss(AAPiReal vswr);
 
     /* Filter array of doubles of length n to remove outliers and return
      * the mean of remaining entries that fall into 1 sigma interval.
      * In normal distribution i.e. our case ~68% entries fall into single
      * standard deviation range. */
-    static double process_array(double *arr, uint32_t len, int retries);
+    static AAPiReal process_array(AAPiReal *arr, uint32_t len, int retries);
 
 private:
     AAPiPtr<AAPiConfig>     config;
     AAPiPtr<AAPiCalibrator> calibrator;
     AAPiMeasureEvents       *callback;
 
-    double      *mag_v_buf;
-    double      *mag_i_buf;
-    double      *phase_diff_buf;
+    AAPiReal    *mag_v_buf;
+    AAPiReal    *mag_i_buf;
+    AAPiReal    *phase_diff_buf;
 
     int         num_retries;
     int         scan_count;
@@ -97,32 +97,33 @@ private:
     bool        use_osl_corr;
     bool        use_hw_err_corr;
 
-    double      R0;             /* System impedance (real value, i.e. 50 Ohm)*/
-    double      R_measure;      /* Bridge measurement resistor */
-    double      R_measure_add;  /* Bridge add resistor */
-    double      R_load;         /* Bridge load resistor */
-    double      R_total;
+    AAPiReal    R0;             /* System impedance (real value, i.e. 50 Ohm)*/
+    AAPiReal    R_measure;      /* Bridge measurement resistor */
+    AAPiReal    R_measure_add;  /* Bridge add resistor */
+    AAPiReal    R_load;         /* Bridge load resistor */
+    AAPiReal    R_total;
 
 public:
     uint32_t    measure_freq;
 
-    double      mag_mv_v;       /* Measured magnitude in mV for V-channel */
-    double      mag_mv_i;       /* Measured magnitude in mV for I-channel */
-    double      mag_ratio;      /* Measured magnitude ratio */
-    double      mag_ratio_db;   /* Measured magnitude ratio, dB */
-    double      phase_diff;     /* Measured phase difference in radians */
-    double      phase_diff_d;   /* Measured phase difference in degrees */
-    AAPiComplex Rx;             /* Measured complex resistance */
-    double      vswr;           /* Measured VSWR */
+    AAPiReal    mag_mv_v;       /* Measured magnitude in mV for V-channel */
+    AAPiReal    mag_mv_i;       /* Measured magnitude in mV for I-channel */
+    AAPiReal    mag_ratio;      /* Measured magnitude ratio */
+    AAPiReal    mag_ratio_db;   /* Measured magnitude ratio, dB */
+    AAPiReal    phase_diff;     /* Measured phase difference in radians */
+    AAPiReal    phase_diff_d;   /* Measured phase difference in degrees */
+    AAPiComplex Rx;             /* Measured complex resistance (OSL-corrected) */
+    AAPiComplex Rx_raw;         /* Measured complex resistance (raw) */
+    AAPiReal    vswr;           /* Measured VSWR */
 
     /* Return loss (expressed in decibels, dB) measures how much power is reflected back
      * toward the source due to an impedance mismatch.
      * A higher return loss is better, as it means less power is wasted via reflections.
      */
-    double      return_loss_db;
+    AAPiReal    return_loss_db;
 
     bool        is_inductive;
-    double      component_val;
+    AAPiReal    component_val;
 };
 
 } // namespace aapi

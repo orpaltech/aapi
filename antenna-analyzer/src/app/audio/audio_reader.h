@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,21 +36,20 @@ enum AAPiAudioError {
 ///////////////////////////////////////////////////////////////////////////////
 // class AAPiAudioReaderEvents
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief The AAPiAudioReaderEvents class
-///
+
 class AAPiAudioReaderEvents
 {
 public:
     virtual ~AAPiAudioReaderEvents() = default;
 
     virtual void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size) = 0;
+    virtual void onAudioBufferOverrun() = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // class AAPiAudioReader
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief The AAPiAudioReader class
-///
+
 class AAPiAudioReader : public AAPiObject
 {
 public:

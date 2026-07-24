@@ -38,32 +38,31 @@ class QAAPiMeasurementView : public QAAPiViewBackend
 
 public:
     enum TuneDirection {
-        TUNE_DOWN_LARGE  = -3, // <<< (e.g., -100 kHz)
-        TUNE_DOWN_MEDIUM = -2, // <<  (e.g., -10 kHz)
-        TUNE_DOWN_SMALL  = -1, // <   (e.g., -1 kHz)
-        TUNE_UP_SMALL    = 1,  // >   (e.g., +1 kHz)
-        TUNE_UP_MEDIUM   = 2,  // >>  (e.g., +10 kHz)
-        TUNE_UP_LARGE    = 3   // >>> (e.g., +100 kHz)
+        TUNE_DOWN_LARGE  = -3, // <<< (e.g., -500 kHz)
+        TUNE_DOWN_MEDIUM = -2, // <<  (e.g., -100 kHz)
+        TUNE_DOWN_SMALL  = -1, // <   (e.g., -5 kHz)
+        TUNE_UP_SMALL    = 1,  // >   (e.g., +5 kHz)
+        TUNE_UP_MEDIUM   = 2,  // >>  (e.g., +100 kHz)
+        TUNE_UP_LARGE    = 3   // >>> (e.g., +500 kHz)
     };
     Q_ENUM(TuneDirection)
 
     // Expose the live frequency to QML bindings
-    Q_PROPERTY(quint32 frequency READ getCurrentFrequency NOTIFY currentFrequencyChanged)
+    Q_PROPERTY(quint32 frequency READ getFrequency NOTIFY frequencyChanged)
 
 public:
     explicit QAAPiMeasurementView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                   AAPiGenerator *gen, AAPiCalibrator *cal,
-                                  QAAPiMessages *msgs,
-                                  QObject *parent = Q_NULLPTR);
+                                  QAAPiMessages *msgs, QObject *parent = Q_NULLPTR);
     ~QAAPiMeasurementView();
 
     /* Property Accessors */
-    quint32 getCurrentFrequency() const { return m_frequency / 1000; }
+    quint32 getFrequency() const { return m_frequency / 1000; }
 
 private:
 // QAAPiViewBackend
-    AAPiError loadView() override;
-    void destroyView() override;
+    AAPiError onViewLoad() override;
+    void onViewDestroy() override;
     AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
     void onViewMeasureError(AAPiError error) override;
 
@@ -71,8 +70,8 @@ private:
 
 Q_SIGNALS:
     void metricsMeasureFinished(double vswr, double r_real, double x_imag, double return_loss, double phase_deg, double component_val, bool is_inductive);
-    void currentFrequencyChanged();
-    void measureError(QString message);
+    void metricsMeasureError(QString message);
+    void frequencyChanged();
 
 public Q_SLOTS:
     void handleTuneFrequency(TuneDirection direction);
@@ -80,9 +79,7 @@ public Q_SLOTS:
 
 private:
     AAPiPtr<AAPiCalibrator> m_calibrator;
-    uint32_t                m_frequency;
-
-    QAAPiMessages           *m_msgs;
+    uint32_t    m_frequency;
 };
 
 #endif // UI_AAPI_MEASUREMENT_VIEW_H

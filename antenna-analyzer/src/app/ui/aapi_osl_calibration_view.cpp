@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@
 
 QAAPiOSLCalibrationView::QAAPiOSLCalibrationView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                                 AAPiGenerator *gen, AAPiCalibrator *cal,
-                                                QObject *parent)
-    : QAAPiViewBackend(config, dsp, gen, parent)
+                                                QAAPiMessages *msgs, QObject *parent)
+    : QAAPiViewBackend(config, dsp, gen, msgs, parent)
     , m_calibrator(cal)
 {
     // Subscribe for DSP events 
@@ -102,7 +102,7 @@ bool QAAPiOSLCalibrationView::getFileExists() const
     return m_calibrator->osl_file_exists( getFile() );
 }
 
-AAPiError QAAPiOSLCalibrationView::loadView()
+AAPiError QAAPiOSLCalibrationView::onViewLoad()
 {
     int currentFile = getFile();
 
@@ -117,7 +117,7 @@ AAPiError QAAPiOSLCalibrationView::loadView()
     return AAPI_SUCCESS;
 }
 
-void QAAPiOSLCalibrationView::destroyView()
+void QAAPiOSLCalibrationView::onViewDestroy()
 {
 }
 
@@ -182,11 +182,17 @@ AAPiError QAAPiOSLCalibrationView::onViewMeasureFinished(AAPiPtr<AAPiMeasureTask
     return AAPI_SUCCESS;
 }
 
-AAPiError QAAPiOSLCalibrationView::handleStartScan(ScanType type)
+void QAAPiOSLCalibrationView::onViewMeasureError(AAPiError error)
+{
+    // TODO: implement
+}
+
+bool QAAPiOSLCalibrationView::handleStartScan(ScanType type)
 {
     auto ret = m_calibrator->set_osl_file( getFile() );
     if (AAPI_FAILED( ret )) {
-        return ret;
+        emit scanError(m_msgs->error(ret));
+        return false;
     }
 
     // Read number of scans
@@ -211,15 +217,17 @@ AAPiError QAAPiOSLCalibrationView::handleStartScan(ScanType type)
 
     ret = m_calibrator->osl_scan_begin( m_scanType );
     if (AAPI_FAILED( ret )) {
-        return ret;
+        emit scanError(m_msgs->error(ret));
+        return false;
     }
 
     ret = startMeasures( std::move(steps) );
     if (AAPI_FAILED( ret )) {
-        return ret;
+        emit scanError(m_msgs->error(ret));
+        return false;
     }
 
-    return AAPI_SUCCESS;
+    return true;
 }
 
 void QAAPiOSLCalibrationView::handleCancelScan()

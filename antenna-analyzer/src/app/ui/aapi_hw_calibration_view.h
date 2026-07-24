@@ -22,6 +22,7 @@
 
 #include "aapi_view_backend.h"
 #include "analyzer/aapi_calibrator.h"
+#include "aapi_messages.h"
 
 using namespace aapi;
 
@@ -39,28 +40,30 @@ class QAAPiHWCalibrationView : public QAAPiViewBackend
 public:
     explicit QAAPiHWCalibrationView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                     AAPiGenerator *gen, AAPiCalibrator *cal,
+                                    QAAPiMessages *msgs,
                                     QObject *parent = Q_NULLPTR);
     ~QAAPiHWCalibrationView();
 
 private:
 // QAAPiViewBackend
-    AAPiError loadView() override;
-    void destroyView() override;
-    void deactivateView() override;
+    AAPiError onViewLoad() override;
+    void onViewDestroy() override;
+    void onViewDeactivate() override;
     AAPiError onViewMeasureFinished(AAPiPtr<AAPiMeasureTask> measure) override;
+    void onViewMeasureError(AAPiError error) override;
 
 private:
     AAPiPtr<AAPiCalibrator> m_calibrator;
     unsigned int    m_scanIndex;
     volatile bool   m_scanCancelled;
 
-signals:
+Q_SIGNALS:
     void scanProgress(int step, int total, quint32 freq, double mag_ratio, double phase_diff);
     void scanError(QString message);
     void scanNoSignal();
 
-public slots:
-    AAPiError handleStartScan();
+public Q_SLOTS:
+    bool handleStartScan();
     void handleCancelScan();
 };
 

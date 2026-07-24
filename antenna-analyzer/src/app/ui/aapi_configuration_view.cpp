@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 QAAPiConfigurationView::QAAPiConfigurationView(AAPiConfig *config, QObject *parent)
-    : QAAPiViewBackend(config, nullptr, nullptr, parent)
+    : QAAPiViewBackend(config, nullptr, nullptr, nullptr, parent)
     , m_tmpConfig( AAPiConfig::create( false ))
     , m_index(-1)
 {
@@ -34,7 +34,7 @@ QAAPiConfigurationView::~QAAPiConfigurationView()
 {
 }
 
-AAPiError QAAPiConfigurationView::loadView()
+AAPiError QAAPiConfigurationView::onViewLoad()
 {
     // Copy configuration into temp 
     *m_tmpConfig = *m_config;
@@ -45,7 +45,7 @@ AAPiError QAAPiConfigurationView::loadView()
     return AAPI_SUCCESS;
 }
 
-void QAAPiConfigurationView::destroyView()
+void QAAPiConfigurationView::onViewDestroy()
 {
     if (is_dirty_config( )) {
         handleAcceptChanges( );

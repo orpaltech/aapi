@@ -29,7 +29,7 @@
 
 QAAPiSignalProcessView::QAAPiSignalProcessView(AAPiConfig *config, AAPiSignalProcessor *dsp,
                                                AAPiGenerator *gen, QObject *parent)
-    : QAAPiViewBackend(config, dsp, gen, parent)
+    : QAAPiViewBackend(config, dsp, gen, nullptr, parent)
     , m_tabIndex(0)
     , m_waveformSeriesV(nullptr)
     , m_waveformSeriesI(nullptr)
@@ -53,12 +53,12 @@ QAAPiSignalProcessView::~QAAPiSignalProcessView()
 {
 }
 
-AAPiError QAAPiSignalProcessView::loadView()
+AAPiError QAAPiSignalProcessView::onViewLoad()
 {
     return AAPI_SUCCESS;
 }
 
-AAPiError QAAPiSignalProcessView::activateView()
+AAPiError QAAPiSignalProcessView::onViewActivate()
 {
     uint32_t freq = m_config->get_generator_freq();
 
@@ -68,7 +68,6 @@ AAPiError QAAPiSignalProcessView::activateView()
         m_generator->set_measure_freq( freq );
     }
 
-    //signal_process_enable( );
 
     m_spectrumPointsV.resize(m_dsp->getBufferSize());
     m_spectrumPointsI.resize(m_dsp->getBufferSize());
@@ -78,10 +77,8 @@ AAPiError QAAPiSignalProcessView::activateView()
     return AAPI_SUCCESS;
 }
 
-void QAAPiSignalProcessView::deactivateView()
+void QAAPiSignalProcessView::onViewDeactivate()
 {
-    //signal_process_enable( false );
-
     m_generator->suspend( );
 
     m_spectrumPointsV.resize(0);
@@ -95,7 +92,7 @@ void QAAPiSignalProcessView::deactivateView()
     m_waveformPointsI.squeeze();
 }
 
-void QAAPiSignalProcessView::destroyView()
+void QAAPiSignalProcessView::onViewDestroy()
 {
 }
 
@@ -104,11 +101,11 @@ void QAAPiSignalProcessView::handleTabChange(int index)
     m_tabIndex = index;
 }
 
-double getSignalMax(const QVector<double>* values)
+AAPiReal getSignalMax(const QVector<AAPiReal>* values)
 {
-    double max = 0;
+    AAPiReal max = 0;
     for (int i = 0; i < values->size(); i++) {
-        double val = std::abs(values->at(i));
+        AAPiReal val = std::abs(values->at(i));
         if (val > max)
             max = val;
     }
@@ -120,10 +117,10 @@ void QAAPiSignalProcessView::handleSpectrumDataReady()
     static QList<QPointF> pointsV, pointsI;
     qsizetype i;
 
-    signal_process_enable( false);
+    signal_process_enable( false );
 
-    QVector<double> *spectrumPointsV = &m_spectrumPointsV;
-    QVector<double> *spectrumPointsI = &m_spectrumPointsI;
+    QVector<AAPiReal> *spectrumPointsV = &m_spectrumPointsV;
+    QVector<AAPiReal> *spectrumPointsI = &m_spectrumPointsI;
 
     pointsV.clear();
     pointsI.clear();
@@ -133,8 +130,8 @@ void QAAPiSignalProcessView::handleSpectrumDataReady()
     if (!spectrumPointsV->isEmpty()) {
 
         for (i = 0; i < spectrumPointsV->size(); i++) {
-            double mag_db_val = AAPiSignalProcessor::mag2db(spectrumPointsV->at(i));
-            double analytic_freq = m_config->get_dsp_fft_bin_freq(i);
+            AAPiReal mag_db_val = AAPiSignalProcessor::mag2db(spectrumPointsV->at(i));
+            AAPiReal analytic_freq = m_config->get_dsp_fft_bin_freq(i);
             pointsV.append(QPointF(analytic_freq, mag_db_val));
         }
 
@@ -144,8 +141,8 @@ void QAAPiSignalProcessView::handleSpectrumDataReady()
     if (!spectrumPointsI->isEmpty()) {
 
         for (i = 0; i < spectrumPointsI->size(); i++) {
-            double mag_db_val = AAPiSignalProcessor::mag2db(spectrumPointsI->at(i));
-            double analytic_freq = m_config->get_dsp_fft_bin_freq(i);
+            AAPiReal mag_db_val = AAPiSignalProcessor::mag2db(spectrumPointsI->at(i));
+            AAPiReal analytic_freq = m_config->get_dsp_fft_bin_freq(i);
             pointsI.append(QPointF(analytic_freq, mag_db_val));
         }
 
@@ -158,29 +155,29 @@ void QAAPiSignalProcessView::handleWaveformDataReady()
     static QList<QPointF> pointsV, pointsI;
     qsizetype i;
 
-    signal_process_enable( false);
+    signal_process_enable( false );
 
-    QVector<double> *waveformPointsV = &m_waveformPointsV;
-    QVector<double> *waveformPointsI = &m_waveformPointsI;
+    QVector<AAPiReal> *waveformPointsV = &m_waveformPointsV;
+    QVector<AAPiReal> *waveformPointsI = &m_waveformPointsI;
 
     pointsV.clear();
     pointsI.clear();
     pointsV.reserve(waveformPointsV->size());
     pointsI.reserve(waveformPointsI->size());
 
-    double sample_rate = static_cast<double>(m_config->get_dsp_sample_rate());
-    double sample_step_ms = (1.0 / sample_rate) * 1000.0;
+    double sampleRate = static_cast<double>(m_config->get_dsp_sample_rate());
+    double sampleStepMs = (1.0 / sampleRate) * 1000.0;
 
     // --- UPDATE V CHANNEL ---
     if (!waveformPointsV->isEmpty()) {
-        double max_amplitude = getSignalMax(waveformPointsV);
+        double amplitudeMax = getSignalMax(waveformPointsV);
 
         for (i = 0; i < waveformPointsV->size(); i++) {
-            double current_time_ms = sample_step_ms * i;
-            double raw_amplitude = waveformPointsV->at(i);
+            double currentTimeMs = sampleStepMs * i;
+            double amplitudeRaw = waveformPointsV->at(i);
 
             // Normalized signal amplitude stream
-            pointsV.append(QPointF(current_time_ms, raw_amplitude / max_amplitude));
+            pointsV.append(QPointF(currentTimeMs, amplitudeRaw / amplitudeMax));
         }
 
         m_waveformSeriesV->replace(pointsV);
@@ -188,13 +185,13 @@ void QAAPiSignalProcessView::handleWaveformDataReady()
 
     // --- UPDATE I CHANNEL ---
     if (!waveformPointsI->isEmpty()) {
-        double max_amplitude = getSignalMax(waveformPointsI);
+        double amplitudeMax = getSignalMax(waveformPointsI);
 
         for (i = 0; i < waveformPointsI->size(); i++) {
-            double current_time_ms = static_cast<double>(i) * sample_step_ms;
-            double raw_amplitude = waveformPointsI->at(i);
+            double currentTimeMs = static_cast<double>(i) * sampleStepMs;
+            double amplitudeRaw = waveformPointsI->at(i);
 
-            pointsI.append(QPointF(current_time_ms, raw_amplitude / max_amplitude));
+            pointsI.append(QPointF(currentTimeMs, amplitudeRaw / amplitudeMax));
         }
 
         m_waveformSeriesI->replace(pointsI);
@@ -213,46 +210,6 @@ void QAAPiSignalProcessView::handleWaveformUpdate()
 
     signal_process_enable( );
     m_dataRequested = true;
-    return;
-
-    /*QMutexLocker lock(&m_mutex);
-    QList<QPointF> points;
-    qsizetype i;
-
-    double sample_rate = static_cast<double>(m_config->get_dsp_sample_rate());
-    double sample_step_ms = (1.0 / sample_rate) * 1000.0;
-
-    // --- UPDATE V CHANNEL ---
-    if (!m_waveformPointsV.isEmpty()) {
-        points.reserve(m_waveformPointsV.size());
-        double max_amplitude = getSignalMax(m_waveformPointsV);
-
-        for (i = 0; i < m_waveformPointsV.size(); i++) {
-            double current_time_ms = sample_step_ms * i;
-            double raw_amplitude = m_waveformPointsV.at(i);
-
-            // Normalized signal amplitude stream
-            points.append(QPointF(current_time_ms, raw_amplitude / max_amplitude));
-        }
-
-        m_waveformSeriesV->replace(points);
-        points.clear();
-    }
-
-    // --- UPDATE I CHANNEL ---
-    if (!m_waveformPointsI.isEmpty()) {
-        points.reserve(m_waveformPointsI.size());
-        double max_amplitude = getSignalMax(m_waveformPointsI);
-
-        for (i = 0; i < m_waveformPointsI.size(); i++) {
-            double current_time_ms = static_cast<double>(i) * sample_step_ms;
-            double raw_amplitude = m_waveformPointsI.at(i);
-
-            points.append(QPointF(current_time_ms, raw_amplitude / max_amplitude));
-        }
-
-        m_waveformSeriesI->replace(points);
-    }*/
 }
 
 void QAAPiSignalProcessView::handleSpectrumUpdate()
@@ -267,47 +224,17 @@ void QAAPiSignalProcessView::handleSpectrumUpdate()
 
     signal_process_enable( );
     m_dataRequested = true;
-    return;
-
-    /*QMutexLocker lock(&m_mutex);
-    QList<QPointF> pointsV, pointsI;
-    qsizetype i;
-
-    pointsV.reserve(m_spectrumPointsV.size());
-    pointsI.reserve(m_spectrumPointsI.size());
-
-    if (!m_spectrumPointsV.isEmpty()) {
-
-        for (i = 0; i < m_spectrumPointsV.size(); i++) {
-            double mag_db_val = AAPiSignalProcessor::mag2db(m_spectrumPointsV.at(i));
-            double analytic_freq = m_config->get_dsp_fft_bin_freq(i);
-            pointsV.append(QPointF(analytic_freq, mag_db_val));
-        }
-
-        m_spectrumSeriesV->replace(pointsV);
-    }
-
-    if (!m_spectrumPointsI.isEmpty()) {
-
-        for (i = 0; i < m_spectrumPointsI.size(); i++) {
-            double mag_db_val = AAPiSignalProcessor::mag2db(m_spectrumPointsI.at(i));
-            double analytic_freq = m_config->get_dsp_fft_bin_freq(i);
-            pointsI.append(QPointF(analytic_freq, mag_db_val));
-        }
-
-        m_spectrumSeriesI->replace(pointsI);
-    }*/
 }
 
 // ignore a few bins because they are in the low frequency range
 #define SKIP_LOW_FREQ_BINS   0
 
-void QAAPiSignalProcessView::handleSpectrumSetup(QLineSeries *v_series, QLineSeries *i_series,
+void QAAPiSignalProcessView::handleSpectrumSetup(QLineSeries *seriesV, QLineSeries *seriesI,
                                                  QValueAxis *axisVX, QValueAxis *axisVY,
                                                  QValueAxis *axisIX, QValueAxis *axisIY)
 {
-    m_spectrumSeriesV = v_series;
-    m_spectrumSeriesI = i_series;
+    m_spectrumSeriesV = seriesV;
+    m_spectrumSeriesI = seriesI;
 
     m_spectrumSeriesV->clear();
     m_spectrumSeriesI->clear();
@@ -327,33 +254,33 @@ void QAAPiSignalProcessView::handleSpectrumSetup(QLineSeries *v_series, QLineSer
     axisVY->setSubTickCount(4);
 
     // --- I CHANNEL Y-AXIS ---
-    // Legacy span: from -120 to 0. Total width = 120.
-    // Intended steps = 12 (which equals 13 ticks). 120 / 12 = exactly 10 dB per step.
-    axisIY->setRange(-120, 0);
+    // Legacy span: from -110 to 0. Total width = 110.
+    // Intended steps = 11 (which equals 12 ticks). 110 / 11 = exactly 10 dB per step.
+    axisIY->setRange(-110, 0);
     axisIY->setTickAnchor(0);       // Grid calculations start neatly at 0 dB
     axisIY->setTickInterval(10);    // Clean 10 dB interval steps
     axisIY->setSubTickCount(4);
 }
 
-void QAAPiSignalProcessView::handleWaveformSetup(QLineSeries *v_series, QLineSeries *i_series,
+void QAAPiSignalProcessView::handleWaveformSetup(QLineSeries *seriesV, QLineSeries *seriesI,
                                                  QValueAxis *axisVX, QValueAxis *axisVY,
                                                  QValueAxis *axisIX, QValueAxis *axisIY)
 {
-    m_waveformSeriesV = v_series;
-    m_waveformSeriesI = i_series;
+    m_waveformSeriesV = seriesV;
+    m_waveformSeriesI = seriesI;
 
     m_waveformSeriesV->clear();
     m_waveformSeriesI->clear();
 
     // CALCULATE MAX TIME WINDOW (in milliseconds):
-    double sample_rate = static_cast<double>(m_config->get_dsp_sample_rate());
-    double num_samples = static_cast<double>(m_config->get_dsp_num_samples());
-    double actual_max_ms = (num_samples / sample_rate) * 1000.0;
+    double sampleRate = static_cast<double>(m_config->get_dsp_sample_rate());
+    double numSamples = static_cast<double>(m_config->get_dsp_num_samples());
+    double actualMaxMs = (numSamples / sampleRate) * 1000.0;
 
-    double max_time_ms = qFloor(actual_max_ms);
+    double maxTimeMs = qFloor(actualMaxMs);
 
     // --- V CHANNEL CONFIGURATION ---
-    axisVX->setRange(0.0, max_time_ms);
+    axisVX->setRange(0.0, maxTimeMs);
     axisVX->setTickAnchor(0.0);
     axisVX->setTickInterval(1.0); // Guarantees explicit lines every 1 ms
     axisVX->setLabelFormat(QStringLiteral("%.0f ms"));
@@ -361,7 +288,7 @@ void QAAPiSignalProcessView::handleWaveformSetup(QLineSeries *v_series, QLineSer
     axisVY->setRange(-1.0, 1.0);
 
     // --- I CHANNEL CONFIGURATION ---
-    axisIX->setRange(0.0, max_time_ms);
+    axisIX->setRange(0.0, maxTimeMs);
     axisIX->setTickAnchor(0.0);
     axisIX->setTickInterval(1.0); // Explicit 1 ms tracking steps
     axisIX->setLabelFormat(QStringLiteral("%.0f ms"));
@@ -379,7 +306,7 @@ bool QAAPiSignalProcessView::isWaveformTab() const
     return m_tabIndex == 1;
 }
 
-void QAAPiSignalProcessView::onSignalProcessRaw(double **buffers, uint32_t num_buffers, uint32_t buff_size)
+void QAAPiSignalProcessView::onSignalProcessRaw(AAPiReal **buffers, uint32_t num_buffers, uint32_t buff_size)
 {
     if (! isWaveformTab( )) {
         return;
@@ -388,23 +315,14 @@ void QAAPiSignalProcessView::onSignalProcessRaw(double **buffers, uint32_t num_b
     if (!m_dataRequested)
         return;
 
-    QT_TRY
-    {
-        QMutexLocker lock(&m_mutex);
-
-        std::copy_n( buffers[DSP_V_CHANNEL], buff_size, m_waveformPointsV.data() );
-        std::copy_n( buffers[DSP_I_CHANNEL], buff_size, m_waveformPointsI.data() );
-
-    }
-    QT_CATCH(...)
-    {
-    }
+    std::copy_n( buffers[DSP_V_CHANNEL], buff_size, m_waveformPointsV.data() );
+    std::copy_n( buffers[DSP_I_CHANNEL], buff_size, m_waveformPointsI.data() );
 
     emit waveformDataReady();
     m_dataRequested = false;
 }
 
-void QAAPiSignalProcessView::onSignalProcessFFT(double **buffers, uint32_t num_buffers, uint32_t buff_size)
+void QAAPiSignalProcessView::onSignalProcessFFT(AAPiReal **buffers, uint32_t num_buffers, uint32_t buff_size)
 {
     if (! isSpectrumTab( )) {
         return;
@@ -413,17 +331,8 @@ void QAAPiSignalProcessView::onSignalProcessFFT(double **buffers, uint32_t num_b
     if (!m_dataRequested)
         return;
 
-    QT_TRY
-    {
-        QMutexLocker lock(&m_mutex);
-
-        std::copy_n( buffers[DSP_V_CHANNEL], buff_size, m_spectrumPointsV.data() );
-        std::copy_n( buffers[DSP_I_CHANNEL], buff_size, m_spectrumPointsI.data() );
-
-    }
-    QT_CATCH(...)
-    {
-    }
+    std::copy_n( buffers[DSP_V_CHANNEL], buff_size, m_spectrumPointsV.data() );
+    std::copy_n( buffers[DSP_I_CHANNEL], buff_size, m_spectrumPointsI.data() );
 
     emit spectrumDataReady();
     m_dataRequested = false;

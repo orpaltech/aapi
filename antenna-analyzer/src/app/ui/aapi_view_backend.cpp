@@ -18,8 +18,10 @@
  */
 
 #include "aapi_view_backend.h"
+#include <QDateTime>
 #include <QTimer>
 #include <QThread>
+#include <QDebug>
 
 using namespace aapi;
 
@@ -29,12 +31,14 @@ using namespace aapi;
 ///////////////////////////////////////////////////////////////////////////////
 
 QAAPiViewBackend::QAAPiViewBackend(AAPiConfig *config, AAPiSignalProcessor *dsp,
-                                   AAPiGenerator *gen, QObject *parent)
+                                   AAPiGenerator *gen, QAAPiMessages *msgs,
+                                   QObject *parent)
     : QObject(parent)
-    , m_active(false)
+    , m_activated(false)
     , m_config(config)
     , m_dsp(dsp)
     , m_generator(gen)
+    , m_msgs(msgs)
 {
     m_timerThread = new QThread(this);
     m_timerThread->start();
@@ -45,13 +49,17 @@ QAAPiViewBackend::QAAPiViewBackend(AAPiConfig *config, AAPiSignalProcessor *dsp,
 
     // Connect the timer wake event cleanly to your signal parsing loop
     QObject::connect(m_settlingTimer, &QTimer::timeout, this, [this]() {
-            signal_process_enable();
-        }, Qt::DirectConnection); // Executes safely within the background thread context!
+                        signal_process_enable();
+                    },
+                    Qt::DirectConnection);
 
 
     // Connect signals and slots
-    QObject::connect(this, &QAAPiViewBackend::measureTaskFinished,
-                     this, &QAAPiViewBackend::handleMeasureTaskFinished,
+    QObject::connect(this, &QAAPiViewBackend::measureTaskFinished, this,
+                     &QAAPiViewBackend::handleMeasureTaskFinished,
+                     Qt::QueuedConnection);
+    QObject::connect(this, &QAAPiViewBackend::measureTaskError, this,
+                     &QAAPiViewBackend::handleMeasureTaskError,
                      Qt::QueuedConnection);
 }
 
@@ -63,7 +71,7 @@ QAAPiViewBackend::~QAAPiViewBackend()
     }
 }
 
-void QAAPiViewBackend::setErrorMessage(const char *message)
+/*void QAAPiViewBackend::setErrorMessage(const char *message)
 {
     m_errorMsg = message;
 }
@@ -76,7 +84,7 @@ void QAAPiViewBackend::clearErrorMessage()
 bool QAAPiViewBackend::hasErrorMessage() const
 {
     return m_errorMsg.length() > 0;
-}
+}*/
 
 void QAAPiViewBackend::cleanupMeasures()
 {
@@ -112,6 +120,17 @@ void QAAPiViewBackend::releaseGenerator()
     }
 }
 
+void QAAPiViewBackend::settleMeasure()
+{
+    // Fetch the dynamic hardware settling gate
+    uint32_t settlingTime = m_config->get_dsp_settling_delay_ms();
+
+    // Start our dedicated tracking instance cleanly
+    QMetaObject::invokeMethod(m_settlingTimer, "start",
+                              Qt::QueuedConnection,
+                              Q_ARG(int, settlingTime));
+}
+
 AAPiError QAAPiViewBackend::startNextMeasure()
 {
     // Setup generator to the first frequency value
@@ -124,13 +143,7 @@ AAPiError QAAPiViewBackend::startNextMeasure()
     // Grab the first measure from the queue
     m_currentMeasure = m_measureSteps.takeFirst();
 
-    // Fetch the dynamic hardware settling gate (e.g., 22 ms for 48k/1024)
-    uint32_t settling_time = m_config->get_dsp_settling_delay_ms();
-
-    // Start our dedicated tracking instance cleanly
-    QMetaObject::invokeMethod(m_settlingTimer, "start",
-                              Qt::QueuedConnection,
-                              Q_ARG(int, settling_time));
+    settleMeasure();
 
     return AAPI_SUCCESS;
 }
@@ -175,10 +188,10 @@ AAPiError QAAPiViewBackend::cancelMeasures()
 
 int QAAPiViewBackend::handleLoaded()
 {
-    // Allow derived class load resources 
-    int ret = loadView();
+    // Allow derived class load resources
+    AAPiError ret = onViewLoad();
     if (AAPI_SUCCEEDED( ret )) {
-        clearErrorMessage();
+        //clearErrorMessage();
     }
 
     return ret;
@@ -187,12 +200,12 @@ int QAAPiViewBackend::handleLoaded()
 int QAAPiViewBackend::handleActivated()
 {
     // Set active flag 
-    m_active = true;
+    m_activated = true;
 
     // Allow derived class activate view
-    int ret = activateView();
+    AAPiError ret = onViewActivate();
     if (AAPI_SUCCEEDED( ret )) {
-        clearErrorMessage();
+        //clearErrorMessage();
     }
 
     return ret;
@@ -201,16 +214,35 @@ int QAAPiViewBackend::handleActivated()
 void QAAPiViewBackend::handleDeactivated()
 {
     // Allow derived class deactivate view 
-    deactivateView( );
+    onViewDeactivate( );
 
     // Clear active flag 
-    m_active = false;
+    m_activated = false;
 }
 
 void QAAPiViewBackend::handleDestroyed()
 {
     // Allow derived class destroy resources
-    destroyView();
+    onViewDestroy();
+}
+
+void QAAPiViewBackend::onSignalProcessError(AAPiError error)
+{
+    if (error == AAPI_DSP_E_ADC_BUFFER_OVERRUN) {
+        signal_process_enable( false );
+
+        qWarning().noquote()
+            << "[WARNING]"
+            << QDateTime::currentDateTime().toString("hh:mm:ss.zzz")
+            << "| Software ring buffer overrun detected!"
+            << "Consumer thread fell behind. Current Thread ID:" << QThread::currentThreadId();
+
+        // Restart current measure step
+        settleMeasure();
+        return;
+    }
+
+    emit measureTaskError( error );
 }
 
 void QAAPiViewBackend::onSignalProcessMags(AAPiComplex *mags, uint32_t num_mags)
@@ -235,7 +267,6 @@ void QAAPiViewBackend::handleMeasureTaskFinished(AAPiPtr<AAPiMeasureTask> measur
     // Let derived class handle the measure
     AAPiError ret = onViewMeasureFinished( measure );
     if (AAPI_FAILED( ret )) {
-
         // An error occurred or derived class wants to cancel sweep
         releaseGenerator();
         cleanupMeasures();
@@ -261,4 +292,9 @@ void QAAPiViewBackend::handleMeasureTaskFinished(AAPiPtr<AAPiMeasureTask> measur
     // Finished all measurements
     releaseGenerator();
     cleanupMeasures();
+}
+
+void QAAPiViewBackend::handleMeasureTaskError(AAPiError error)
+{
+    onViewMeasureError( error );
 }

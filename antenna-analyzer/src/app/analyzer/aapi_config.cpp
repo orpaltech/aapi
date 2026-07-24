@@ -18,13 +18,16 @@
  */
 
 #include <unistd.h>
-#include <memory.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include "analyzer/aapi_config.h"
 #include "serial/aapi_uart_device.h"
 #include "audio/audio_reader.h"
+
 namespace fs = std::filesystem;
 
 #include <QDebug>
@@ -582,6 +585,11 @@ AAPiConfig::AAPiConfig(const AAPiConfig& config)
     copyFrom( config );
 }
 
+AAPiConfig::AAPiConfig(AAPiConfig&& config) noexcept
+{
+    moveFrom( std::move(config) );
+}
+
 AAPiConfig::~AAPiConfig()
 {
 }
@@ -594,24 +602,34 @@ AAPiConfig& AAPiConfig::operator=(const AAPiConfig& config)
     return *this;
 }
 
+AAPiConfig& AAPiConfig::operator=(AAPiConfig&& config) noexcept
+{
+    if (this != &config) {
+        moveFrom( std::move(config) );
+    }
+    return *this;
+}
+
 AAPiString AAPiConfig::get_app_dir()
 {
     fs::path targetPath;
-    const char* homeEnv = std::getenv("HOME");
 
-    // Ensure HOME is valid, fallback to native /root directory safely if blank
-    if (homeEnv && std::strlen(homeEnv) > 0) {
-        targetPath = fs::path(homeEnv);
+    // Get the current User ID (UID) from the Linux kernel
+    uid_t uid = getuid();
+    // Query the system user database for this UID's official record
+    struct passwd* pw = getpwuid(uid);
+
+    if (pw && pw->pw_dir && std::strlen(pw->pw_dir) > 0 && std::strcmp(pw->pw_dir, "/") != 0) {
+        targetPath = fs::path(pw->pw_dir);
     } else {
+        // Safe hardcoded fallback if OS database is reading a generic single slash
         targetPath = fs::path("/root");
     }
 
-    // Using the canonical /= operator prevents argument parsing bugs
-    // and guarantees that the folder lands strictly inside your home directory!
     targetPath /= AAPI_APP_NAME;
-
     return AAPiString{ targetPath.c_str() };
 }
+
 
 AAPiString AAPiConfig::get_config_dir()
 {
@@ -644,6 +662,14 @@ void AAPiConfig::copyFrom (const AAPiConfig& config)
     // deep copy
     for (uint i = 0; i < NUM_PARAMS; ++i) {
         m_values[i] = config.m_values[i];
+    }
+}
+
+void AAPiConfig::moveFrom(AAPiConfig&& config)
+{
+    // deep move
+    for (uint i = 0; i < NUM_PARAMS; ++i) {
+        m_values[i] = std::move(config.m_values[i]);
     }
 }
 
