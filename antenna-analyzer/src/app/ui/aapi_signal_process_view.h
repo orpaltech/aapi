@@ -57,8 +57,6 @@ private:
     bool isWaveformTab() const;
 
 private:
-    //QRecursiveMutex m_mutex;
-
     volatile int    m_tabIndex;
     volatile bool   m_dataRequested;
 

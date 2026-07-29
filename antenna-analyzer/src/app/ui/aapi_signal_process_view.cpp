@@ -40,13 +40,13 @@ QAAPiSignalProcessView::QAAPiSignalProcessView(AAPiConfig *config, AAPiSignalPro
     dsp->addCallback(this);
 
     // Connect signals and slots
-    QObject::connect(this, &QAAPiSignalProcessView::spectrumDataReady,
-                     this, &QAAPiSignalProcessView::handleSpectrumDataReady,
-                     Qt::QueuedConnection);
+    connect(this, &QAAPiSignalProcessView::spectrumDataReady,
+            this, &QAAPiSignalProcessView::handleSpectrumDataReady,
+            Qt::QueuedConnection);
 
-    QObject::connect(this, &QAAPiSignalProcessView::waveformDataReady,
-                     this, &QAAPiSignalProcessView::handleWaveformDataReady,
-                     Qt::QueuedConnection);
+    connect(this, &QAAPiSignalProcessView::waveformDataReady,
+            this, &QAAPiSignalProcessView::handleWaveformDataReady,
+            Qt::QueuedConnection);
 }
 
 QAAPiSignalProcessView::~QAAPiSignalProcessView()

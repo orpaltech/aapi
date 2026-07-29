@@ -35,8 +35,7 @@ QAAPiGeneratorView::QAAPiGeneratorView(AAPiConfig *config, AAPiSignalProcessor *
     m_measurementTimer->setSingleShot(true);
 
     // FIX: Change slot reference from handleMeasurementTimer to handleMeasurement
-    QObject::connect(m_measurementTimer, &QTimer::timeout, this,
-                     &QAAPiGeneratorView::handleMeasurement);
+    connect(m_measurementTimer, &QTimer::timeout, this, &QAAPiGeneratorView::handleMeasurement);
 }
 
 QAAPiGeneratorView::~QAAPiGeneratorView()

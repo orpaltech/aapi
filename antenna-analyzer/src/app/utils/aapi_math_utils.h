@@ -42,7 +42,7 @@ namespace aapi
 
 class MathUtils
 {
-    static constexpr double SMALL_REAL = 1e-30;
+    static constexpr AAPiReal SMALL_REAL = 1e-30;
 public:
     /* Ensure val to be non-zero (safe to use as denominator)*/
     template<typename T>

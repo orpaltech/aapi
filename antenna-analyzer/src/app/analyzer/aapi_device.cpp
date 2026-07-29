@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/socket.h>
-#include <QDebug>
-//#include "utils/simple_map.h"
 
 
 namespace aapi
@@ -38,7 +36,7 @@ struct AAPiDevice::Private
 {
     int         fd;
     int         sock_fd[2];
-    pthread_t   thread_id;
+    pthread_t   tid;
     volatile bool keep_running;
 
     Private()
@@ -46,7 +44,7 @@ struct AAPiDevice::Private
         fd = -1;
         sock_fd[0] = -1;
         sock_fd[1] = -1;
-        thread_id = 0;
+        tid = 0;
         keep_running = true;
     }
 
@@ -105,11 +103,11 @@ struct AAPiDevice::Private
     {
         /* Stop thread */
         keep_running = false;
-        pthread_kill(thread_id, SIGIO);
+        pthread_kill(tid, SIGIO);
 
         /* Wait for thread */
-        pthread_join(thread_id, NULL);
-        thread_id = 0;
+        pthread_join(tid, nullptr);
+        tid = 0;
     }
 
     static void *signal_thread(void *arg);
@@ -126,44 +124,44 @@ AAPiDevice::~AAPiDevice() = default;
 
 void *AAPiDevice::Private::signal_thread(void *arg)
 {
-    int sig, ret;
-    auto d = reinterpret_cast<AAPiDevice::Private *>(arg);
+    auto dev = reinterpret_cast<AAPiDevice::Private *>(arg);
 
     /* Setup signal set to wait for */
-    sigset_t waitset;
-    sigemptyset (&waitset);
-    sigaddset (&waitset, SIGIO);
+    sigset_t wset;
+    sigemptyset (&wset);
+    sigaddset (&wset, SIGIO);
 
     /* Block SIGIO in this thread (required for sigwait) */
-    pthread_sigmask (SIG_BLOCK, &waitset, NULL);
+    pthread_sigmask (SIG_BLOCK, &wset, nullptr);
 
     /* Setup fasync */
-    if (fcntl (d->fd, F_SETOWN, getpid()) < 0) {
-        return NULL;
+    if (fcntl (dev->fd, F_SETOWN, getpid()) < 0) {
+        return nullptr;
     }
 
-    int flags = fcntl (d->fd, F_GETFL);
-    if (fcntl (d->fd, F_SETFL, flags | FASYNC) < 0) {
-        return NULL;
+    int flags = fcntl (dev->fd, F_GETFL);
+    if (fcntl (dev->fd, F_SETFL, flags | FASYNC) < 0) {
+        return nullptr;
     }
 
     /* FASYNC configured, waiting for signals... */
 
-    while (d->keep_running) {
+    int sig, ret;
 
+    while (dev->keep_running) {
         /* sigwait blocks until signal arrives */
-        ret = sigwait (&waitset, &sig);
+        ret = sigwait (&wset, &sig);
 
         if (ret != 0) {
             // sigwait failed, exit thread
             break;
         }
 
-        if (!d->keep_running)
+        if (!dev->keep_running)
             break;
 
         /* SIGIO received; */
-        ret = d->write_socket();
+        ret = dev->write_socket();
 
         if (ret < 0) {
             // copy data failed, exit thread
@@ -172,37 +170,31 @@ void *AAPiDevice::Private::signal_thread(void *arg)
     }
 
     /* Exiting thread */
-    return NULL;
+    return nullptr;
 }
 
 int AAPiDevice::open(const char *dev_path)
 {
-    int ret;
-    sigset_t set;
-
     if (!(m_priv->fd < 0)) {
         return AAPI_E_INVALID_STATE;
     }
 
     /* Block SIGIO in main thread (important!) */
+    sigset_t set;
     sigemptyset(&set);
     sigaddset(&set, SIGIO);
     pthread_sigmask(SIG_BLOCK, &set, NULL);
 
     /* Open device */
-    ret = ::open (dev_path, O_RDONLY | O_NONBLOCK);
+    int ret = ::open (dev_path, O_RDONLY | O_NONBLOCK);
     if (ret < 0) {
-        qCritical() << "device open failed: " << strerror(ret);
         return AAPI_CDEV_E_OPEN_FAILED;
     }
 
     m_priv->fd = ret;
 
-    qDebug() << "Device opened (fd=" << m_priv->fd << ")";
-
     /* Using socketpair is slightly more portable than pipe() */
     if (::socketpair(AF_UNIX, SOCK_STREAM, 0, m_priv->sock_fd)) {
-        qCritical() << "couldn't create socket pair";
         m_priv->close_file();
         return AAPI_E_CREATE_SOCKET;
     }
@@ -210,15 +202,12 @@ int AAPiDevice::open(const char *dev_path)
     m_priv->keep_running = true;
 
     /* Create signal thread */
-    ret = pthread_create (&m_priv->thread_id, NULL, Private::signal_thread, m_priv.get());
+    ret = pthread_create (&m_priv->tid, NULL, Private::signal_thread, m_priv.get());
     if (ret != 0) {
-        qCritical() << "pthread_create() failed: " << strerror(ret);
         m_priv->close_file();
         m_priv->close_socks();
         return AAPI_E_CREATE_THREAD_FAILED;
     }
-
-    qDebug() << "Signal thread created";
 
     return AAPI_SUCCESS;
 }

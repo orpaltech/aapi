@@ -70,7 +70,7 @@ public:
     uint32_t            buff_periods;   /* number of periods in buffer */
 
     std::atomic<uint32_t> read_pos;     /* in bytes */
-    std::atomic<bool>     complete;     /* thread exit flag */
+    std::atomic<bool>   complete;       /* thread exit flag */
 
     uint32_t            clnt_pos;       /* Only modified by client thread */
 
@@ -389,7 +389,7 @@ void *AlsaSource::client_thread(void *data)
         if (val >= static_cast<int>(src->buff_periods)) {
             // Drain outstanding notifications to instantly catch up
             for (int i = 0; i < val - 1; ++i) {
-                sem_trywait(&src->sem);
+                sem_trywait( &src->sem );
             }
 
             // Snap data position safely behind the atomic pointer using acquire semantics

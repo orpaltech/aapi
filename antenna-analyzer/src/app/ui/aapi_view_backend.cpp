@@ -48,19 +48,20 @@ QAAPiViewBackend::QAAPiViewBackend(AAPiConfig *config, AAPiSignalProcessor *dsp,
     m_settlingTimer->moveToThread(m_timerThread); // Run strictly inside your timer loop thread
 
     // Connect the timer wake event cleanly to your signal parsing loop
-    QObject::connect(m_settlingTimer, &QTimer::timeout, this, [this]() {
-                        signal_process_enable();
-                    },
-                    Qt::DirectConnection);
+    connect(m_settlingTimer, &QTimer::timeout, this, [this]() {
+                signal_process_enable();
+            },
+            Qt::DirectConnection);
 
 
     // Connect signals and slots
-    QObject::connect(this, &QAAPiViewBackend::measureTaskFinished, this,
-                     &QAAPiViewBackend::handleMeasureTaskFinished,
-                     Qt::QueuedConnection);
-    QObject::connect(this, &QAAPiViewBackend::measureTaskError, this,
-                     &QAAPiViewBackend::handleMeasureTaskError,
-                     Qt::QueuedConnection);
+    connect(this, &QAAPiViewBackend::measureTaskFinished, this,
+            &QAAPiViewBackend::handleMeasureTaskFinished,
+            Qt::QueuedConnection);
+
+    connect(this, &QAAPiViewBackend::measureTaskError, this,
+            &QAAPiViewBackend::handleMeasureTaskError,
+            Qt::QueuedConnection);
 }
 
 QAAPiViewBackend::~QAAPiViewBackend()
@@ -70,21 +71,6 @@ QAAPiViewBackend::~QAAPiViewBackend()
         m_timerThread->wait();    // Wait for the OS thread to close completely
     }
 }
-
-/*void QAAPiViewBackend::setErrorMessage(const char *message)
-{
-    m_errorMsg = message;
-}
-
-void QAAPiViewBackend::clearErrorMessage()
-{
-    m_errorMsg.clear();
-}
-
-bool QAAPiViewBackend::hasErrorMessage() const
-{
-    return m_errorMsg.length() > 0;
-}*/
 
 void QAAPiViewBackend::cleanupMeasures()
 {

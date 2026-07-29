@@ -2,7 +2,7 @@
  * This file is part of the ORPALTECH AA-PI project
  *  (https://github.com/orpaltech/aapi).
  *
- * Copyright (c) 2013-2025 ORPAL Technology, Inc.
+ * Copyright (c) 2013-2026 ORPAL Technology, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ private:
     void onAudioReaderData(char **buffers, uint32_t num_buffers, uint32_t buf_size) override;
     void onAudioBufferOverrun() override;
 
-    // Caclulates magnitude for a bin considering +/- 2 bins from maximum
+    // Caclulates magnitude for a IF bin
     AAPiComplex calcMagnitude(int channel);
 
     // Process audio buffer for a channel
