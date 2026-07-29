@@ -6,9 +6,10 @@
 	(paper "A4")
 	(title_block
 		(title "AA-PI Display Board for BananaPi M2-Magic")
-		(date "2026-04-23")
+		(date "2026-07-29")
 		(rev "4.4")
 		(company "ORPALTECH")
+		(comment 1 "2026")
 		(comment 4 "Author: Sergey Suloev")
 	)
 	(lib_symbols
